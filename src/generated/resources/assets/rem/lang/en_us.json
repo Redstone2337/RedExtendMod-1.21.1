@@ -1,0 +1,6 @@
+{
+  "ability.FastStart": "Fast Start",
+  "ability.FastStart.description": "For the first 3 rounds after the Pokémon enters the field, its attack and speed increase by 50%, and the effect ends after 3 rounds.",
+  "pixelmon.abilities.faststart": "%s has entered the Fast Start state! Speed and attack have been greatly increased!",
+  "pixelmon.abilities.faststartend": "The Fast Start effect of %s has ended! Speed and attack have returned to normal."
+}
