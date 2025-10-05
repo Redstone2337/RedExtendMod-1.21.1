@@ -21,6 +21,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.redstone.redextent.core.npc.NPCDefinition;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * 用于生成 Pixelmon NPC JSON 文件的数据提供者，这些文件定义了宝可梦模组中
@@ -31,6 +32,7 @@ public abstract class PixelmonNPCProvider implements DataProvider {
     private final PackOutput output;
     private final String modId;
     private final String subDirectory;
+    private final String customOutputPath;
 
     private final Map<String, JsonObject> npcs = new LinkedHashMap<>();
 
@@ -39,12 +41,28 @@ public abstract class PixelmonNPCProvider implements DataProvider {
      *
      * @param output 数据生成器提供的 {@linkplain PackOutput} 实例。
      * @param modId  当前模组的模组ID。
-     * @param subDirectory 在 data/modid/npc/ 中放置文件的子目录。
+     * @param subDirectory 在 data/modid/pixelmon/npc/preset/ 中放置文件的子目录。
      */
     protected PixelmonNPCProvider(final PackOutput output, final String modId, final String subDirectory) {
         this.output = output;
         this.modId = modId;
         this.subDirectory = subDirectory;
+        this.customOutputPath = null; // 使用默认路径
+    }
+
+    /**
+     * 创建此数据提供者的新实例，支持自定义输出路径。
+     *
+     * @param output 数据生成器提供的 {@linkplain PackOutput} 实例。
+     * @param modId  当前模组的模组ID。
+     * @param subDirectory 放置文件的子目录。
+     * @param customOutputPath 自定义输出路径，如果为null则使用默认路径 data/modid/pixelmon/npc/preset/。
+     */
+    protected PixelmonNPCProvider(final PackOutput output, final String modId, final String subDirectory, final String customOutputPath) {
+        this.output = output;
+        this.modId = modId;
+        this.subDirectory = subDirectory;
+        this.customOutputPath = customOutputPath;
     }
 
     /**
@@ -53,16 +71,26 @@ public abstract class PixelmonNPCProvider implements DataProvider {
     public abstract void registerNPCs();
 
     @Override
-    public CompletableFuture<?> run(CachedOutput cache) {
+    public @NotNull CompletableFuture<?> run(@NotNull CachedOutput cache) {
         this.npcs.clear();
         this.registerNPCs();
 
         if (!this.npcs.isEmpty()) {
-            // 修改为数据包路径：data/modid/npc/subDirectory
-            Path npcPath = this.output.getOutputFolder(PackOutput.Target.DATA_PACK)
-                    .resolve(this.modId)
-                    .resolve("npc")
-                    .resolve(this.subDirectory);
+            // 使用自定义路径或默认路径：data/modid/pixelmon/npc/preset/
+            Path npcPath;
+            if (this.customOutputPath != null && !this.customOutputPath.isEmpty()) {
+                npcPath = this.output.getOutputFolder(PackOutput.Target.DATA_PACK)
+                        .resolve(this.modId)
+                        .resolve(this.customOutputPath)
+                        .resolve(this.subDirectory);
+            } else {
+                npcPath = this.output.getOutputFolder(PackOutput.Target.DATA_PACK)
+                        .resolve(this.modId)
+                        .resolve("pixelmon")
+                        .resolve("npc")
+                        .resolve("preset")
+                        .resolve(this.subDirectory);
+            }
 
             CompletableFuture<?>[] futures = new CompletableFuture[this.npcs.size()];
             int i = 0;
@@ -79,8 +107,11 @@ public abstract class PixelmonNPCProvider implements DataProvider {
     }
 
     @Override
-    public String getName() {
-        return "Pixelmon NPC 定义: " + this.subDirectory;
+    public @NotNull String getName() {
+        String pathInfo = (customOutputPath != null && !customOutputPath.isEmpty())
+                ? customOutputPath + "/" + subDirectory
+                : "pixelmon/npc/preset/" + subDirectory;
+        return "Pixelmon NPC 定义: " + pathInfo;
     }
 
     /**

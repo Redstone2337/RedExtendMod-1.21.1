@@ -1,7 +1,10 @@
 package net.redstone.redextent.data;
 
 import com.google.gson.JsonObject;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
 import net.redstone.redextent.core.generator.PixelmonNPCProvider;
 
 import java.util.List;
@@ -190,7 +193,7 @@ public class BattleNPCProvider extends PixelmonNPCProvider {
                         createItemReward("pixelmon:rare_candy", 5)
                 ),
                 2,                             // 冷却天数
-                "pixelmon:textures/npc/gym_leaders/fire_trainer.png" // 纹理路径
+                "rem:textures/npc/battle/eric.png" // 纹理路径
         );
     }
 
@@ -256,7 +259,7 @@ public class BattleNPCProvider extends PixelmonNPCProvider {
                         createItemReward("pixelmon:rare_candy", 5)
                 ),
                 2,                             // 冷却天数
-                "pixelmon:textures/npc/gym_leaders/water_trainer.png" // 纹理路径
+                "rem:textures/npc/battle/ice_dragon.png" // 纹理路径
         );
     }
 
@@ -322,7 +325,7 @@ public class BattleNPCProvider extends PixelmonNPCProvider {
                         createItemReward("pixelmon:rare_candy", 5)
                 ),
                 2,                             // 冷却天数
-                "pixelmon:textures/npc/gym_leaders/electric_trainer.png" // 纹理路径
+                "rem:textures/npc/battle/ender_dragon.png" // 纹理路径
         );
     }
 
@@ -441,5 +444,13 @@ public class BattleNPCProvider extends PixelmonNPCProvider {
         item.addProperty("id", itemId);
         item.addProperty("count", count);
         return item;
+    }
+
+    public static JsonObject createItemReward(Item item, int count) {
+        ResourceLocation itemId = BuiltInRegistries.ITEM.getKey(item);
+        if (itemId == null) {
+            throw new IllegalArgumentException("物品未注册: " + item);
+        }
+        return createItemReward(itemId.toString(), count);
     }
 }
