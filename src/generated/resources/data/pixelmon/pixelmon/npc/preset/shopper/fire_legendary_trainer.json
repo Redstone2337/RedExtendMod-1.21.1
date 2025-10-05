@@ -1,0 +1,204 @@
+{
+  "goals": {
+    "type": "pixelmon:constant",
+    "value": {
+      "goals": [
+        {
+          "priority": 1,
+          "provider": {
+            "type": "pixelmon:look_at_nearby",
+            "look_distance": 8.0,
+            "probability": 0.9
+          }
+        }
+      ]
+    }
+  },
+  "interactions": {
+    "type": "pixelmon:constant",
+    "value": {
+      "interactions": [
+        {
+          "conditions": {
+            "type": "pixelmon:true"
+          },
+          "event": "pixelmon:right_click",
+          "results": {
+            "type": "pixelmon:constant",
+            "value": [
+              {
+                "type": "pixelmon:open_dialogue",
+                "message": {
+                  "text": "我是火焰神兽训练家炎煌！让火焰净化一切吧！"
+                },
+                "title": {
+                  "bold": true,
+                  "color": "#FF4500",
+                  "italic": false,
+                  "text": "火焰神兽训练家·炎煌",
+                  "underlined": false
+                }
+              }
+            ]
+          }
+        },
+        {
+          "conditions": {
+            "type": "pixelmon:true"
+          },
+          "event": "pixelmon:close_dialogue",
+          "results": {
+            "type": "pixelmon:constant",
+            "value": [
+              {
+                "type": "pixelmon:player_start_npc_battle"
+              }
+            ]
+          }
+        },
+        {
+          "conditions": {
+            "type": "pixelmon:true"
+          },
+          "event": "pixelmon:win_battle",
+          "results": {
+            "type": "pixelmon:constant",
+            "value": [
+              {
+                "type": "pixelmon:open_dialogue",
+                "fire_close_event": false,
+                "message": {
+                  "text": "你的实力让我印象深刻！继续前进吧！"
+                },
+                "title": {
+                  "bold": true,
+                  "color": "#FF4500",
+                  "italic": false,
+                  "text": "火焰神兽训练家·炎煌",
+                  "underlined": false
+                }
+              },
+              {
+                "type": "pixelmon:give_money",
+                "money": 5000.0
+              },
+              {
+                "type": "pixelmon:give_item",
+                "items": [
+                  {
+                    "count": 1,
+                    "id": "pixelmon:fire_stone"
+                  },
+                  {
+                    "count": 5,
+                    "id": "pixelmon:rare_candy"
+                  }
+                ]
+              },
+              {
+                "type": "pixelmon:trigger_interaction_event",
+                "event": "pixelmon:defeat_trainer"
+              },
+              {
+                "type": "pixelmon:set_cooldown",
+                "cooldown": 2,
+                "key": "pixelmon:gym_leader",
+                "player": {
+                  "type": "pixelmon:context_player",
+                  "key": "pixelmon:player"
+                },
+                "unit": "DAYS"
+              }
+            ]
+          }
+        },
+        {
+          "conditions": {
+            "type": "pixelmon:true"
+          },
+          "event": "pixelmon:lose_battle",
+          "results": {
+            "type": "pixelmon:constant",
+            "value": [
+              {
+                "type": "pixelmon:open_dialogue",
+                "fire_close_event": false,
+                "message": {
+                  "text": "火焰的力量果然还是最强的！"
+                },
+                "title": {
+                  "bold": true,
+                  "color": "#FF4500",
+                  "italic": false,
+                  "text": "火焰神兽训练家·炎煌",
+                  "underlined": false
+                }
+              },
+              {
+                "type": "pixelmon:set_cooldown",
+                "cooldown": 2,
+                "key": "pixelmon:gym_leader",
+                "player": {
+                  "type": "pixelmon:context_player",
+                  "key": "pixelmon:player"
+                },
+                "unit": "DAYS"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "models": {
+    "type": "pixelmon:constant",
+    "value": {
+      "type": "pixelmon:player",
+      "slim": false,
+      "texture": "rem:textures/npc/battle/eric.png"
+    }
+  },
+  "names": {
+    "type": "pixelmon:uniformly_random",
+    "values": [
+      "炎煌"
+    ]
+  },
+  "party": {
+    "type": "pixelmon:constant",
+    "value": {
+      "type": "pixelmon:spec",
+      "specs": [
+        "Groudon lvl:88 ability:Drought helditem:Red Orb nature:Adamant ivhp:31 ivspdef:31 ivdef:31 ivatk:31 ivspatk:31 ivspd:31 evhp:0 evspdef:4 evdef:0 evatk:252 evspatk:0 evspd:252 move1:Precipice Blades move2:Fire Punch move3:Rock Slide move4:Swords Dance",
+        "Ho-Oh lvl:85 ability:Pressure helditem:Life Orb nature:Adamant ivhp:31 ivspdef:31 ivdef:31 ivatk:31 ivspatk:31 ivspd:31 evhp:248 evspdef:8 evdef:0 evatk:252 evspatk:0 evspd:0 move1:Sacred Fire move2:Brave Bird move3:Earthquake move4:Recover",
+        "Moltres lvl:82 ability:Pressure helditem:Heavy-Duty Boots nature:Timid ivhp:31 ivspdef:31 ivdef:31 ivatk:31 ivspatk:31 ivspd:31 evhp:0 evspdef:4 evdef:0 evatk:0 evspatk:252 evspd:252 move1:Hurricane move2:Fire Blast move3:Roost move4:U-turn",
+        "Entei lvl:80 ability:Pressure helditem:Choice Band nature:Adamant ivhp:31 ivspdef:31 ivdef:31 ivatk:31 ivspatk:31 ivspd:31 evhp:0 evspdef:4 evdef:0 evatk:252 evspatk:0 evspd:252 move1:Sacred Fire move2:Extreme Speed move3:Stone Edge move4:Iron Head",
+        "Reshiram lvl:78 ability:Turboblaze helditem:Choice Scarf nature:Modest ivhp:31 ivspdef:31 ivdef:31 ivatk:31 ivspatk:31 ivspd:31 evhp:0 evspdef:4 evdef:0 evatk:0 evspatk:252 evspd:252 move1:Blue Flare move2:Draco Meteor move3:Focus Blast move4:Stone Edge",
+        "Blaziken lvl:75 ability:Speed Boost helditem:Blazikenite nature:Adamant ivhp:31 ivspdef:31 ivdef:31 ivatk:31 ivspatk:31 ivspd:31 evhp:0 evspdef:4 evdef:0 evatk:252 evspatk:0 evspd:252 move1:Flare Blitz move2:High Jump Kick move3:Stone Edge move4:Protect"
+      ]
+    }
+  },
+  "properties": {
+    "type": "pixelmon:constant",
+    "value": {
+      "child": false,
+      "dimensions": {
+        "height": 2.0,
+        "width": 0.65
+      },
+      "eyeHeight": 1.9,
+      "health": 20.0,
+      "immovable": false,
+      "invulnerable": false,
+      "nameplate": true,
+      "pushable": false,
+      "title": {
+        "bold": true,
+        "color": "#FF4500",
+        "italic": false,
+        "text": "火焰神兽训练家·炎煌",
+        "underlined": false
+      }
+    }
+  }
+}
