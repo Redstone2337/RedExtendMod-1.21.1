@@ -1,0 +1,103 @@
+{
+  "goals": {
+    "type": "pixelmon:constant",
+    "value": {
+      "goals": [
+        {
+          "priority": 1,
+          "provider": {
+            "type": "pixelmon:look_at_nearby",
+            "look_distance": 6.0,
+            "probability": 1.5
+          }
+        }
+      ]
+    }
+  },
+  "interactions": {
+    "type": "pixelmon:uniformly_random",
+    "values": [
+      {
+        "interactions": [
+          {
+            "conditions": {
+              "type": "pixelmon:true"
+            },
+            "event": "pixelmon:right_click",
+            "results": {
+              "type": "pixelmon:constant",
+              "value": [
+                {
+                  "type": "pixelmon:open_paged_dialogue",
+                  "pages": [
+                    "你知道吗? 在这个服务器整合包上，你可以体验到像素精灵模组带来的丰富玩法！无论是挑战道馆、参加联盟，还是捕捉各种宝可梦，这里都有你想要的冒险！",
+                    "欢迎来到像素精灵的世界！准备好迎接挑战了吗？"
+                  ],
+                  "title": "宣传大使"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "models": {
+    "type": "pixelmon:uniformly_random",
+    "values": [
+      {
+        "type": "pixelmon:player",
+        "slim": false,
+        "texture": {
+          "type": "pixelmon:fallback",
+          "resource": {
+            "fallback": "rem:textures/steve/gwenthe_dragon.png",
+            "resource": "rem:textures/steve/gwenthe_dragon.png"
+          }
+        }
+      }
+    ]
+  },
+  "names": {
+    "type": "pixelmon:uniformly_random",
+    "values": [
+      "Terry",
+      "Max",
+      "Caleb",
+      "Jeremy",
+      "Dan",
+      "Justin",
+      "Oliver",
+      "Phil"
+    ]
+  },
+  "party": {
+    "type": "pixelmon:constant",
+    "value": {
+      "type": "pixelmon:empty"
+    }
+  },
+  "properties": {
+    "type": "pixelmon:constant",
+    "value": {
+      "child": false,
+      "dimensions": {
+        "height": 2.0,
+        "width": 1.0
+      },
+      "eyeHeight": 1.0,
+      "health": 20.0,
+      "immovable": false,
+      "invulnerable": false,
+      "nameplate": true,
+      "pushable": false,
+      "title": {
+        "bold": true,
+        "color": "#F8F8F2",
+        "italic": false,
+        "translate": "宣传使训练家",
+        "underlined": false
+      }
+    }
+  }
+}
