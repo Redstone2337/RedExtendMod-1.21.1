@@ -32,13 +32,13 @@ public class ShopNPCProvider extends PixelmonNPCProvider {
         );
 
         addShopKeeper(
-                "premium_shopkeeper",                 // 文件名
-                List.of("毛毛龙·晨曦"),               // NPC名称列表
+                "info_dragon",                       // 文件名
+                List.of("毛毛龙·晨曦"),              // NPC名称列表
                 createTextTitle("毛毛龙的商店", "#FFD700", true, false, true),
                 createTextMessage("欢迎来到毛毛龙商店，这里只有最稀有的商品！"),
                 createTextMessage("感谢您的光临，期待再次为您服务！"),
                 premiumItems,
-                List.of("rem:textures/steve/info_dragon.png") // 纹理路径
+                List.of("rem:textures/steve/info_dragon.png")
         );
     }
 }
