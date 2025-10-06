@@ -164,7 +164,7 @@ public abstract class PixelmonNPCProvider implements DataProvider {
                 .withConstantInteractions(createGymLeaderInteractions(title, greeting, winMessage,
                         loseMessage, rewardMoney, rewardItems, cooldownDays, fileName))
                 .build()
-                .serialize();
+                .serialize(NPCDefinition.NPCType.BATTLE); // 使用BATTLE类型序列化
 
         this.add(fileName, npcDefinition);
     }
@@ -213,7 +213,7 @@ public abstract class PixelmonNPCProvider implements DataProvider {
                 .withLookAtNearbyGoal(5.0f, 0.9f, 1)
                 .withUniformInteractions(List.of(createShopInteractions(title, greeting, goodbye, shopItems)))
                 .build()
-                .serialize();
+                .serialize(NPCDefinition.NPCType.SHOPKEEPER); // 使用SHOPKEEPER类型序列化
 
         this.add(fileName, npcDefinition);
     }
@@ -256,7 +256,7 @@ public abstract class PixelmonNPCProvider implements DataProvider {
                 .withLookAtNearbyGoal(4.0f, 0.9f, 1)
                 .withUniformInteractions(List.of(createTipInteractions(title, messages)))
                 .build()
-                .serialize();
+                .serialize(NPCDefinition.NPCType.CHATTING); // 使用CHATTING类型序列化
 
         this.add(fileName, npcDefinition);
     }
@@ -273,49 +273,6 @@ public abstract class PixelmonNPCProvider implements DataProvider {
                 .toList();
 
         addTipNPC(fileName, npcNames, title, messages, textureResources);
-    }
-
-    // ==================== 旧版快速生成方法（已弃用，保持向下兼容） ====================
-
-    /**
-     * @deprecated 使用 {@link #addGymLeader(String, String, JsonObject, JsonObject, JsonObject, JsonObject, List, double, List, int, String)} 替代
-     */
-    @Deprecated
-    protected void addGymLeaderOld(String fileName, String npcName, JsonObject title,
-                                   JsonObject greeting, JsonObject winMessage, JsonObject loseMessage,
-                                   List<String> pokemonSpecs, double rewardMoney,
-                                   List<JsonObject> rewardItems, int cooldownDays, String texture) {
-
-        JsonObject npcDefinition = definition()
-                .withConstantInteractions(createGymLeaderInteractionsOld(title, greeting, winMessage,
-                        loseMessage, rewardMoney, rewardItems, cooldownDays))
-                .withTitleProperties(20.0f, 1.9f, 0.65f, 2.0f, title, false, false, false, false, true)
-                .withSpecParty(pokemonSpecs)
-                .withSingleName(npcName)
-                .withSinglePlayerModel(false, texture)
-                .withLookAtNearbyGoal(8.0f, 0.9f, 1)
-                .build()
-                .serialize();
-
-        this.add(fileName, npcDefinition);
-    }
-
-    /**
-     * @deprecated 使用 {@link #addGymLeader(String, String, String, String, String, String, List, double, List, int, String)} 替代
-     */
-    @Deprecated
-    protected void addGymLeaderOld(String fileName, String npcName, String titleTranslate,
-                                   String greetingTranslate, String winMessageTranslate, String loseMessageTranslate,
-                                   List<String> pokemonSpecs, double rewardMoney,
-                                   List<JsonObject> rewardItems, int cooldownDays, String texture) {
-
-        JsonObject title = createTranslateTitle(titleTranslate, "#FF6B35", true, false, false);
-        JsonObject greeting = createTranslateMessage(greetingTranslate);
-        JsonObject winMessage = createTranslateMessage(winMessageTranslate);
-        JsonObject loseMessage = createTranslateMessage(loseMessageTranslate);
-
-        addGymLeaderOld(fileName, npcName, title, greeting, winMessage, loseMessage,
-                pokemonSpecs, rewardMoney, rewardItems, cooldownDays, texture);
     }
 
     // ==================== 辅助类方法 ====================
@@ -527,6 +484,28 @@ public abstract class PixelmonNPCProvider implements DataProvider {
     }
 
     /**
+     * 创建宝可梦队伍配置（带个体值和努力值）
+     */
+    public static String createPokemonSpecWithIVsEVs(String pokemon, int level, String ability, String heldItem,
+                                                     String nature, List<String> moves, Map<String, Integer> ivs,
+                                                     Map<String, Integer> evs) {
+        String baseSpec = createPokemonSpec(pokemon, level, ability, heldItem, nature, moves);
+        StringBuilder spec = new StringBuilder(baseSpec);
+
+        // 添加个体值
+        for (Map.Entry<String, Integer> entry : ivs.entrySet()) {
+            spec.append(" iv").append(entry.getKey()).append(":").append(entry.getValue());
+        }
+
+        // 添加努力值
+        for (Map.Entry<String, Integer> entry : evs.entrySet()) {
+            spec.append(" ev").append(entry.getKey()).append(":").append(entry.getValue());
+        }
+
+        return spec.toString();
+    }
+
+    /**
      * 创建玩家模型配置
      */
     public static NPCDefinition.PlayerModel createPlayerModel(boolean slim, String textureResource) {
@@ -616,6 +595,8 @@ public abstract class PixelmonNPCProvider implements DataProvider {
         interactionsWrapper.add("interactions", interactionsArray);
         return interactionsWrapper;
     }
+
+    // ==================== 交互创建辅助方法 ====================
 
     private JsonObject createRightClickBattleInteraction(JsonObject message, JsonObject title, String fileName) {
         JsonObject interaction = new JsonObject();
@@ -1035,175 +1016,6 @@ public abstract class PixelmonNPCProvider implements DataProvider {
         dialogue.addProperty("fire_close_event", false);
         dialogue.addProperty("type", "pixelmon:open_dialogue");
         resultsArray.add(dialogue);
-
-        results.add("value", resultsArray);
-        results.addProperty("type", "pixelmon:constant");
-        interaction.add("results", results);
-
-        return interaction;
-    }
-
-    // ==================== 旧版私有辅助方法（已弃用） ====================
-
-    /**
-     * @deprecated 使用 {@link #createGymLeaderInteractions(JsonObject, JsonObject, JsonObject, JsonObject, double, List, int, String)} 替代
-     */
-    @Deprecated
-    private JsonObject createGymLeaderInteractionsOld(JsonObject title, JsonObject greeting,
-                                                      JsonObject winMessage, JsonObject loseMessage,
-                                                      double rewardMoney, List<JsonObject> rewardItems,
-                                                      int cooldownDays) {
-        JsonObject interactions = new JsonObject();
-        JsonArray interactionsArray = new JsonArray();
-
-        // 右键点击交互
-        interactionsArray.add(createRightClickInteraction(greeting, title));
-        // 关闭对话开始战斗
-        interactionsArray.add(createCloseDialogueBattleInteractionOld());
-        // 战斗胜利交互
-        interactionsArray.add(createWinBattleInteractionOld(winMessage, title, rewardMoney, rewardItems, cooldownDays));
-        // 战斗失败交互
-        interactionsArray.add(createLoseBattleInteractionOld(loseMessage, title, cooldownDays));
-
-        interactions.add("interactions", interactionsArray);
-        return interactions;
-    }
-
-    /**
-     * @deprecated 使用 {@link #createCloseDialogueBattleInteraction()} 替代
-     */
-    @Deprecated
-    private JsonObject createCloseDialogueBattleInteractionOld() {
-        JsonObject interaction = new JsonObject();
-        interaction.addProperty("event", "pixelmon:close_dialogue");
-
-        JsonObject conditions = new JsonObject();
-        conditions.addProperty("type", "pixelmon:true");
-        interaction.add("conditions", conditions);
-
-        JsonObject results = new JsonObject();
-        JsonArray resultsArray = new JsonArray();
-
-        JsonObject battle = new JsonObject();
-        battle.addProperty("type", "pixelmon:player_start_npc_battle");
-        resultsArray.add(battle);
-
-        results.add("value", resultsArray);
-        results.addProperty("type", "pixelmon:constant");
-        interaction.add("results", results);
-
-        return interaction;
-    }
-
-    /**
-     * @deprecated 使用 {@link #createWinBattleInteraction(JsonObject, JsonObject, double, List, int, String)} 替代
-     */
-    @Deprecated
-    private JsonObject createWinBattleInteractionOld(JsonObject message, JsonObject title,
-                                                     double rewardMoney, List<JsonObject> rewardItems,
-                                                     int cooldownDays) {
-        JsonObject interaction = new JsonObject();
-        interaction.addProperty("event", "pixelmon:win_battle");
-
-        JsonObject conditions = new JsonObject();
-        conditions.addProperty("type", "pixelmon:true");
-        interaction.add("conditions", conditions);
-
-        JsonObject results = new JsonObject();
-        JsonArray resultsArray = new JsonArray();
-
-        // 胜利对话
-        JsonObject dialogue = new JsonObject();
-        dialogue.add("title", title); // 使用传入的标题对象
-        dialogue.add("message", message); // 使用传入的消息对象
-        dialogue.addProperty("fire_close_event", false);
-        dialogue.addProperty("type", "pixelmon:open_dialogue");
-        resultsArray.add(dialogue);
-
-        // 金钱奖励
-        if (rewardMoney > 0) {
-            JsonObject moneyReward = new JsonObject();
-            moneyReward.addProperty("money", rewardMoney);
-            moneyReward.addProperty("type", "pixelmon:give_money");
-            resultsArray.add(moneyReward);
-        }
-
-        // 物品奖励
-        if (!rewardItems.isEmpty()) {
-            JsonObject itemReward = new JsonObject();
-            itemReward.addProperty("type", "pixelmon:give_item");
-
-            JsonArray itemsArray = new JsonArray();
-            for (JsonObject item : rewardItems) {
-                itemsArray.add(item);
-            }
-            itemReward.add("items", itemsArray);
-            resultsArray.add(itemReward);
-        }
-
-        // 触发训练师击败事件
-        JsonObject defeatEvent = new JsonObject();
-        defeatEvent.addProperty("type", "pixelmon:trigger_interaction_event");
-        defeatEvent.addProperty("event", "pixelmon:defeat_trainer");
-        resultsArray.add(defeatEvent);
-
-        // 设置冷却
-        JsonObject cooldown = new JsonObject();
-        cooldown.addProperty("type", "pixelmon:set_cooldown");
-
-        JsonObject player = new JsonObject();
-        player.addProperty("key", "pixelmon:player");
-        player.addProperty("type", "pixelmon:context_player");
-        cooldown.add("player", player);
-
-        cooldown.addProperty("key", "pixelmon:gym_leader");
-        cooldown.addProperty("cooldown", cooldownDays);
-        cooldown.addProperty("unit", "DAYS");
-        resultsArray.add(cooldown);
-
-        results.add("value", resultsArray);
-        results.addProperty("type", "pixelmon:constant");
-        interaction.add("results", results);
-
-        return interaction;
-    }
-
-    /**
-     * @deprecated 使用 {@link #createLoseBattleInteraction(JsonObject, JsonObject, int, String)} 替代
-     */
-    @Deprecated
-    private JsonObject createLoseBattleInteractionOld(JsonObject message, JsonObject title, int cooldownDays) {
-        JsonObject interaction = new JsonObject();
-        interaction.addProperty("event", "pixelmon:lose_battle");
-
-        JsonObject conditions = new JsonObject();
-        conditions.addProperty("type", "pixelmon:true");
-        interaction.add("conditions", conditions);
-
-        JsonObject results = new JsonObject();
-        JsonArray resultsArray = new JsonArray();
-
-        // 失败对话
-        JsonObject dialogue = new JsonObject();
-        dialogue.add("title", title); // 使用传入的标题对象
-        dialogue.add("message", message); // 使用传入的消息对象
-        dialogue.addProperty("fire_close_event", false);
-        dialogue.addProperty("type", "pixelmon:open_dialogue");
-        resultsArray.add(dialogue);
-
-        // 设置冷却
-        JsonObject cooldown = new JsonObject();
-        cooldown.addProperty("type", "pixelmon:set_cooldown");
-
-        JsonObject player = new JsonObject();
-        player.addProperty("key", "pixelmon:player");
-        player.addProperty("type", "pixelmon:context_player");
-        cooldown.add("player", player);
-
-        cooldown.addProperty("key", "pixelmon:gym_leader");
-        cooldown.addProperty("cooldown", cooldownDays);
-        cooldown.addProperty("unit", "DAYS");
-        resultsArray.add(cooldown);
 
         results.add("value", resultsArray);
         results.addProperty("type", "pixelmon:constant");
