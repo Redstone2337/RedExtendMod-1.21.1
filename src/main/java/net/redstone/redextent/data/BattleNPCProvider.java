@@ -1,8 +1,12 @@
 package net.redstone.redextent.data;
 
-import com.google.gson.JsonObject;
 import net.minecraft.data.PackOutput;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Items;
 import net.redstone.redextent.core.generator.PixelmonNPCProvider;
+import net.redstone.redextent.core.npc.NpcPresetBuilder;
+import net.redstone.redextent.core.npc.NpcPresetBuilder.*;
+import net.redstone.redextent.core.npc.NPCType;
 
 import java.util.List;
 import java.util.Map;
@@ -28,10 +32,11 @@ public class BattleNPCProvider extends PixelmonNPCProvider {
      * 创建馆主：蓝龙（神兽道馆馆主）
      */
     private void createBlueDragonGymLeader() {
-        JsonObject title = createTextTitle("神兽道馆馆主·蓝龙", "#4169E1", true, false, true);
-        JsonObject greeting = createTextMessage("欢迎来到神兽道馆！我是馆主蓝龙。准备好面对传说中的宝可梦了吗？");
-        JsonObject winMessage = createTextMessage("不可思议！你竟然战胜了我的神兽队伍！这是神兽徽章，你值得拥有！");
-        JsonObject loseMessage = createTextMessage("神兽的力量果然不是那么容易挑战的，继续努力吧！");
+        TextContent title = TextContent.literal("神兽道馆馆主·蓝龙");
+        TextContent greeting = TextContent.literal("欢迎来到神兽道馆！我是馆主蓝龙。准备好面对传说中的宝可梦了吗？");
+        TextContent winMessage = TextContent.literal("不可思议！你竟然战胜了我的神兽队伍！这是神兽徽章，你值得拥有！");
+        TextContent loseMessage = TextContent.literal("神兽的力量果然不是那么容易挑战的，继续努力吧！");
+        TextContent cooldownMessage = TextContent.literal("你已经挑战过我了，明天再来吧！");
 
         // 蓝龙的队伍 - 全是神兽，等级90-100
         List<String> blueDragonTeam = List.of(
@@ -72,32 +77,40 @@ public class BattleNPCProvider extends PixelmonNPCProvider {
                         Map.of("hp", 252, "atk", 0, "def", 0, "spatk", 252, "spdef", 4, "spd", 0))
         );
 
-        addGymLeader(
-                "blue_dragon_leader",          // 文件名
-                "蓝龙",                        // NPC名称
-                title,                         // 自定义标题
-                greeting,                      // 自定义问候语
-                winMessage,                    // 自定义胜利消息
-                loseMessage,                   // 自定义失败消息
-                blueDragonTeam,                // 神兽队伍配置
-                10000.0,                       // 奖励金钱
-                List.of(                       // 奖励物品
-                        createItemReward("pixelmon:master_ball", 2),
-                        createItemReward("pixelmon:rare_candy", 10)
-                ),
-                3,                             // 冷却天数
-                "rem:textures/npc/battle/blue_dragon.png" // 纹理路径
+        Map<String, Object> battleProperties = Map.of(
+            "partySpecs", blueDragonTeam,
+            "moneyReward", 10000.0,
+            "rewardItems", List.of(
+                RewardItem.of("pixelmon:master_ball", 2),
+                RewardItem.of("pixelmon:rare_candy", 10)
+            ),
+            "leaderKey", "blue_dragon_leader",
+            "winMessage", winMessage,
+            "loseMessage", loseMessage,
+            "cooldownMessage", cooldownMessage
         );
+
+        NpcTemplate gymLeader = NpcPresetBuilder.createNpcByType(
+            "blue_dragon_leader",
+            NPCType.BATTLE,
+            List.of("蓝龙"),
+            List.of(ResourceLocation.parse("rem:textures/npc/battle/blue_dragon.png")),
+            title,
+            battleProperties
+        );
+
+        addNPC(gymLeader);
     }
 
     /**
      * 创建实习训练家：火焰神兽训练家
      */
     private void createFireLegendaryTrainer() {
-        JsonObject title = createTextTitle("火焰神兽训练家·炎煌", "#FF4500", true, false, false);
-        JsonObject greeting = createTextMessage("我是火焰神兽训练家炎煌！让火焰净化一切吧！");
-        JsonObject winMessage = createTextMessage("你的实力让我印象深刻！继续前进吧！");
-        JsonObject loseMessage = createTextMessage("火焰的力量果然还是最强的！");
+        TextContent title = TextContent.literal("火焰神兽训练家·炎煌");
+        TextContent greeting = TextContent.literal("我是火焰神兽训练家炎煌！让火焰净化一切吧！");
+        TextContent winMessage = TextContent.literal("你的实力让我印象深刻！继续前进吧！");
+        TextContent loseMessage = TextContent.literal("火焰的力量果然还是最强的！");
+        TextContent cooldownMessage = TextContent.literal("你今天已经挑战过我了，明天再来吧！");
 
         // 火焰神兽队伍 - 等级70-90
         List<String> fireTeam = List.of(
@@ -138,32 +151,40 @@ public class BattleNPCProvider extends PixelmonNPCProvider {
                         Map.of("hp", 0, "atk", 252, "def", 0, "spatk", 0, "spdef", 4, "spd", 252))
         );
 
-        addGymLeader(
-                "fire_legendary_trainer",      // 文件名
-                "炎煌",                        // NPC名称
-                title,                         // 自定义标题
-                greeting,                      // 自定义问候语
-                winMessage,                    // 自定义胜利消息
-                loseMessage,                   // 自定义失败消息
-                fireTeam,                      // 神兽队伍配置
-                5000.0,                        // 奖励金钱
-                List.of(                       // 奖励物品
-                        createItemReward("pixelmon:fire_stone", 1),
-                        createItemReward("pixelmon:rare_candy", 5)
-                ),
-                2,                             // 冷却天数
-                "rem:textures/npc/battle/eric.png" // 纹理路径
+        Map<String, Object> battleProperties = Map.of(
+            "partySpecs", fireTeam,
+            "moneyReward", 5000.0,
+            "rewardItems", List.of(
+                RewardItem.of("pixelmon:fire_stone", 1),
+                RewardItem.of("pixelmon:rare_candy", 5)
+            ),
+            "leaderKey", "fire_legendary_trainer",
+            "winMessage", winMessage,
+            "loseMessage", loseMessage,
+            "cooldownMessage", cooldownMessage
         );
+
+        NpcTemplate trainer = NpcPresetBuilder.createNpcByType(
+            "fire_legendary_trainer",
+            NPCType.BATTLE,
+            List.of("炎煌"),
+            List.of(ResourceLocation.parse("rem:textures/npc/battle/eric.png")),
+            title,
+            battleProperties
+        );
+
+        addNPC(trainer);
     }
 
     /**
      * 创建实习训练家：水系神兽训练家
      */
     private void createWaterLegendaryTrainer() {
-        JsonObject title = createTextTitle("水系神兽训练家·海澜", "#1E90FF", true, false, false);
-        JsonObject greeting = createTextMessage("我是水系神兽训练家海澜！感受大海的力量吧！");
-        JsonObject winMessage = createTextMessage("你的实力如海洋般深不可测！继续前进吧！");
-        JsonObject loseMessage = createTextMessage("大海的力量是无穷无尽的！");
+        TextContent title = TextContent.literal("水系神兽训练家·海澜");
+        TextContent greeting = TextContent.literal("我是水系神兽训练家海澜！感受大海的力量吧！");
+        TextContent winMessage = TextContent.literal("你的实力如海洋般深不可测！继续前进吧！");
+        TextContent loseMessage = TextContent.literal("大海的力量是无穷无尽的！");
+        TextContent cooldownMessage = TextContent.literal("你今天已经挑战过我了，明天再来吧！");
 
         // 水系神兽队伍 - 等级70-90
         List<String> waterTeam = List.of(
@@ -204,32 +225,40 @@ public class BattleNPCProvider extends PixelmonNPCProvider {
                         Map.of("hp", 0, "atk", 252, "def", 0, "spatk", 0, "spdef", 4, "spd", 252))
         );
 
-        addGymLeader(
-                "water_legendary_trainer",     // 文件名
-                "海澜",                        // NPC名称
-                title,                         // 自定义标题
-                greeting,                      // 自定义问候语
-                winMessage,                    // 自定义胜利消息
-                loseMessage,                   // 自定义失败消息
-                waterTeam,                     // 神兽队伍配置
-                5000.0,                        // 奖励金钱
-                List.of(                       // 奖励物品
-                        createItemReward("pixelmon:water_stone", 1),
-                        createItemReward("pixelmon:rare_candy", 5)
-                ),
-                2,                             // 冷却天数
-                "rem:textures/npc/battle/ice_dragon.png" // 纹理路径
+        Map<String, Object> battleProperties = Map.of(
+            "partySpecs", waterTeam,
+            "moneyReward", 5000.0,
+            "rewardItems", List.of(
+                RewardItem.of("pixelmon:water_stone", 1),
+                RewardItem.of("pixelmon:rare_candy", 5)
+            ),
+            "leaderKey", "water_legendary_trainer",
+            "winMessage", winMessage,
+            "loseMessage", loseMessage,
+            "cooldownMessage", cooldownMessage
         );
+
+        NpcTemplate trainer = NpcPresetBuilder.createNpcByType(
+            "water_legendary_trainer",
+            NPCType.BATTLE,
+            List.of("海澜"),
+            List.of(ResourceLocation.parse("rem:textures/npc/battle/ice_dragon.png")),
+            title,
+            battleProperties
+        );
+
+        addNPC(trainer);
     }
 
     /**
      * 创建实习训练家：电系神兽训练家
      */
     private void createElectricLegendaryTrainer() {
-        JsonObject title = createTextTitle("电系神兽训练家·雷霆", "#FFD700", true, false, false);
-        JsonObject greeting = createTextMessage("我是电系神兽训练家雷霆！准备好被电击了吗？");
-        JsonObject winMessage = createTextMessage("你的实力如闪电般耀眼！继续前进吧！");
-        JsonObject loseMessage = createTextMessage("电力的力量无人能挡！");
+        TextContent title = TextContent.literal("电系神兽训练家·雷霆");
+        TextContent greeting = TextContent.literal("我是电系神兽训练家雷霆！准备好被电击了吗？");
+        TextContent winMessage = TextContent.literal("你的实力如闪电般耀眼！继续前进吧！");
+        TextContent loseMessage = TextContent.literal("电力的力量无人能挡！");
+        TextContent cooldownMessage = TextContent.literal("你今天已经挑战过我了，明天再来吧！");
 
         // 电系神兽队伍 - 等级70-90
         List<String> electricTeam = List.of(
@@ -270,32 +299,40 @@ public class BattleNPCProvider extends PixelmonNPCProvider {
                         Map.of("hp", 248, "atk", 0, "def", 0, "spatk", 252, "spdef", 8, "spd", 0))
         );
 
-        addGymLeader(
-                "electric_legendary_trainer",  // 文件名
-                "雷霆",                        // NPC名称
-                title,                         // 自定义标题
-                greeting,                      // 自定义问候语
-                winMessage,                    // 自定义胜利消息
-                loseMessage,                   // 自定义失败消息
-                electricTeam,                  // 神兽队伍配置
-                5000.0,                        // 奖励金钱
-                List.of(                       // 奖励物品
-                        createItemReward("pixelmon:thunder_stone", 1),
-                        createItemReward("pixelmon:rare_candy", 5)
-                ),
-                2,                             // 冷却天数
-                "rem:textures/npc/battle/ender_dragon.png" // 纹理路径
+        Map<String, Object> battleProperties = Map.of(
+            "partySpecs", electricTeam,
+            "moneyReward", 5000.0,
+            "rewardItems", List.of(
+                RewardItem.of("pixelmon:thunder_stone", 1),
+                RewardItem.of("pixelmon:rare_candy", 5)
+            ),
+            "leaderKey", "electric_legendary_trainer",
+            "winMessage", winMessage,
+            "loseMessage", loseMessage,
+            "cooldownMessage", cooldownMessage
         );
+
+        NpcTemplate trainer = NpcPresetBuilder.createNpcByType(
+            "electric_legendary_trainer",
+            NPCType.BATTLE,
+            List.of("雷霆"),
+            List.of(ResourceLocation.parse("rem:textures/npc/battle/ender_dragon.png")),
+            title,
+            battleProperties
+        );
+
+        addNPC(trainer);
     }
 
     /**
      * 创建实习训练家：龙系神兽训练家
      */
     private void createDragonLegendaryTrainer() {
-        JsonObject title = createTextTitle("龙系神兽训练家·龙啸", "#8A2BE2", true, false, false);
-        JsonObject greeting = createTextMessage("我是龙系神兽训练家龙啸！感受龙之怒吧！");
-        JsonObject winMessage = createTextMessage("你的实力如同传说中的龙骑士！继续前进吧！");
-        JsonObject loseMessage = createTextMessage("龙族的力量永远是最强的！");
+        TextContent title = TextContent.literal("龙系神兽训练家·龙啸");
+        TextContent greeting = TextContent.literal("我是龙系神兽训练家龙啸！感受龙之怒吧！");
+        TextContent winMessage = TextContent.literal("你的实力如同传说中的龙骑士！继续前进吧！");
+        TextContent loseMessage = TextContent.literal("龙族的力量永远是最强的！");
+        TextContent cooldownMessage = TextContent.literal("你今天已经挑战过我了，明天再来吧！");
 
         // 龙系神兽队伍 - 等级70-90
         List<String> dragonTeam = List.of(
@@ -336,21 +373,28 @@ public class BattleNPCProvider extends PixelmonNPCProvider {
                         Map.of("hp", 0, "atk", 252, "def", 0, "spatk", 0, "spdef", 4, "spd", 252))
         );
 
-        addGymLeader(
-                "dragon_legendary_trainer",    // 文件名
-                "龙啸",                        // NPC名称
-                title,                         // 自定义标题
-                greeting,                      // 自定义问候语
-                winMessage,                    // 自定义胜利消息
-                loseMessage,                   // 自定义失败消息
-                dragonTeam,                    // 神兽队伍配置
-                5000.0,                        // 奖励金钱
-                List.of(                       // 奖励物品
-                        createItemReward("pixelmon:dragon_scale", 1),
-                        createItemReward("pixelmon:rare_candy", 5)
-                ),
-                2,                             // 冷却天数
-                "pixelmon:textures/npc/gym_leaders/dragon_trainer.png" // 纹理路径
+        Map<String, Object> battleProperties = Map.of(
+            "partySpecs", dragonTeam,
+            "moneyReward", 5000.0,
+            "rewardItems", List.of(
+                RewardItem.of("pixelmon:dragon_scale", 1),
+                RewardItem.of("pixelmon:rare_candy", 5)
+            ),
+            "leaderKey", "dragon_legendary_trainer",
+            "winMessage", winMessage,
+            "loseMessage", loseMessage,
+            "cooldownMessage", cooldownMessage
         );
+
+        NpcTemplate trainer = NpcPresetBuilder.createNpcByType(
+            "dragon_legendary_trainer",
+            NPCType.BATTLE,
+            List.of("龙啸"),
+            List.of(ResourceLocation.parse("pixelmon:textures/npc/gym_leaders/dragon_trainer.png")),
+            title,
+            battleProperties
+        );
+
+        addNPC(trainer);
     }
 }
