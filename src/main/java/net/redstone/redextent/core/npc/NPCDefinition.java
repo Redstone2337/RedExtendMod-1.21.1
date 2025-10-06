@@ -7,35 +7,21 @@ package net.redstone.redextent.core.npc;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.mojang.serialization.Codec;
-import com.mojang.serialization.DataResult;
-import com.mojang.serialization.JsonOps;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 /**
- * 用于以类型安全的方式创建宝可梦NPC定义的构建器类，使用CODEC序列化。
+ * 用于以类型安全的方式创建宝可梦NPC定义的构建器类。
  */
 public class NPCDefinition {
-    private final Optional<JsonObject> properties;
-    private final Optional<JsonObject> names;
-    private final Optional<JsonObject> party;
-    private final Optional<JsonObject> models;
-    private final Optional<JsonObject> goals;
-    private final Optional<JsonObject> interactions;
+    private JsonObject properties;
+    private JsonObject names;
+    private JsonObject party;
+    private JsonObject models;
+    private JsonObject goals;
+    private JsonObject interactions;
 
-    private NPCDefinition(Optional<JsonObject> properties, Optional<JsonObject> names,
-                        Optional<JsonObject> party, Optional<JsonObject> models,
-                        Optional<JsonObject> goals, Optional<JsonObject> interactions) {
-        this.properties = properties;
-        this.names = names;
-        this.party = party;
-        this.models = models;
-        this.goals = goals;
-        this.interactions = interactions;
-    }
+    private NPCDefinition() {}
 
     public static Builder builder() {
         return new Builder();
@@ -44,60 +30,22 @@ public class NPCDefinition {
     public JsonObject serialize() {
         JsonObject root = new JsonObject();
 
-        properties.ifPresent(props -> root.add("properties", props));
-        names.ifPresent(n -> root.add("names", n));
-        party.ifPresent(p -> root.add("party", p));
-        models.ifPresent(m -> root.add("models", m));
-        goals.ifPresent(g -> root.add("goals", g));
-        interactions.ifPresent(i -> root.add("interactions", i));
+        if (properties != null) root.add("properties", properties);
+        if (names != null) root.add("names", names);
+        if (party != null) root.add("party", party);
+        if (models != null) root.add("models", models);
+        if (goals != null) root.add("goals", goals);
+        if (interactions != null) root.add("interactions", interactions);
 
         return root;
     }
 
-    // CODEC 定义
-    public static final Codec<NPCDefinition> CODEC = RecordCodecBuilder.create(instance ->
-        instance.group(
-            Codec.optionalField("properties", JsonObject.CODEC).forGetter(NPCDefinition::getProperties),
-            Codec.optionalField("names", JsonObject.CODEC).forGetter(NPCDefinition::getNames),
-            Codec.optionalField("party", JsonObject.CODEC).forGetter(NPCDefinition::getParty),
-            Codec.optionalField("models", JsonObject.CODEC).forGetter(NPCDefinition::getModels),
-            Codec.optionalField("goals", JsonObject.CODEC).forGetter(NPCDefinition::getGoals),
-            Codec.optionalField("interactions", JsonObject.CODEC).forGetter(NPCDefinition::getInteractions)
-        ).apply(instance, NPCDefinition::new)
-    );
-
-    public Optional<JsonObject> getProperties() { return properties; }
-    public Optional<JsonObject> getNames() { return names; }
-    public Optional<JsonObject> getParty() { return party; }
-    public Optional<JsonObject> getModels() { return models; }
-    public Optional<JsonObject> getGoals() { return goals; }
-    public Optional<JsonObject> getInteractions() { return interactions; }
-
-    /**
-     * 从JSON对象创建NPCDefinition实例
-     */
-    public static NPCDefinition fromJson(JsonObject json) {
-        DataResult<NPCDefinition> result = CODEC.parse(JsonOps.INSTANCE, json);
-        return result.result().orElseThrow(() -> new IllegalArgumentException("Invalid NPC JSON: " + result.error().orElse(null)));
-    }
-
-    /**
-     * 转换为JSON对象
-     */
-    public JsonObject toJson() {
-        DataResult<JsonObject> result = CODEC.encodeStart(JsonOps.INSTANCE, this);
-        return result.result().orElseGet(JsonObject::new);
-    }
-
     public static class Builder {
-        private JsonObject properties;
-        private JsonObject names;
-        private JsonObject party;
-        private JsonObject models;
-        private JsonObject goals;
-        private JsonObject interactions;
+        private final NPCDefinition definition;
 
-        private Builder() {}
+        private Builder() {
+            this.definition = new NPCDefinition();
+        }
 
         /**
          * 使用自定义标题对象的属性配置
@@ -116,7 +64,7 @@ public class NPCDefinition {
             dimensions.addProperty("height", height);
             value.add("dimensions", dimensions);
 
-            value.add("title", title);
+            value.add("title", title); // 使用传入的标题对象
 
             value.addProperty("pushable", pushable);
             value.addProperty("child", child);
@@ -126,13 +74,13 @@ public class NPCDefinition {
 
             properties.add("value", value);
             properties.addProperty("type", "pixelmon:constant");
-            this.properties = properties;
+            definition.properties = properties;
             return this;
         }
 
         // 交互配置
         public Builder withInteractions(JsonObject interactions) {
-            this.interactions = interactions;
+            definition.interactions = interactions;
             return this;
         }
 
@@ -142,7 +90,7 @@ public class NPCDefinition {
             interactionValues.forEach(valuesArray::add);
             interactions.add("values", valuesArray);
             interactions.addProperty("type", "pixelmon:uniformly_random");
-            this.interactions = interactions;
+            definition.interactions = interactions;
             return this;
         }
 
@@ -150,13 +98,13 @@ public class NPCDefinition {
             JsonObject interactions = new JsonObject();
             interactions.add("value", interactionValue);
             interactions.addProperty("type", "pixelmon:constant");
-            this.interactions = interactions;
+            definition.interactions = interactions;
             return this;
         }
 
         // 属性配置
         public Builder withProperties(JsonObject properties) {
-            this.properties = properties;
+            definition.properties = properties;
             return this;
         }
 
@@ -186,7 +134,7 @@ public class NPCDefinition {
 
             properties.add("value", value);
             properties.addProperty("type", "pixelmon:constant");
-            this.properties = properties;
+            definition.properties = properties;
             return this;
         }
 
@@ -199,19 +147,40 @@ public class NPCDefinition {
                                             boolean italic, boolean underlined, boolean pushable,
                                             boolean child, boolean invulnerable, boolean immovable,
                                             boolean nameplate) {
+            JsonObject properties = new JsonObject();
+            JsonObject value = new JsonObject();
+
+            value.addProperty("health", health);
+            value.addProperty("eyeHeight", eyeHeight);
+
+            JsonObject dimensions = new JsonObject();
+            dimensions.addProperty("width", width);
+            dimensions.addProperty("height", height);
+            value.add("dimensions", dimensions);
+
             JsonObject title = new JsonObject();
             title.addProperty("translate", titleTranslate);
             title.addProperty("color", color);
             title.addProperty("bold", bold);
             title.addProperty("italic", italic);
             title.addProperty("underlined", underlined);
+            value.add("title", title);
 
-            return withTitleProperties(health, eyeHeight, width, height, title, pushable, child, invulnerable, immovable, nameplate);
+            value.addProperty("pushable", pushable);
+            value.addProperty("child", child);
+            value.addProperty("invulnerable", invulnerable);
+            value.addProperty("immovable", immovable);
+            value.addProperty("nameplate", nameplate);
+
+            properties.add("value", value);
+            properties.addProperty("type", "pixelmon:constant");
+            definition.properties = properties;
+            return this;
         }
 
         // 队伍配置
         public Builder withParty(JsonObject party) {
-            this.party = party;
+            definition.party = party;
             return this;
         }
 
@@ -221,7 +190,7 @@ public class NPCDefinition {
             value.addProperty("type", "pixelmon:empty");
             party.add("value", value);
             party.addProperty("type", "pixelmon:constant");
-            this.party = party;
+            definition.party = party;
             return this;
         }
 
@@ -236,13 +205,13 @@ public class NPCDefinition {
 
             party.add("value", value);
             party.addProperty("type", "pixelmon:constant");
-            this.party = party;
+            definition.party = party;
             return this;
         }
 
         // 名称配置
         public Builder withNames(JsonObject names) {
-            this.names = names;
+            definition.names = names;
             return this;
         }
 
@@ -252,7 +221,7 @@ public class NPCDefinition {
             nameList.forEach(valuesArray::add);
             names.add("values", valuesArray);
             names.addProperty("type", "pixelmon:uniformly_random");
-            this.names = names;
+            definition.names = names;
             return this;
         }
 
@@ -262,13 +231,13 @@ public class NPCDefinition {
             valuesArray.add(name);
             names.add("values", valuesArray);
             names.addProperty("type", "pixelmon:uniformly_random");
-            this.names = names;
+            definition.names = names;
             return this;
         }
 
         // 模型配置
         public Builder withModels(JsonObject models) {
-            this.models = models;
+            definition.models = models;
             return this;
         }
 
@@ -294,7 +263,7 @@ public class NPCDefinition {
 
             models.add("values", valuesArray);
             models.addProperty("type", "pixelmon:uniformly_random");
-            this.models = models;
+            definition.models = models;
             return this;
         }
 
@@ -324,13 +293,13 @@ public class NPCDefinition {
 
             models.add("value", value);
             models.addProperty("type", "pixelmon:constant");
-            this.models = models;
+            definition.models = models;
             return this;
         }
 
         // 行为目标配置
         public Builder withGoals(JsonObject goals) {
-            this.goals = goals;
+            definition.goals = goals;
             return this;
         }
 
@@ -353,19 +322,12 @@ public class NPCDefinition {
             value.add("goals", goalsArray);
             goals.add("value", value);
             goals.addProperty("type", "pixelmon:constant");
-            this.goals = goals;
+            definition.goals = goals;
             return this;
         }
 
         public NPCDefinition build() {
-            return new NPCDefinition(
-                Optional.ofNullable(properties),
-                Optional.ofNullable(names),
-                Optional.ofNullable(party),
-                Optional.ofNullable(models),
-                Optional.ofNullable(goals),
-                Optional.ofNullable(interactions)
-            );
+            return definition;
         }
     }
 
@@ -393,14 +355,5 @@ public class NPCDefinition {
         public static PlayerModel of(boolean slim, String textureResource) {
             return new PlayerModel(slim, textureResource, textureResource);
         }
-
-        // CODEC for PlayerModel
-        public static final Codec<PlayerModel> CODEC = RecordCodecBuilder.create(instance ->
-            instance.group(
-                Codec.BOOL.fieldOf("slim").forGetter(m -> m.slim),
-                Codec.STRING.fieldOf("textureResource").forGetter(m -> m.textureResource),
-                Codec.STRING.fieldOf("textureFallback").forGetter(m -> m.textureFallback)
-            ).apply(instance, PlayerModel::new)
-        );
     }
 }
