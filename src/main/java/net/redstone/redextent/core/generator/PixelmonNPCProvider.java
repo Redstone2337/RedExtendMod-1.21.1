@@ -1,9 +1,9 @@
 package net.redstone.redextent.core.generator;
 
 import net.minecraft.data.PackOutput;
-import net.redstone.redextent.data.provider.NpcDataProvider;
-import net.redstone.redextent.data.codec.NpcDefinitionCodec;
-import net.redstone.redextent.data.preset.NpcPresetBuilder;
+import net.redstone.redextent.core.npc.NpcDataProvider;
+import net.redstone.redextent.core.codecs.NpcDefinitionCodec;
+import net.redstone.redextent.core.npc.NpcPresetBuilder;
 
 import java.util.Map;
 import java.util.HashMap;
