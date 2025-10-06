@@ -53,10 +53,11 @@ public abstract class NpcDataProvider implements DataProvider {
                 .resolve(basePath)
                 .resolve(name + ".json");
             
-            JsonElement json = NpcDefinitionCodec.CODEC.encodeStart(JsonOps.INSTANCE, definition)
-                .getOrThrow(false, msg -> {
-                    throw new IllegalArgumentException("Failed to encode NPC definition for " + name + ": " + msg);
-                });
+            // 修改 getOrThrow 调用
+        JsonElement json = NpcDefinitionCodec.CODEC.encodeStart(JsonOps.INSTANCE, definition)
+            .getOrThrow(msg -> { // 移除 boolean 参数
+                throw new IllegalArgumentException("Failed to encode NPC definition for " + name + ": " + msg);
+            });
             
             futures.add(DataProvider.saveStable(cache, json, filePath));
         });
