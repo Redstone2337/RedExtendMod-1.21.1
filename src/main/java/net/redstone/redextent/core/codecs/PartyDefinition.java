@@ -7,7 +7,6 @@ package net.redstone.redextent.core.codecs;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.util.ExtraCodecs;
 
 import java.util.List;
 import java.util.Optional;
@@ -65,7 +64,7 @@ public record PartyDefinition(
     ) {
         public static final Codec<PartyValue> CODEC = RecordCodecBuilder.create(instance ->
             instance.group(
-                ExtraCodecs.STRING.listOf().optionalFieldOf("specs").forGetter(PartyValue::specs),
+                Codec.STRING.listOf().optionalFieldOf("specs").forGetter(PartyValue::specs), // 修改这里
                 Codec.STRING.fieldOf("type").forGetter(PartyValue::type)
             ).apply(instance, PartyValue::new)
         );

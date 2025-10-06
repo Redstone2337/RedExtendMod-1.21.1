@@ -7,7 +7,6 @@ package net.redstone.redextent.core.codecs;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.util.ExtraCodecs;
 
 import java.util.List;
 
@@ -18,9 +17,10 @@ public record NameDefinition(
     List<String> values,
     String type
 ) {
+    // 修改 ExtraCodecs.STRING 为 Codec.STRING
     public static final Codec<NameDefinition> CODEC = RecordCodecBuilder.create(instance ->
         instance.group(
-            ExtraCodecs.STRING.listOf().fieldOf("values").forGetter(NameDefinition::values),
+            Codec.STRING.listOf().fieldOf("values").forGetter(NameDefinition::values), // 修改这里
             Codec.STRING.fieldOf("type").forGetter(NameDefinition::type)
         ).apply(instance, NameDefinition::new)
     );

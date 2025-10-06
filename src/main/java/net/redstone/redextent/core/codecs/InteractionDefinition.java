@@ -71,11 +71,14 @@ public record InteractionDefinition(
         }
     }
 
+    // 修改这两个有问题的行
     public record Interaction(
         String event,
-        Object conditions,
+        JsonElement conditions, // 从 Object 改为 JsonElement
         InteractionResults results
     ) {
+        // ...
+
         public static final Codec<Interaction> CODEC = RecordCodecBuilder.create(instance ->
             instance.group(
                 Codec.STRING.fieldOf("event").forGetter(Interaction::event),
@@ -83,25 +86,19 @@ public record InteractionDefinition(
                 InteractionResults.CODEC.fieldOf("results").forGetter(Interaction::results)
             ).apply(instance, Interaction::new)
         );
-
-        public static Interaction of(String event, Object conditions, InteractionResults results) {
-            return new Interaction(event, conditions, results);
-        }
     }
 
     public record InteractionResults(
         String type,
-        List<Object> value
+        List<JsonElement> value // 从 List<Object> 改为 List<JsonElement>
     ) {
+        // ...
+    
         public static final Codec<InteractionResults> CODEC = RecordCodecBuilder.create(instance ->
             instance.group(
                 Codec.STRING.fieldOf("type").forGetter(InteractionResults::type),
                 ExtraCodecs.JSON.listOf().fieldOf("value").forGetter(InteractionResults::value)
             ).apply(instance, InteractionResults::new)
         );
-
-        public static InteractionResults constant(List<Object> value) {
-            return new InteractionResults("pixelmon:constant", value);
-        }
     }
 }
