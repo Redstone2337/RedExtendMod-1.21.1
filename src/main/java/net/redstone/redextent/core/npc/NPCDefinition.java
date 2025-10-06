@@ -30,14 +30,92 @@ public class NPCDefinition {
     public JsonObject serialize() {
         JsonObject root = new JsonObject();
 
-        if (properties != null) root.add("properties", properties);
-        if (names != null) root.add("names", names);
-        if (party != null) root.add("party", party);
-        if (models != null) root.add("models", models);
-        if (goals != null) root.add("goals", goals);
-        if (interactions != null) root.add("interactions", interactions);
+        if (properties != null) root.add("properties", properties); // 6
+        if (names != null) root.add("names", names); // 4
+        if (party != null) root.add("party", party); // 5
+        if (models != null) root.add("models", models); //3
+        if (goals != null) root.add("goals", goals); // 1
+        if (interactions != null) root.add("interactions", interactions); // 2
 
         return root;
+    }
+
+    /**
+     * 根据NPC类型生成对应的数据结构
+     * @param type NPC类型
+     * @return 序列化的JSON对象
+     */
+    public JsonObject serialize(NPCType type) {
+        JsonObject root = new JsonObject();
+
+        switch (type) {
+            case BATTLE:
+                // 生成与战斗(Battle)数据文件一模一样的结构
+                if (interactions != null) root.add("interactions", interactions);
+                if (models != null) root.add("models", models);
+                if (goals != null) root.add("goals", goals);
+                if (party != null) root.add("party", party);
+                if (properties != null) root.add("properties", properties);
+                if (names != null) root.add("names", names);
+                break;
+                
+            case CHATTING:
+            case DIALOGUE:
+            case SHOPKEEPER:
+            case TRAINERS:
+            case TUTOR:
+                // 生成与聊天(Chatting)，对话(Dialogue)，
+                // 商店店主(Shopkeeper)，训练师(Trainers)，
+                // 导师(Tutor)数据文件一模一样的结构
+                if (goals != null) root.add("goals", goals);
+                if (names != null) root.add("names", names);
+                if (models != null) root.add("models", models);
+                if (party != null) root.add("party", party);
+                if (interactions != null) root.add("interactions", interactions);
+                if (properties != null) root.add("properties", properties);
+                break;
+                
+            case POKECENTER:
+            case UTILITY:
+                // 生成与宝可梦中心(Pokecenter)和工具(Utility)一样的数据结构
+                if (goals != null) root.add("goals", goals);
+                if (properties != null) root.add("properties", properties);
+                if (party != null) root.add("party", party);
+                if (interactions != null) root.add("interactions", interactions);
+                if (names != null) root.add("names", names);
+                if (models != null) root.add("models", models);
+                break;
+                
+            default:
+                // 默认使用原始顺序
+                return serialize();
+        }
+
+        return root;
+    }
+
+    /**
+     * NPC类型枚举
+     */
+    public enum NPCType {
+        /** 默认类型 */
+        DEFAULT,
+        /** 战斗类型 */
+        BATTLE,
+        /** 聊天类型 */
+        CHATTING,
+        /** 对话类型 */
+        DIALOGUE,
+        /** 商店店主类型 */
+        SHOPKEEPER,
+        /** 训练师类型 */
+        TRAINERS,
+        /** 导师类型 */
+        TUTOR,
+        /** 宝可梦中心类型 */
+        POKECENTER,
+        /** 工具类型 */
+        UTILITY
     }
 
     public static class Builder {
