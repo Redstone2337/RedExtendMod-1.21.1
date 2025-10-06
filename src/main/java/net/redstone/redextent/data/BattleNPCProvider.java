@@ -89,7 +89,8 @@ public class BattleNPCProvider extends PixelmonNPCProvider {
                         createItemReward("pixelmon:rare_candy", 10)
                 ),
                 3,                             // 冷却天数
-                "rem:textures/npc/battle/blue_dragon.png" // 纹理路径
+                "rem:textures/npc/battle/blue_dragon.png", // 纹理路径
+                "blue_dragon_leader"           // 冷却键名
         );
     }
 
@@ -155,7 +156,8 @@ public class BattleNPCProvider extends PixelmonNPCProvider {
                         createItemReward("pixelmon:rare_candy", 5)
                 ),
                 2,                             // 冷却天数
-                "rem:textures/npc/battle/eric.png" // 纹理路径
+                "rem:textures/npc/battle/eric.png", // 纹理路径
+                "fire_legendary_trainer"       // 冷却键名
         );
     }
 
@@ -221,7 +223,8 @@ public class BattleNPCProvider extends PixelmonNPCProvider {
                         createItemReward("pixelmon:rare_candy", 5)
                 ),
                 2,                             // 冷却天数
-                "rem:textures/npc/battle/ice_dragon.png" // 纹理路径
+                "rem:textures/npc/battle/ice_dragon.png", // 纹理路径
+                "water_legendary_trainer"      // 冷却键名
         );
     }
 
@@ -287,7 +290,8 @@ public class BattleNPCProvider extends PixelmonNPCProvider {
                         createItemReward("pixelmon:rare_candy", 5)
                 ),
                 2,                             // 冷却天数
-                "rem:textures/npc/battle/ender_dragon.png" // 纹理路径
+                "rem:textures/npc/battle/ender_dragon.png", // 纹理路径
+                "electric_legendary_trainer"   // 冷却键名
         );
     }
 
@@ -353,7 +357,8 @@ public class BattleNPCProvider extends PixelmonNPCProvider {
                         createItemReward("pixelmon:rare_candy", 5)
                 ),
                 2,                             // 冷却天数
-                "pixelmon:textures/npc/gym_leaders/dragon_trainer.png" // 纹理路径
+                "pixelmon:textures/npc/gym_leaders/dragon_trainer.png", // 纹理路径
+                "dragon_legendary_trainer"     // 冷却键名
         );
     }
 
