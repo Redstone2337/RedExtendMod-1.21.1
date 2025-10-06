@@ -5,10 +5,10 @@ import net.minecraft.resources.ResourceLocation;
 import net.redstone.redextent.core.generator.PixelmonNPCProvider;
 import net.redstone.redextent.core.npc.NpcPresetBuilder;
 import net.redstone.redextent.core.npc.NpcPresetBuilder.*;
-import net.redstone.redextent.core.npc.NPCType;
+import net.redstone.redextent.core.codecs.NpcDefinitionCodec;
 
 import java.util.List;
-import java.util.Map;
+import java.util.function.BiConsumer;
 
 /**
  * 提示NPC数据提供者 - 专门生成提示NPC
@@ -20,14 +20,14 @@ public class TipNPCProvider extends PixelmonNPCProvider {
     }
 
     @Override
-    public void registerNPCs() {
-        createModPublicityAmbassador();
+    protected void registerNpcs(BiConsumer<String, NpcDefinitionCodec> consumer) {
+        createModPublicityAmbassador(consumer);
     }
 
     /**
      * 创建模组宣传大使NPC
      */
-    private void createModPublicityAmbassador() {
+    private void createModPublicityAmbassador(BiConsumer<String, NpcDefinitionCodec> consumer) {
         TextContent title = TextContent.literal("模组宣传");
         List<TextContent> tipMessages = List.of(
                 TextContent.literal("欢迎来到我们的像素精灵世界！"),
@@ -35,15 +35,8 @@ public class TipNPCProvider extends PixelmonNPCProvider {
                 TextContent.literal("记得定期检查我们的更新，获取最新内容和活动信息！")
         );
 
-        Map<String, Object> chatProperties = Map.of(
-            "dialoguePages", tipMessages,
-            "randomName", true,
-            "randomModel", true
-        );
-
-        NpcTemplate ambassador = NpcPresetBuilder.createNpcByType(
+        NpcTemplate ambassador = NpcPresetBuilder.createChatNpc(
             "publicity_ambassador",
-            NPCType.CHATTING,
             List.of("Fire Dragon Kael", "Lu Ming Fei", "Magic Dragon An Ye"),
             List.of(
                 ResourceLocation.parse("rem:textures/steve/fire_dragon.png"),
@@ -51,9 +44,11 @@ public class TipNPCProvider extends PixelmonNPCProvider {
                 ResourceLocation.parse("rem:textures/steve/magic_dragon_electricity.png")
             ),
             title,
-            chatProperties
+            tipMessages,
+            true,
+            true
         );
 
-        addNPC(ambassador);
+        consumer.accept(ambassador.name(), ambassador.build());
     }
 }

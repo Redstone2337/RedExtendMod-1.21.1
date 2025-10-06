@@ -5,10 +5,10 @@ import net.minecraft.resources.ResourceLocation;
 import net.redstone.redextent.core.generator.PixelmonNPCProvider;
 import net.redstone.redextent.core.npc.NpcPresetBuilder;
 import net.redstone.redextent.core.npc.NpcPresetBuilder.*;
-import net.redstone.redextent.core.npc.NPCType;
+import net.redstone.redextent.core.codecs.NpcDefinitionCodec;
 
 import java.util.List;
-import java.util.Map;
+import java.util.function.BiConsumer;
 
 /**
  * 商店NPC数据提供者 - 专门生成商店NPC
@@ -20,14 +20,14 @@ public class ShopNPCProvider extends PixelmonNPCProvider {
     }
 
     @Override
-    public void registerNPCs() {
-        createPremiumShopKeeper();
+    protected void registerNpcs(BiConsumer<String, NpcDefinitionCodec> consumer) {
+        createPremiumShopKeeper(consumer);
     }
 
     /**
      * 创建高级商店NPC - 售卖稀有物品
      */
-    private void createPremiumShopKeeper() {
+    private void createPremiumShopKeeper(BiConsumer<String, NpcDefinitionCodec> consumer) {
         TextContent title = TextContent.literal("毛毛龙的商店");
         TextContent greeting = TextContent.literal("欢迎来到毛毛龙商店，这里只有最稀有的商品！");
         TextContent goodbye = TextContent.literal("感谢您的光临，期待再次为您服务！");
@@ -39,23 +39,18 @@ public class ShopNPCProvider extends PixelmonNPCProvider {
                 ShopItem.of("pixelmon:ability_capsule", 1, 10000.0, 2500.0)
         );
 
-        Map<String, Object> shopProperties = Map.of(
-            "greeting", greeting,
-            "goodbye", goodbye,
-            "shopItems", premiumItems,
-            "randomName", false,
-            "randomModel", false
-        );
-
-        NpcTemplate shopKeeper = NpcPresetBuilder.createNpcByType(
+        NpcTemplate shopKeeper = NpcPresetBuilder.createShopNpc(
             "info_dragon",
-            NPCType.SHOPKEEPER,
             List.of("毛毛龙·晨曦"),
             List.of(ResourceLocation.parse("rem:textures/steve/info_dragon.png")),
             title,
-            shopProperties
+            greeting,
+            goodbye,
+            premiumItems,
+            false,
+            false
         );
 
-        addNPC(shopKeeper);
+        consumer.accept(shopKeeper.name(), shopKeeper.build());
     }
 }
