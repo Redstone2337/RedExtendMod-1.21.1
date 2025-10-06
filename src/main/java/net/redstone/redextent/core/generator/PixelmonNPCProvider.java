@@ -7,6 +7,7 @@ package net.redstone.redextent.core.generator;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.mojang.serialization.JsonOps;
 import java.nio.file.Path;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -15,9 +16,9 @@ import java.util.concurrent.CompletableFuture;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
 import net.redstone.redextent.core.npc.NPCDefinition;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -127,16 +128,26 @@ public abstract class PixelmonNPCProvider implements DataProvider {
     }
 
     /**
+     * 添加具有给定文件名和NPCDefinition对象的NPC定义。
+     *
+     * @param fileName NPC定义的文件名（不带.json扩展名）。
+     * @param npcDefinition NPCDefinition对象。
+     */
+    protected void add(final String fileName, final NPCDefinition npcDefinition) {
+        add(fileName, npcDefinition.toJson());
+    }
+
+    /**
      * 创建一个新的空NPC定义构建器。
      */
     protected static NPCDefinition.Builder definition() {
         return NPCDefinition.builder();
     }
 
-    // ==================== 快速生成方法（新版，与原版结构一致） ====================
+    // ==================== 快速生成方法（新版，使用CODEC结构） ====================
 
     /**
-     * 快速生成馆主NPC（新版，与原版结构一致）
+     * 快速生成道馆训练家NPC（新版CODEC结构）
      *
      * @param fileName 文件名
      * @param npcName NPC名称
@@ -149,33 +160,33 @@ public abstract class PixelmonNPCProvider implements DataProvider {
      * @param rewardItems 奖励物品列表
      * @param cooldownDays 冷却天数
      * @param texture 纹理路径
+     * @param cooldownKey 冷却键名
      */
     protected void addGymLeader(String fileName, String npcName, JsonObject title,
                                 JsonObject greeting, JsonObject winMessage, JsonObject loseMessage,
                                 List<String> pokemonSpecs, double rewardMoney,
-                                List<JsonObject> rewardItems, int cooldownDays, String texture) {
+                                List<JsonObject> rewardItems, int cooldownDays, String texture, String cooldownKey) {
 
-        JsonObject npcDefinition = definition()
+        NPCDefinition npcDefinition = definition()
                 .withTitleProperties(20.0f, 1.9f, 0.65f, 2.0f, title, false, false, false, false, true)
                 .withSingleName(npcName)
                 .withSpecParty(pokemonSpecs)
                 .withSinglePlayerModel(false, texture, texture)
                 .withLookAtNearbyGoal(8.0f, 0.9f, 1)
-                .withConstantInteractions(createGymLeaderInteractions(title, greeting, winMessage,
-                        loseMessage, rewardMoney, rewardItems, cooldownDays, fileName))
-                .build()
-                .serialize();
+                .withConstantInteractions(createGymLeaderInteractionsCODEC(title, greeting, winMessage,
+                        loseMessage, rewardMoney, rewardItems, cooldownDays, fileName, cooldownKey))
+                .build();
 
         this.add(fileName, npcDefinition);
     }
 
     /**
-     * 快速生成馆主NPC（简化版，使用翻译键作为消息）
+     * 快速生成道馆训练家NPC（简化版，使用翻译键作为消息）
      */
     protected void addGymLeader(String fileName, String npcName, String titleTranslate,
                                 String greetingTranslate, String winMessageTranslate, String loseMessageTranslate,
                                 List<String> pokemonSpecs, double rewardMoney,
-                                List<JsonObject> rewardItems, int cooldownDays, String texture) {
+                                List<JsonObject> rewardItems, int cooldownDays, String texture, String cooldownKey) {
 
         JsonObject title = createTranslateTitle(titleTranslate, "#8E44AD", true, false, false);
         JsonObject greeting = createTranslateMessage(greetingTranslate);
@@ -183,11 +194,11 @@ public abstract class PixelmonNPCProvider implements DataProvider {
         JsonObject loseMessage = createTranslateMessage(loseMessageTranslate);
 
         addGymLeader(fileName, npcName, title, greeting, winMessage, loseMessage,
-                pokemonSpecs, rewardMoney, rewardItems, cooldownDays, texture);
+                pokemonSpecs, rewardMoney, rewardItems, cooldownDays, texture, cooldownKey);
     }
 
     /**
-     * 快速生成商店NPC（新版，与原版结构一致）
+     * 快速生成商店NPC（新版CODEC结构）
      *
      * @param fileName 文件名
      * @param npcNames NPC名称列表
@@ -205,15 +216,14 @@ public abstract class PixelmonNPCProvider implements DataProvider {
                 .map(texture -> NPCDefinition.PlayerModel.of(false, texture))
                 .toList();
 
-        JsonObject npcDefinition = definition()
+        NPCDefinition npcDefinition = definition()
                 .withTitleProperties(20.0f, 1.0f, 1.0f, 2.0f, title, false, false, false, false, true)
                 .withRandomNames(npcNames)
                 .withEmptyParty()
                 .withRandomPlayerModels(models)
                 .withLookAtNearbyGoal(5.0f, 0.9f, 1)
-                .withUniformInteractions(List.of(createShopInteractions(title, greeting, goodbye, shopItems)))
-                .build()
-                .serialize();
+                .withUniformInteractions(List.of(createShopInteractionsCODEC(title, greeting, goodbye, shopItems)))
+                .build();
 
         this.add(fileName, npcDefinition);
     }
@@ -233,7 +243,7 @@ public abstract class PixelmonNPCProvider implements DataProvider {
     }
 
     /**
-     * 快速生成提示NPC（新版，与原版结构一致）
+     * 快速生成对话框NPC（新版CODEC结构）
      *
      * @param fileName 文件名
      * @param npcNames NPC名称列表
@@ -241,44 +251,538 @@ public abstract class PixelmonNPCProvider implements DataProvider {
      * @param messages 消息配置列表（JsonObject，支持translate或text）
      * @param textureResources 纹理资源列表
      */
-    protected void addTipNPC(String fileName, List<String> npcNames, JsonObject title,
-                             List<JsonObject> messages, List<String> textureResources) {
+    protected void addDialogueNPC(String fileName, List<String> npcNames, JsonObject title,
+                                  List<JsonObject> messages, List<String> textureResources) {
 
         List<NPCDefinition.PlayerModel> models = textureResources.stream()
                 .map(texture -> NPCDefinition.PlayerModel.of(false, texture))
                 .toList();
 
-        JsonObject npcDefinition = definition()
+        NPCDefinition npcDefinition = definition()
                 .withTitleProperties(20.0f, 1.0f, 1.0f, 2.0f, title, false, false, false, false, true)
                 .withRandomNames(npcNames)
                 .withEmptyParty()
                 .withRandomPlayerModels(models)
                 .withLookAtNearbyGoal(4.0f, 0.9f, 1)
-                .withUniformInteractions(List.of(createTipInteractions(title, messages)))
-                .build()
-                .serialize();
+                .withUniformInteractions(List.of(createDialogueInteractionsCODEC(title, messages)))
+                .build();
 
         this.add(fileName, npcDefinition);
     }
 
     /**
-     * 快速生成提示NPC（简化版，使用翻译键作为消息）
+     * 快速生成对话框NPC（简化版，使用翻译键作为消息）
      */
-    protected void addTipNPC(String fileName, List<String> npcNames, String titleTranslate,
-                             List<String> messageTranslates, List<String> textureResources) {
+    protected void addDialogueNPC(String fileName, List<String> npcNames, String titleTranslate,
+                                  List<String> messageTranslates, List<String> textureResources) {
 
         JsonObject title = createTranslateTitle(titleTranslate, "#F8F8F2", true, false, false);
         List<JsonObject> messages = messageTranslates.stream()
                 .map(PixelmonNPCProvider::createTranslateMessage)
                 .toList();
 
-        addTipNPC(fileName, npcNames, title, messages, textureResources);
+        addDialogueNPC(fileName, npcNames, title, messages, textureResources);
+    }
+
+    // ==================== 新版CODEC辅助方法 ====================
+
+    private JsonObject createGymLeaderInteractionsCODEC(JsonObject title, JsonObject greeting,
+                                                       JsonObject winMessage, JsonObject loseMessage,
+                                                       double rewardMoney, List<JsonObject> rewardItems,
+                                                       int cooldownDays, String fileName, String cooldownKey) {
+        JsonObject interactionsWrapper = new JsonObject();
+        JsonArray interactionsArray = new JsonArray();
+
+        // 右键点击交互 - 可以战斗的情况
+        interactionsArray.add(createRightClickBattleInteractionCODEC(greeting, title, fileName, cooldownKey));
+        // 右键点击交互 - 冷却中的情况
+        interactionsArray.add(createRightClickCooldownInteractionCODEC(fileName, cooldownKey));
+        // 右键点击交互 - 无法战斗的情况
+        interactionsArray.add(createRightClickUnableBattleInteractionCODEC(fileName));
+        // 关闭对话开始战斗
+        interactionsArray.add(createCloseDialogueBattleInteractionCODEC());
+        // 战斗胜利交互
+        interactionsArray.add(createWinBattleInteractionCODEC(winMessage, title, rewardMoney, rewardItems, cooldownDays, fileName, cooldownKey));
+        // 战斗失败交互
+        interactionsArray.add(createLoseBattleInteractionCODEC(loseMessage, title, fileName));
+
+        interactionsWrapper.add("interactions", interactionsArray);
+        return interactionsWrapper;
+    }
+
+    private JsonObject createShopInteractionsCODEC(JsonObject title, JsonObject greeting,
+                                                  JsonObject goodbye, List<JsonObject> shopItems) {
+        JsonObject interactionsWrapper = new JsonObject();
+        JsonArray interactionsArray = new JsonArray();
+
+        // 右键点击打开对话
+        interactionsArray.add(createRightClickInteractionCODEC(greeting, title));
+        // 关闭对话打开商店
+        interactionsArray.add(createOpenShopInteractionCODEC(shopItems));
+        // 关闭商店显示告别语
+        interactionsArray.add(createShopGoodbyeInteractionCODEC(goodbye, title));
+
+        interactionsWrapper.add("interactions", interactionsArray);
+        return interactionsWrapper;
+    }
+
+    private JsonObject createDialogueInteractionsCODEC(JsonObject title, List<JsonObject> messages) {
+        JsonObject interactionsWrapper = new JsonObject();
+        JsonArray interactionsArray = new JsonArray();
+
+        // 右键点击打开多页对话
+        JsonObject interaction = new JsonObject();
+        interaction.addProperty("event", "pixelmon:right_click");
+
+        JsonObject conditions = new JsonObject();
+        conditions.addProperty("type", "pixelmon:true");
+        interaction.add("conditions", conditions);
+
+        JsonObject results = new JsonObject();
+        JsonArray resultsArray = new JsonArray();
+
+        JsonObject dialogue = new JsonObject();
+        dialogue.add("title", title);
+
+        JsonArray pagesArray = new JsonArray();
+        for (JsonObject message : messages) {
+            pagesArray.add(message);
+        }
+        dialogue.add("pages", pagesArray);
+        dialogue.addProperty("type", "pixelmon:open_paged_dialogue");
+
+        resultsArray.add(dialogue);
+        results.add("value", resultsArray);
+        results.addProperty("type", "pixelmon:constant");
+        interaction.add("results", results);
+
+        interactionsArray.add(interaction);
+        interactionsWrapper.add("interactions", interactionsArray);
+        return interactionsWrapper;
+    }
+
+    // ==================== CODEC交互构建方法 ====================
+
+    private JsonObject createRightClickBattleInteractionCODEC(JsonObject message, JsonObject title, String fileName, String cooldownKey) {
+        JsonObject interaction = new JsonObject();
+        interaction.addProperty("event", "pixelmon:right_click");
+
+        JsonArray conditions = new JsonArray();
+
+        // 条件1: 使用主手
+        JsonObject condition1 = createHandCondition();
+        conditions.add(condition1);
+
+        // 条件2: 可以战斗
+        JsonObject condition2 = createCanBattleCondition();
+        conditions.add(condition2);
+
+        // 条件3: 不在冷却中
+        JsonObject condition3 = createNotOnCooldownCondition(cooldownKey);
+        conditions.add(condition3);
+
+        interaction.add("conditions", conditions);
+
+        JsonObject results = new JsonObject();
+        JsonArray resultsArray = new JsonArray();
+
+        JsonObject dialogue = new JsonObject();
+        dialogue.add("title", title);
+        dialogue.add("message", message);
+        dialogue.addProperty("type", "pixelmon:open_dialogue");
+        resultsArray.add(dialogue);
+
+        results.add("value", resultsArray);
+        results.addProperty("type", "pixelmon:constant");
+        interaction.add("results", results);
+
+        return interaction;
+    }
+
+    private JsonObject createRightClickCooldownInteractionCODEC(String fileName, String cooldownKey) {
+        JsonObject interaction = new JsonObject();
+        interaction.addProperty("event", "pixelmon:right_click");
+
+        JsonArray conditions = new JsonArray();
+
+        // 条件1: 使用主手
+        JsonObject condition1 = createHandCondition();
+        conditions.add(condition1);
+
+        // 条件2: 在冷却中
+        JsonObject condition2 = createOnCooldownCondition(cooldownKey);
+        conditions.add(condition2);
+
+        interaction.add("conditions", conditions);
+
+        JsonObject results = new JsonObject();
+        JsonArray resultsArray = new JsonArray();
+
+        JsonObject message = new JsonObject();
+        JsonArray messages = new JsonArray();
+        JsonObject msg = new JsonObject();
+        msg.addProperty("translate", "pixelmon.npc.dialogue.battle.leader.gym." + fileName + ".cooldown");
+        messages.add(msg);
+        message.add("messages", messages);
+        message.addProperty("type", "pixelmon:message_player");
+        resultsArray.add(message);
+
+        results.add("value", resultsArray);
+        results.addProperty("type", "pixelmon:constant");
+        interaction.add("results", results);
+
+        return interaction;
+    }
+
+    private JsonObject createRightClickUnableBattleInteractionCODEC(String fileName) {
+        JsonObject interaction = new JsonObject();
+        interaction.addProperty("event", "pixelmon:right_click");
+
+        JsonArray conditions = new JsonArray();
+
+        // 条件1: 使用主手
+        JsonObject condition1 = createHandCondition();
+        conditions.add(condition1);
+
+        // 条件2: 无法战斗
+        JsonObject condition2 = createCannotBattleCondition();
+        conditions.add(condition2);
+
+        interaction.add("conditions", conditions);
+
+        JsonObject results = new JsonObject();
+        JsonArray resultsArray = new JsonArray();
+
+        JsonObject message = new JsonObject();
+        JsonArray messages = new JsonArray();
+        JsonObject msg = new JsonObject();
+        msg.addProperty("translate", "pixelmon.npc.dialogue.battle.leader.gym." + fileName + ".unable_to_battle");
+        messages.add(msg);
+        message.add("messages", messages);
+        message.addProperty("type", "pixelmon:message_player");
+        resultsArray.add(message);
+
+        results.add("value", resultsArray);
+        results.addProperty("type", "pixelmon:constant");
+        interaction.add("results", results);
+
+        return interaction;
+    }
+
+    private JsonObject createRightClickInteractionCODEC(JsonObject message, JsonObject title) {
+        JsonObject interaction = new JsonObject();
+        interaction.addProperty("event", "pixelmon:right_click");
+
+        JsonObject conditions = new JsonObject();
+        conditions.addProperty("type", "pixelmon:true");
+        interaction.add("conditions", conditions);
+
+        JsonObject results = new JsonObject();
+        JsonArray resultsArray = new JsonArray();
+
+        JsonObject dialogue = new JsonObject();
+        dialogue.add("title", title);
+        dialogue.add("message", message);
+        dialogue.addProperty("type", "pixelmon:open_dialogue");
+        resultsArray.add(dialogue);
+
+        results.add("value", resultsArray);
+        results.addProperty("type", "pixelmon:constant");
+        interaction.add("results", results);
+
+        return interaction;
+    }
+
+    private JsonObject createCloseDialogueBattleInteractionCODEC() {
+        JsonObject interaction = new JsonObject();
+        interaction.addProperty("event", "pixelmon:close_dialogue");
+
+        JsonArray conditions = new JsonArray();
+        JsonObject condition = new JsonObject();
+        condition.addProperty("type", "pixelmon:constant_boolean");
+        condition.addProperty("value", true);
+        conditions.add(condition);
+
+        interaction.add("conditions", conditions);
+
+        JsonObject results = new JsonObject();
+        JsonArray resultsArray = new JsonArray();
+
+        JsonObject battle = new JsonObject();
+        battle.addProperty("type", "pixelmon:player_start_npc_battle");
+        resultsArray.add(battle);
+
+        results.add("value", resultsArray);
+        results.addProperty("type", "pixelmon:constant");
+        interaction.add("results", results);
+
+        return interaction;
+    }
+
+    private JsonObject createWinBattleInteractionCODEC(JsonObject message, JsonObject title,
+                                                      double rewardMoney, List<JsonObject> rewardItems,
+                                                      int cooldownDays, String fileName, String cooldownKey) {
+        JsonObject interaction = new JsonObject();
+        interaction.addProperty("event", "pixelmon:win_battle");
+
+        JsonObject conditions = new JsonObject();
+        conditions.addProperty("type", "pixelmon:true");
+        interaction.add("conditions", conditions);
+
+        JsonObject results = new JsonObject();
+        JsonArray resultsArray = new JsonArray();
+
+        // 胜利对话
+        JsonObject dialogue = new JsonObject();
+        dialogue.add("title", title);
+        dialogue.add("message", message);
+        dialogue.addProperty("fire_close_event", false);
+        dialogue.addProperty("type", "pixelmon:open_dialogue");
+        resultsArray.add(dialogue);
+
+        // 金钱奖励
+        if (rewardMoney > 0) {
+            JsonObject moneyReward = new JsonObject();
+            moneyReward.addProperty("money", rewardMoney);
+            moneyReward.addProperty("type", "pixelmon:give_money");
+            resultsArray.add(moneyReward);
+        }
+
+        // 物品奖励
+        if (!rewardItems.isEmpty()) {
+            JsonObject itemReward = new JsonObject();
+            itemReward.addProperty("type", "pixelmon:give_item");
+
+            JsonArray itemsArray = new JsonArray();
+            for (JsonObject item : rewardItems) {
+                itemsArray.add(item);
+            }
+            itemReward.add("items", itemsArray);
+            resultsArray.add(itemReward);
+        }
+
+        // 设置冷却
+        JsonObject cooldown = new JsonObject();
+        cooldown.addProperty("type", "pixelmon:set_cooldown");
+
+        JsonObject player = new JsonObject();
+        player.addProperty("key", "pixelmon:player");
+        player.addProperty("type", "pixelmon:context_player");
+        cooldown.add("player", player);
+
+        cooldown.addProperty("key", "pixelmon:" + cooldownKey);
+        cooldown.addProperty("cooldown", cooldownDays);
+        cooldown.addProperty("unit", "DAYS");
+        resultsArray.add(cooldown);
+
+        // 设置字符串上下文
+        JsonObject stringContext = new JsonObject();
+        stringContext.addProperty("type", "pixelmon:set_string_context");
+        stringContext.addProperty("key", "pixelmon:leader");
+        stringContext.addProperty("value", fileName);
+        resultsArray.add(stringContext);
+
+        // 触发训练师击败事件
+        JsonObject defeatEvent = new JsonObject();
+        defeatEvent.addProperty("type", "pixelmon:trigger_interaction_event");
+        defeatEvent.addProperty("event", "pixelmon:defeat_leader");
+        resultsArray.add(defeatEvent);
+
+        results.add("value", resultsArray);
+        results.addProperty("type", "pixelmon:constant");
+        interaction.add("results", results);
+
+        return interaction;
+    }
+
+    private JsonObject createLoseBattleInteractionCODEC(JsonObject message, JsonObject title, String fileName) {
+        JsonObject interaction = new JsonObject();
+        interaction.addProperty("event", "pixelmon:lose_battle");
+
+        JsonObject conditions = new JsonObject();
+        conditions.addProperty("type", "pixelmon:true");
+        interaction.add("conditions", conditions);
+
+        JsonObject results = new JsonObject();
+        JsonArray resultsArray = new JsonArray();
+
+        // 失败对话
+        JsonObject dialogue = new JsonObject();
+        dialogue.add("title", title);
+        dialogue.add("message", message);
+        dialogue.addProperty("fire_close_event", false);
+        dialogue.addProperty("type", "pixelmon:open_dialogue");
+        resultsArray.add(dialogue);
+
+        // 设置字符串上下文
+        JsonObject stringContext = new JsonObject();
+        stringContext.addProperty("type", "pixelmon:set_string_context");
+        stringContext.addProperty("key", "pixelmon:leader");
+        stringContext.addProperty("value", fileName);
+        resultsArray.add(stringContext);
+
+        // 触发失败事件
+        JsonObject loseEvent = new JsonObject();
+        loseEvent.addProperty("type", "pixelmon:trigger_interaction_event");
+        loseEvent.addProperty("event", "pixelmon:lose_to_leader");
+        resultsArray.add(loseEvent);
+
+        results.add("value", resultsArray);
+        results.addProperty("type", "pixelmon:constant");
+        interaction.add("results", results);
+
+        return interaction;
+    }
+
+    private JsonObject createOpenShopInteractionCODEC(List<JsonObject> shopItems) {
+        JsonObject interaction = new JsonObject();
+        interaction.addProperty("event", "pixelmon:close_dialogue");
+
+        JsonObject conditions = new JsonObject();
+        conditions.addProperty("type", "pixelmon:true");
+        interaction.add("conditions", conditions);
+
+        JsonObject results = new JsonObject();
+        JsonArray resultsArray = new JsonArray();
+
+        JsonObject shop = new JsonObject();
+
+        JsonArray itemsArray = new JsonArray();
+        for (JsonObject item : shopItems) {
+            itemsArray.add(item);
+        }
+        shop.add("items", itemsArray);
+        shop.addProperty("type", "pixelmon:open_shop");
+
+        resultsArray.add(shop);
+        results.add("value", resultsArray);
+        results.addProperty("type", "pixelmon:constant");
+        interaction.add("results", results);
+
+        return interaction;
+    }
+
+    private JsonObject createShopGoodbyeInteractionCODEC(JsonObject message, JsonObject title) {
+        JsonObject interaction = new JsonObject();
+        interaction.addProperty("event", "pixelmon:close_shop");
+
+        JsonObject conditions = new JsonObject();
+        conditions.addProperty("type", "pixelmon:true");
+        interaction.add("conditions", conditions);
+
+        JsonObject results = new JsonObject();
+        JsonArray resultsArray = new JsonArray();
+
+        JsonObject dialogue = new JsonObject();
+        dialogue.add("title", title);
+        dialogue.add("message", message);
+        dialogue.addProperty("fire_close_event", false);
+        dialogue.addProperty("type", "pixelmon:open_dialogue");
+        resultsArray.add(dialogue);
+
+        results.add("value", resultsArray);
+        results.addProperty("type", "pixelmon:constant");
+        interaction.add("results", results);
+
+        return interaction;
+    }
+
+    // ==================== 条件构建辅助方法 ====================
+
+    private JsonObject createHandCondition() {
+        JsonObject condition = new JsonObject();
+        condition.addProperty("type", "pixelmon:interaction_condition");
+        JsonObject handCondition = new JsonObject();
+        handCondition.addProperty("type", "pixelmon:string_compare");
+        
+        JsonObject first = new JsonObject();
+        first.addProperty("value", "MAIN_HAND");
+        first.addProperty("type", "pixelmon:constant_string");
+        handCondition.add("first", first);
+        
+        JsonObject second = new JsonObject();
+        second.addProperty("type", "pixelmon:hand_used");
+        handCondition.add("second", second);
+        
+        condition.add("condition", handCondition);
+        return condition;
+    }
+
+    private JsonObject createCanBattleCondition() {
+        JsonObject condition = new JsonObject();
+        condition.addProperty("type", "pixelmon:interaction_condition");
+        JsonObject battleCondition = new JsonObject();
+        battleCondition.addProperty("type", "pixelmon:can_battle");
+        
+        JsonObject player = new JsonObject();
+        player.addProperty("key", "pixelmon:player");
+        player.addProperty("type", "pixelmon:context_player");
+        battleCondition.add("player", player);
+        
+        condition.add("condition", battleCondition);
+        return condition;
+    }
+
+    private JsonObject createCannotBattleCondition() {
+        JsonObject condition = new JsonObject();
+        condition.addProperty("type", "pixelmon:interaction_condition");
+        JsonObject notCondition = new JsonObject();
+        notCondition.addProperty("type", "pixelmon:logical_not");
+        
+        JsonObject innerCondition = new JsonObject();
+        innerCondition.addProperty("type", "pixelmon:interaction_condition");
+        JsonObject battleCondition = new JsonObject();
+        battleCondition.addProperty("type", "pixelmon:can_battle");
+        
+        JsonObject player = new JsonObject();
+        player.addProperty("key", "pixelmon:player");
+        player.addProperty("type", "pixelmon:context_player");
+        battleCondition.add("player", player);
+        
+        innerCondition.add("condition", battleCondition);
+        notCondition.add("condition", innerCondition);
+        condition.add("condition", notCondition);
+        return condition;
+    }
+
+    private JsonObject createNotOnCooldownCondition(String cooldownKey) {
+        JsonObject condition = new JsonObject();
+        condition.addProperty("type", "pixelmon:interaction_condition");
+        JsonObject notCondition = new JsonObject();
+        notCondition.addProperty("type", "pixelmon:logical_not");
+        
+        JsonObject innerCondition = new JsonObject();
+        innerCondition.addProperty("type", "pixelmon:interaction_condition");
+        JsonObject cooldownCondition = createOnCooldownCondition(cooldownKey);
+        innerCondition.add("condition", cooldownCondition.get("condition"));
+        notCondition.add("condition", innerCondition);
+        condition.add("condition", notCondition);
+        return condition;
+    }
+
+    private JsonObject createOnCooldownCondition(String cooldownKey) {
+        JsonObject condition = new JsonObject();
+        condition.addProperty("type", "pixelmon:interaction_condition");
+        JsonObject cooldownCondition = new JsonObject();
+        cooldownCondition.addProperty("type", "pixelmon:on_cooldown");
+        
+        JsonObject player = new JsonObject();
+        player.addProperty("key", "pixelmon:player");
+        player.addProperty("type", "pixelmon:context_player");
+        cooldownCondition.add("player", player);
+        
+        cooldownCondition.addProperty("cooldown_key", "pixelmon:" + cooldownKey);
+        cooldownCondition.addProperty("cooldown", 1);
+        cooldownCondition.addProperty("unit", "DAYS");
+        
+        condition.add("condition", cooldownCondition);
+        return condition;
     }
 
     // ==================== 旧版快速生成方法（已弃用，保持向下兼容） ====================
 
     /**
-     * @deprecated 使用 {@link #addGymLeader(String, String, JsonObject, JsonObject, JsonObject, JsonObject, List, double, List, int, String)} 替代
+     * @deprecated 使用 {@link #addGymLeader(String, String, JsonObject, JsonObject, JsonObject, JsonObject, List, double, List, int, String, String)} 替代
      */
     @Deprecated
     protected void addGymLeaderOld(String fileName, String npcName, JsonObject title,
@@ -301,7 +805,7 @@ public abstract class PixelmonNPCProvider implements DataProvider {
     }
 
     /**
-     * @deprecated 使用 {@link #addGymLeader(String, String, String, String, String, String, List, double, List, int, String)} 替代
+     * @deprecated 使用 {@link #addGymLeader(String, String, String, String, String, String, List, double, List, int, String, String)} 替代
      */
     @Deprecated
     protected void addGymLeaderOld(String fileName, String npcName, String titleTranslate,
@@ -316,6 +820,24 @@ public abstract class PixelmonNPCProvider implements DataProvider {
 
         addGymLeaderOld(fileName, npcName, title, greeting, winMessage, loseMessage,
                 pokemonSpecs, rewardMoney, rewardItems, cooldownDays, texture);
+    }
+
+    /**
+     * @deprecated 使用 {@link #addDialogueNPC(String, List, JsonObject, List, List)} 替代
+     */
+    @Deprecated
+    protected void addTipNPC(String fileName, List<String> npcNames, JsonObject title,
+                             List<JsonObject> messages, List<String> textureResources) {
+        addDialogueNPC(fileName, npcNames, title, messages, textureResources);
+    }
+
+    /**
+     * @deprecated 使用 {@link #addDialogueNPC(String, List, String, List, List)} 替代
+     */
+    @Deprecated
+    protected void addTipNPC(String fileName, List<String> npcNames, String titleTranslate,
+                             List<String> messageTranslates, List<String> textureResources) {
+        addDialogueNPC(fileName, npcNames, titleTranslate, messageTranslates, textureResources);
     }
 
     // ==================== 辅助类方法 ====================
@@ -540,513 +1062,10 @@ public abstract class PixelmonNPCProvider implements DataProvider {
         return new NPCDefinition.PlayerModel(slim, textureResource, textureFallback);
     }
 
-    // ==================== 新版私有辅助方法（与原版结构一致） ====================
-
-    private JsonObject createGymLeaderInteractions(JsonObject title, JsonObject greeting,
-                                                   JsonObject winMessage, JsonObject loseMessage,
-                                                   double rewardMoney, List<JsonObject> rewardItems,
-                                                   int cooldownDays, String fileName) {
-        JsonObject interactionsWrapper = new JsonObject();
-        JsonArray interactionsArray = new JsonArray();
-
-        // 右键点击交互 - 可以战斗的情况
-        interactionsArray.add(createRightClickBattleInteraction(greeting, title, fileName));
-        // 右键点击交互 - 冷却中的情况
-        interactionsArray.add(createRightClickCooldownInteraction(fileName));
-        // 右键点击交互 - 无法战斗的情况
-        interactionsArray.add(createRightClickUnableBattleInteraction(fileName));
-        // 关闭对话开始战斗
-        interactionsArray.add(createCloseDialogueBattleInteraction());
-        // 战斗胜利交互
-        interactionsArray.add(createWinBattleInteraction(winMessage, title, rewardMoney, rewardItems, cooldownDays, fileName));
-        // 战斗失败交互
-        interactionsArray.add(createLoseBattleInteraction(loseMessage, title, cooldownDays, fileName));
-
-        interactionsWrapper.add("interactions", interactionsArray);
-        return interactionsWrapper;
-    }
-
-    private JsonObject createShopInteractions(JsonObject title, JsonObject greeting,
-                                              JsonObject goodbye, List<JsonObject> shopItems) {
-        JsonObject interactionsWrapper = new JsonObject();
-        JsonArray interactionsArray = new JsonArray();
-
-        // 右键点击打开对话
-        interactionsArray.add(createRightClickInteraction(greeting, title));
-        // 关闭对话打开商店
-        interactionsArray.add(createOpenShopInteraction(shopItems));
-        // 关闭商店显示告别语
-        interactionsArray.add(createShopGoodbyeInteraction(goodbye, title));
-
-        interactionsWrapper.add("interactions", interactionsArray);
-        return interactionsWrapper;
-    }
-
-    private JsonObject createTipInteractions(JsonObject title, List<JsonObject> messages) {
-        JsonObject interactionsWrapper = new JsonObject();
-        JsonArray interactionsArray = new JsonArray();
-
-        // 右键点击打开多页对话
-        JsonObject interaction = new JsonObject();
-        interaction.addProperty("event", "pixelmon:right_click");
-
-        JsonObject conditions = new JsonObject();
-        conditions.addProperty("type", "pixelmon:true");
-        interaction.add("conditions", conditions);
-
-        JsonObject results = new JsonObject();
-        JsonArray resultsArray = new JsonArray();
-
-        JsonObject dialogue = new JsonObject();
-        dialogue.add("title", title); // 使用传入的标题对象
-
-        JsonArray pagesArray = new JsonArray();
-        for (JsonObject message : messages) {
-            pagesArray.add(message); // 使用传入的消息对象
-        }
-        dialogue.add("pages", pagesArray);
-        dialogue.addProperty("type", "pixelmon:open_paged_dialogue");
-
-        resultsArray.add(dialogue);
-        results.add("value", resultsArray);
-        results.addProperty("type", "pixelmon:constant");
-        interaction.add("results", results);
-
-        interactionsArray.add(interaction);
-        interactionsWrapper.add("interactions", interactionsArray);
-        return interactionsWrapper;
-    }
-
-    private JsonObject createRightClickBattleInteraction(JsonObject message, JsonObject title, String fileName) {
-        JsonObject interaction = new JsonObject();
-        interaction.addProperty("event", "pixelmon:right_click");
-
-        JsonArray conditions = new JsonArray();
-
-        // 条件1: 使用主手
-        JsonObject condition1 = new JsonObject();
-        condition1.addProperty("type", "pixelmon:interaction_condition");
-        JsonObject handCondition = new JsonObject();
-        handCondition.addProperty("type", "pixelmon:string_compare");
-        
-        JsonObject first = new JsonObject();
-        first.addProperty("value", "MAIN_HAND");
-        first.addProperty("type", "pixelmon:constant_string");
-        handCondition.add("first", first);
-        
-        JsonObject second = new JsonObject();
-        second.addProperty("type", "pixelmon:hand_used");
-        handCondition.add("second", second);
-        
-        condition1.add("condition", handCondition);
-        conditions.add(condition1);
-
-        // 条件2: 可以战斗
-        JsonObject condition2 = new JsonObject();
-        condition2.addProperty("type", "pixelmon:interaction_condition");
-        JsonObject battleCondition = new JsonObject();
-        battleCondition.addProperty("type", "pixelmon:can_battle");
-        
-        JsonObject player = new JsonObject();
-        player.addProperty("key", "pixelmon:player");
-        player.addProperty("type", "pixelmon:context_player");
-        battleCondition.add("player", player);
-        
-        condition2.add("condition", battleCondition);
-        conditions.add(condition2);
-
-        // 条件3: 不在冷却中
-        JsonObject condition3 = new JsonObject();
-        condition3.addProperty("type", "pixelmon:interaction_condition");
-        JsonObject notCondition = new JsonObject();
-        notCondition.addProperty("type", "pixelmon:logical_not");
-        
-        JsonObject innerCondition = new JsonObject();
-        innerCondition.addProperty("type", "pixelmon:interaction_condition");
-        JsonObject cooldownCondition = new JsonObject();
-        cooldownCondition.addProperty("type", "pixelmon:on_cooldown");
-        
-        JsonObject cooldownPlayer = new JsonObject();
-        cooldownPlayer.addProperty("key", "pixelmon:player");
-        cooldownPlayer.addProperty("type", "pixelmon:context_player");
-        cooldownCondition.add("player", cooldownPlayer);
-        
-        cooldownCondition.addProperty("cooldown_key", "pixelmon:" + fileName);
-        cooldownCondition.addProperty("cooldown", 1);
-        cooldownCondition.addProperty("unit", "DAYS");
-        
-        innerCondition.add("condition", cooldownCondition);
-        notCondition.add("condition", innerCondition);
-        condition3.add("condition", notCondition);
-        conditions.add(condition3);
-
-        interaction.add("conditions", conditions);
-
-        JsonObject results = new JsonObject();
-        JsonArray resultsArray = new JsonArray();
-
-        JsonObject dialogue = new JsonObject();
-        dialogue.add("title", title);
-        dialogue.add("message", message);
-        dialogue.addProperty("type", "pixelmon:open_dialogue");
-        resultsArray.add(dialogue);
-
-        results.add("value", resultsArray);
-        results.addProperty("type", "pixelmon:constant");
-        interaction.add("results", results);
-
-        return interaction;
-    }
-
-    private JsonObject createRightClickCooldownInteraction(String fileName) {
-        JsonObject interaction = new JsonObject();
-        interaction.addProperty("event", "pixelmon:right_click");
-
-        JsonArray conditions = new JsonArray();
-
-        // 条件1: 使用主手
-        JsonObject condition1 = new JsonObject();
-        condition1.addProperty("type", "pixelmon:interaction_condition");
-        JsonObject handCondition = new JsonObject();
-        handCondition.addProperty("type", "pixelmon:string_compare");
-        
-        JsonObject first = new JsonObject();
-        first.addProperty("value", "MAIN_HAND");
-        first.addProperty("type", "pixelmon:constant_string");
-        handCondition.add("first", first);
-        
-        JsonObject second = new JsonObject();
-        second.addProperty("type", "pixelmon:hand_used");
-        handCondition.add("second", second);
-        
-        condition1.add("condition", handCondition);
-        conditions.add(condition1);
-
-        // 条件2: 在冷却中
-        JsonObject condition2 = new JsonObject();
-        condition2.addProperty("type", "pixelmon:interaction_condition");
-        JsonObject cooldownCondition = new JsonObject();
-        cooldownCondition.addProperty("type", "pixelmon:on_cooldown");
-        
-        JsonObject player = new JsonObject();
-        player.addProperty("key", "pixelmon:player");
-        player.addProperty("type", "pixelmon:context_player");
-        cooldownCondition.add("player", player);
-        
-        cooldownCondition.addProperty("cooldown_key", "pixelmon:" + fileName);
-        cooldownCondition.addProperty("cooldown", 1);
-        cooldownCondition.addProperty("unit", "DAYS");
-        
-        condition2.add("condition", cooldownCondition);
-        conditions.add(condition2);
-
-        interaction.add("conditions", conditions);
-
-        JsonObject results = new JsonObject();
-        JsonArray resultsArray = new JsonArray();
-
-        JsonObject message = new JsonObject();
-        JsonArray messages = new JsonArray();
-        JsonObject msg = new JsonObject();
-        msg.addProperty("translate", "pixelmon.npc.dialogue.battle.leader.gym." + fileName + ".cooldown");
-        messages.add(msg);
-        message.add("messages", messages);
-        message.addProperty("type", "pixelmon:message_player");
-        resultsArray.add(message);
-
-        results.add("value", resultsArray);
-        results.addProperty("type", "pixelmon:constant");
-        interaction.add("results", results);
-
-        return interaction;
-    }
-
-    private JsonObject createRightClickUnableBattleInteraction(String fileName) {
-        JsonObject interaction = new JsonObject();
-        interaction.addProperty("event", "pixelmon:right_click");
-
-        JsonArray conditions = new JsonArray();
-
-        // 条件1: 使用主手
-        JsonObject condition1 = new JsonObject();
-        condition1.addProperty("type", "pixelmon:interaction_condition");
-        JsonObject handCondition = new JsonObject();
-        handCondition.addProperty("type", "pixelmon:string_compare");
-        
-        JsonObject first = new JsonObject();
-        first.addProperty("value", "MAIN_HAND");
-        first.addProperty("type", "pixelmon:constant_string");
-        handCondition.add("first", first);
-        
-        JsonObject second = new JsonObject();
-        second.addProperty("type", "pixelmon:hand_used");
-        handCondition.add("second", second);
-        
-        condition1.add("condition", handCondition);
-        conditions.add(condition1);
-
-        // 条件2: 无法战斗
-        JsonObject condition2 = new JsonObject();
-        condition2.addProperty("type", "pixelmon:interaction_condition");
-        JsonObject notCondition = new JsonObject();
-        notCondition.addProperty("type", "pixelmon:logical_not");
-        
-        JsonObject innerCondition = new JsonObject();
-        innerCondition.addProperty("type", "pixelmon:interaction_condition");
-        JsonObject battleCondition = new JsonObject();
-        battleCondition.addProperty("type", "pixelmon:can_battle");
-        
-        JsonObject player = new JsonObject();
-        player.addProperty("key", "pixelmon:player");
-        player.addProperty("type", "pixelmon:context_player");
-        battleCondition.add("player", player);
-        
-        innerCondition.add("condition", battleCondition);
-        notCondition.add("condition", innerCondition);
-        condition2.add("condition", notCondition);
-        conditions.add(condition2);
-
-        interaction.add("conditions", conditions);
-
-        JsonObject results = new JsonObject();
-        JsonArray resultsArray = new JsonArray();
-
-        JsonObject message = new JsonObject();
-        JsonArray messages = new JsonArray();
-        JsonObject msg = new JsonObject();
-        msg.addProperty("translate", "pixelmon.npc.dialogue.battle.leader.gym." + fileName + ".unable_to_battle");
-        messages.add(msg);
-        message.add("messages", messages);
-        message.addProperty("type", "pixelmon:message_player");
-        resultsArray.add(message);
-
-        results.add("value", resultsArray);
-        results.addProperty("type", "pixelmon:constant");
-        interaction.add("results", results);
-
-        return interaction;
-    }
-
-    private JsonObject createRightClickInteraction(JsonObject message, JsonObject title) {
-        JsonObject interaction = new JsonObject();
-        interaction.addProperty("event", "pixelmon:right_click");
-
-        JsonObject conditions = new JsonObject();
-        conditions.addProperty("type", "pixelmon:true");
-        interaction.add("conditions", conditions);
-
-        JsonObject results = new JsonObject();
-        JsonArray resultsArray = new JsonArray();
-
-        JsonObject dialogue = new JsonObject();
-        dialogue.add("title", title); // 使用传入的标题对象
-        dialogue.add("message", message); // 使用传入的消息对象
-        dialogue.addProperty("type", "pixelmon:open_dialogue");
-        resultsArray.add(dialogue);
-
-        results.add("value", resultsArray);
-        results.addProperty("type", "pixelmon:constant");
-        interaction.add("results", results);
-
-        return interaction;
-    }
-
-    private JsonObject createCloseDialogueBattleInteraction() {
-        JsonObject interaction = new JsonObject();
-        interaction.addProperty("event", "pixelmon:close_dialogue");
-
-        JsonArray conditions = new JsonArray();
-        JsonObject condition = new JsonObject();
-        condition.addProperty("type", "pixelmon:constant_boolean");
-        condition.addProperty("value", true);
-        conditions.add(condition);
-
-        interaction.add("conditions", conditions);
-
-        JsonObject results = new JsonObject();
-        JsonArray resultsArray = new JsonArray();
-
-        JsonObject battle = new JsonObject();
-        battle.addProperty("type", "pixelmon:player_start_npc_battle");
-        resultsArray.add(battle);
-
-        results.add("value", resultsArray);
-        results.addProperty("type", "pixelmon:constant");
-        interaction.add("results", results);
-
-        return interaction;
-    }
-
-    private JsonObject createWinBattleInteraction(JsonObject message, JsonObject title,
-                                                  double rewardMoney, List<JsonObject> rewardItems,
-                                                  int cooldownDays, String fileName) {
-        JsonObject interaction = new JsonObject();
-        interaction.addProperty("event", "pixelmon:win_battle");
-
-        JsonObject conditions = new JsonObject();
-        conditions.addProperty("type", "pixelmon:true");
-        interaction.add("conditions", conditions);
-
-        JsonObject results = new JsonObject();
-        JsonArray resultsArray = new JsonArray();
-
-        // 胜利对话
-        JsonObject dialogue = new JsonObject();
-        dialogue.add("title", title); // 使用传入的标题对象
-        dialogue.add("message", message); // 使用传入的消息对象
-        dialogue.addProperty("fire_close_event", false);
-        dialogue.addProperty("type", "pixelmon:open_dialogue");
-        resultsArray.add(dialogue);
-
-        // 金钱奖励
-        if (rewardMoney > 0) {
-            JsonObject moneyReward = new JsonObject();
-            moneyReward.addProperty("money", rewardMoney);
-            moneyReward.addProperty("type", "pixelmon:give_money");
-            resultsArray.add(moneyReward);
-        }
-
-        // 物品奖励
-        if (!rewardItems.isEmpty()) {
-            JsonObject itemReward = new JsonObject();
-            itemReward.addProperty("type", "pixelmon:give_item");
-
-            JsonArray itemsArray = new JsonArray();
-            for (JsonObject item : rewardItems) {
-                itemsArray.add(item);
-            }
-            itemReward.add("items", itemsArray);
-            resultsArray.add(itemReward);
-        }
-
-        // 设置冷却
-        JsonObject cooldown = new JsonObject();
-        cooldown.addProperty("type", "pixelmon:set_cooldown");
-
-        JsonObject player = new JsonObject();
-        player.addProperty("key", "pixelmon:player");
-        player.addProperty("type", "pixelmon:context_player");
-        cooldown.add("player", player);
-
-        cooldown.addProperty("key", "pixelmon:" + fileName);
-        resultsArray.add(cooldown);
-
-        // 设置字符串上下文
-        JsonObject stringContext = new JsonObject();
-        stringContext.addProperty("type", "pixelmon:set_string_context");
-        stringContext.addProperty("key", "pixelmon:leader");
-        stringContext.addProperty("value", fileName);
-        resultsArray.add(stringContext);
-
-        // 触发训练师击败事件
-        JsonObject defeatEvent = new JsonObject();
-        defeatEvent.addProperty("type", "pixelmon:trigger_interaction_event");
-        defeatEvent.addProperty("event", "pixelmon:defeat_leader");
-        resultsArray.add(defeatEvent);
-
-        results.add("value", resultsArray);
-        results.addProperty("type", "pixelmon:constant");
-        interaction.add("results", results);
-
-        return interaction;
-    }
-
-    private JsonObject createLoseBattleInteraction(JsonObject message, JsonObject title, int cooldownDays, String fileName) {
-        JsonObject interaction = new JsonObject();
-        interaction.addProperty("event", "pixelmon:lose_battle");
-
-        JsonObject conditions = new JsonObject();
-        conditions.addProperty("type", "pixelmon:true");
-        interaction.add("conditions", conditions);
-
-        JsonObject results = new JsonObject();
-        JsonArray resultsArray = new JsonArray();
-
-        // 失败对话
-        JsonObject dialogue = new JsonObject();
-        dialogue.add("title", title); // 使用传入的标题对象
-        dialogue.add("message", message); // 使用传入的消息对象
-        dialogue.addProperty("fire_close_event", false);
-        dialogue.addProperty("type", "pixelmon:open_dialogue");
-        resultsArray.add(dialogue);
-
-        // 设置字符串上下文
-        JsonObject stringContext = new JsonObject();
-        stringContext.addProperty("type", "pixelmon:set_string_context");
-        stringContext.addProperty("key", "pixelmon:leader");
-        stringContext.addProperty("value", fileName);
-        resultsArray.add(stringContext);
-
-        // 触发失败事件
-        JsonObject loseEvent = new JsonObject();
-        loseEvent.addProperty("type", "pixelmon:trigger_interaction_event");
-        loseEvent.addProperty("event", "pixelmon:lose_to_leader");
-        resultsArray.add(loseEvent);
-
-        results.add("value", resultsArray);
-        results.addProperty("type", "pixelmon:constant");
-        interaction.add("results", results);
-
-        return interaction;
-    }
-
-    private JsonObject createOpenShopInteraction(List<JsonObject> shopItems) {
-        JsonObject interaction = new JsonObject();
-        interaction.addProperty("event", "pixelmon:close_dialogue");
-
-        JsonObject conditions = new JsonObject();
-        conditions.addProperty("type", "pixelmon:true");
-        interaction.add("conditions", conditions);
-
-        JsonObject results = new JsonObject();
-        JsonArray resultsArray = new JsonArray();
-
-        JsonObject shop = new JsonObject();
-
-        JsonArray itemsArray = new JsonArray();
-        for (JsonObject item : shopItems) {
-            itemsArray.add(item);
-        }
-        shop.add("items", itemsArray);
-        shop.addProperty("type", "pixelmon:open_shop");
-
-        resultsArray.add(shop);
-        results.add("value", resultsArray);
-        results.addProperty("type", "pixelmon:constant");
-        interaction.add("results", results);
-
-        return interaction;
-    }
-
-    private JsonObject createShopGoodbyeInteraction(JsonObject message, JsonObject title) {
-        JsonObject interaction = new JsonObject();
-        interaction.addProperty("event", "pixelmon:close_shop");
-
-        JsonObject conditions = new JsonObject();
-        conditions.addProperty("type", "pixelmon:true");
-        interaction.add("conditions", conditions);
-
-        JsonObject results = new JsonObject();
-        JsonArray resultsArray = new JsonArray();
-
-        JsonObject dialogue = new JsonObject();
-        dialogue.add("title", title); // 使用传入的标题对象
-        dialogue.add("message", message); // 使用传入的消息对象
-        dialogue.addProperty("fire_close_event", false);
-        dialogue.addProperty("type", "pixelmon:open_dialogue");
-        resultsArray.add(dialogue);
-
-        results.add("value", resultsArray);
-        results.addProperty("type", "pixelmon:constant");
-        interaction.add("results", results);
-
-        return interaction;
-    }
-
     // ==================== 旧版私有辅助方法（已弃用） ====================
 
     /**
-     * @deprecated 使用 {@link #createGymLeaderInteractions(JsonObject, JsonObject, JsonObject, JsonObject, double, List, int, String)} 替代
+     * @deprecated 使用 {@link #createGymLeaderInteractionsCODEC(JsonObject, JsonObject, JsonObject, JsonObject, double, List, int, String, String)} 替代
      */
     @Deprecated
     private JsonObject createGymLeaderInteractionsOld(JsonObject title, JsonObject greeting,
@@ -1070,7 +1089,7 @@ public abstract class PixelmonNPCProvider implements DataProvider {
     }
 
     /**
-     * @deprecated 使用 {@link #createCloseDialogueBattleInteraction()} 替代
+     * @deprecated 使用 {@link #createCloseDialogueBattleInteractionCODEC()} 替代
      */
     @Deprecated
     private JsonObject createCloseDialogueBattleInteractionOld() {
@@ -1096,7 +1115,7 @@ public abstract class PixelmonNPCProvider implements DataProvider {
     }
 
     /**
-     * @deprecated 使用 {@link #createWinBattleInteraction(JsonObject, JsonObject, double, List, int, String)} 替代
+     * @deprecated 使用 {@link #createWinBattleInteractionCODEC(JsonObject, JsonObject, double, List, int, String, String)} 替代
      */
     @Deprecated
     private JsonObject createWinBattleInteractionOld(JsonObject message, JsonObject title,
@@ -1114,8 +1133,8 @@ public abstract class PixelmonNPCProvider implements DataProvider {
 
         // 胜利对话
         JsonObject dialogue = new JsonObject();
-        dialogue.add("title", title); // 使用传入的标题对象
-        dialogue.add("message", message); // 使用传入的消息对象
+        dialogue.add("title", title);
+        dialogue.add("message", message);
         dialogue.addProperty("fire_close_event", false);
         dialogue.addProperty("type", "pixelmon:open_dialogue");
         resultsArray.add(dialogue);
@@ -1169,7 +1188,7 @@ public abstract class PixelmonNPCProvider implements DataProvider {
     }
 
     /**
-     * @deprecated 使用 {@link #createLoseBattleInteraction(JsonObject, JsonObject, int, String)} 替代
+     * @deprecated 使用 {@link #createLoseBattleInteractionCODEC(JsonObject, JsonObject, String)} 替代
      */
     @Deprecated
     private JsonObject createLoseBattleInteractionOld(JsonObject message, JsonObject title, int cooldownDays) {
@@ -1185,8 +1204,8 @@ public abstract class PixelmonNPCProvider implements DataProvider {
 
         // 失败对话
         JsonObject dialogue = new JsonObject();
-        dialogue.add("title", title); // 使用传入的标题对象
-        dialogue.add("message", message); // 使用传入的消息对象
+        dialogue.add("title", title);
+        dialogue.add("message", message);
         dialogue.addProperty("fire_close_event", false);
         dialogue.addProperty("type", "pixelmon:open_dialogue");
         resultsArray.add(dialogue);
@@ -1211,4 +1230,10 @@ public abstract class PixelmonNPCProvider implements DataProvider {
 
         return interaction;
     }
+
+    // ==================== 从JSON文件创建NPC的方法（已移除） ====================
+    
+    // 以下方法已被移除：
+    // - addFromJson(String fileName, JsonObject json)
+    // - addFromJsonFile(String fileName, String filePath)
 }
