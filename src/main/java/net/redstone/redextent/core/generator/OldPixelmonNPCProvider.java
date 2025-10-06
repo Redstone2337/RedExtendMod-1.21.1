@@ -27,7 +27,7 @@ import org.jetbrains.annotations.NotNull;
  * 用于生成 Pixelmon NPC JSON 文件的数据提供者，这些文件定义了宝可梦模组中
  * 自定义NPC的行为、交互和属性。
  */
-public abstract class PixelmonNPCProvider implements DataProvider {
+public abstract class OldPixelmonNPCProvider implements DataProvider {
     private static final Logger LOGGER = LogManager.getLogger();
     private final PackOutput output;
     private final String modId;
