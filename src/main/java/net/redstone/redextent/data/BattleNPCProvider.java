@@ -17,7 +17,6 @@ public class BattleNPCProvider extends PixelmonNPCProvider {
 
     @Override
     public void registerNPCs() {
-
         // ==================== 馆主：蓝龙 ====================
         createBlueDragonGymLeader();
 
@@ -26,7 +25,6 @@ public class BattleNPCProvider extends PixelmonNPCProvider {
         createWaterLegendaryTrainer();
         createElectricLegendaryTrainer();
         createDragonLegendaryTrainer();
-
     }
 
     /**
