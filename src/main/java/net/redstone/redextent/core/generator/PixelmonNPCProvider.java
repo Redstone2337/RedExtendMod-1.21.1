@@ -5,8 +5,9 @@ import net.redstone.redextent.core.npc.NpcDataProvider;
 import net.redstone.redextent.core.codecs.NpcDefinitionCodec;
 import net.redstone.redextent.core.npc.NpcPresetBuilder;
 
+import java.util.List;
 import java.util.Map;
-import java.util.HashMap;
+import java.util.function.BiConsumer;
 
 /**
  * 像素精灵NPC提供者基类
@@ -15,13 +16,6 @@ public abstract class PixelmonNPCProvider extends NpcDataProvider {
     
     protected PixelmonNPCProvider(PackOutput output, String modId, String subPath) {
         super(output, modId, "pixelmon/npc/" + subPath);
-    }
-
-    /**
-     * 添加NPC到生成列表
-     */
-    protected void addNPC(NpcPresetBuilder.NpcTemplate npcTemplate) {
-        registerNpcs(consumer -> consumer.put(npcTemplate.name(), npcTemplate.build()));
     }
 
     /**
