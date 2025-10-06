@@ -1,10 +1,7 @@
 package net.redstone.redextent.data;
 
 import com.google.gson.JsonObject;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Item;
 import net.redstone.redextent.core.generator.PixelmonNPCProvider;
 
 import java.util.List;
@@ -355,64 +352,5 @@ public class BattleNPCProvider extends PixelmonNPCProvider {
                 2,                             // 冷却天数
                 "pixelmon:textures/npc/gym_leaders/dragon_trainer.png" // 纹理路径
         );
-    }
-
-    // ==================== 辅助方法 ====================
-
-    /**
-     * 创建带个体值和努力值的宝可梦配置
-     */
-    private String createPokemonSpecWithIVsEVs(String pokemon, int level, String ability, String heldItem,
-                                               String nature, List<String> moves, Map<String, Integer> ivs,
-                                               Map<String, Integer> evs) {
-        StringBuilder spec = new StringBuilder(pokemon);
-        spec.append(" lvl:").append(level);
-
-        if (ability != null && !ability.isEmpty()) {
-            spec.append(" ability:").append(ability);
-        }
-
-        if (heldItem != null && !heldItem.isEmpty()) {
-            spec.append(" helditem:").append(heldItem);
-        }
-
-        if (nature != null && !nature.isEmpty()) {
-            spec.append(" nature:").append(nature);
-        }
-
-        // 添加个体值
-        for (Map.Entry<String, Integer> entry : ivs.entrySet()) {
-            spec.append(" iv").append(entry.getKey()).append(":").append(entry.getValue());
-        }
-
-        // 添加努力值
-        for (Map.Entry<String, Integer> entry : evs.entrySet()) {
-            spec.append(" ev").append(entry.getKey()).append(":").append(entry.getValue());
-        }
-
-        // 添加招式
-        for (int i = 0; i < moves.size() && i < 4; i++) {
-            spec.append(" move").append(i + 1).append(":").append(moves.get(i));
-        }
-
-        return spec.toString();
-    }
-
-    /**
-     * 创建物品奖励（使用物品ID字符串）
-     */
-    public static JsonObject createItemReward(String itemId, int count) {
-        JsonObject item = new JsonObject();
-        item.addProperty("id", itemId);
-        item.addProperty("count", count);
-        return item;
-    }
-
-    public static JsonObject createItemReward(Item item, int count) {
-        ResourceLocation itemId = BuiltInRegistries.ITEM.getKey(item);
-        if (itemId == null) {
-            throw new IllegalArgumentException("物品未注册: " + item);
-        }
-        return createItemReward(itemId.toString(), count);
     }
 }
