@@ -7,7 +7,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
-import net.redstone.redextent.data.BattleNPCProvider;
+import net.redstone.redextent.data.all.BattleNPCProvider;
 import net.redstone.redextent.data.tip.TipNpcProvider;
 import net.redstone.redextent.data.shop.ShopNpcProvider;
 import net.redstone.redextent.data.ModEnglishLanguageProvider;
