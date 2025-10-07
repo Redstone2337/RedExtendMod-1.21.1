@@ -462,7 +462,8 @@ public class BattleNPCProvider extends PixelmonNPCProvider {
     /**
      * 创建带个体值和努力值的宝可梦配置
      */
-    private String createPokemonSpecWithIVsEVs(String pokemon, int level, String ability, String heldItem,
+    @Override
+    protected String createPokemonSpecWithIVsEVs(String pokemon, int level, String ability, String heldItem,
                                                String nature, List<String> moves, Map<String, Integer> ivs,
                                                Map<String, Integer> evs) {
         StringBuilder spec = new StringBuilder(pokemon);
