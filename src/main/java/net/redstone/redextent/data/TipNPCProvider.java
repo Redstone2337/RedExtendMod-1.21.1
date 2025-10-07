@@ -13,9 +13,9 @@ import java.util.function.BiConsumer;
 /**
  * 提示NPC数据提供者 - 专门生成提示NPC
  */
-public class TipNPCProvider extends PixelmonNPCProvider {
+public class TipsNPCProvider extends PixelmonNPCProvider {
     
-    public TipNPCProvider(PackOutput output) {
+    public TipsNPCProvider(PackOutput output) {
         super(output, "pixelmon", "info");
     }
 

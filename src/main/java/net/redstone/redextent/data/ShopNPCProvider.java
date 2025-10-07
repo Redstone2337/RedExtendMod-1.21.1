@@ -13,9 +13,9 @@ import java.util.function.BiConsumer;
 /**
  * 商店NPC数据提供者 - 专门生成商店NPC
  */
-public class ShopNPCProvider extends PixelmonNPCProvider {
+public class ShopNPCPrevider extends PixelmonNPCProvider {
     
-    public ShopNPCProvider(PackOutput output) {
+    public ShopNPCPrevider(PackOutput output) {
         super(output, "pixelmon", "shopper");
     }
 
