@@ -8,7 +8,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.redstone.redextent.data.BattleNPCProvider;
-import net.redstone.redextent.data.TipsNPCProvider;
+import net.redstone.redextent.data.TipNPCProvider;
 import net.redstone.redextent.data.ShopNPCPrevider;
 import net.redstone.redextent.data.ModEnglishLanguageProvider;
 import net.redstone.redextent.data.PixelmonAbilityProvider;
@@ -27,6 +27,6 @@ public class ModDataGenerator {
         generator.addProvider(event.includeClient(), new ModEnglishLanguageProvider(packOutput));
         generator.addProvider(event.includeClient(), new BattleNPCProvider(packOutput));
         generator.addProvider(event.includeClient(), new ShopNPCPrevider(packOutput));
-        generator.addProvider(event.includeClient(), new TipsNPCProvider(packOutput));
+        generator.addProvider(event.includeClient(), new TipNPCProvider(packOutput));
     }
 }
