@@ -29,14 +29,14 @@
               {
                 "type": "pixelmon:open_dialogue",
                 "message": {
-                  "text": "欢迎来到神兽道馆！我是馆主蓝龙。准备好面对传说中的宝可梦了吗？"
+                  "text": "我是电系神兽训练家雷霆！准备好被电击了吗？"
                 },
                 "title": {
                   "bold": true,
-                  "color": "#4169E1",
+                  "color": "#FFD700",
                   "italic": false,
-                  "text": "神兽道馆馆主·蓝龙",
-                  "underlined": true
+                  "text": "电系神兽训练家·雷霆",
+                  "underlined": false
                 }
               }
             ]
@@ -68,29 +68,29 @@
                 "type": "pixelmon:open_dialogue",
                 "fire_close_event": false,
                 "message": {
-                  "text": "不可思议！你竟然战胜了我的神兽队伍！这是神兽徽章，你值得拥有！"
+                  "text": "你的实力如闪电般耀眼！继续前进吧！"
                 },
                 "title": {
                   "bold": true,
-                  "color": "#4169E1",
+                  "color": "#FFD700",
                   "italic": false,
-                  "text": "神兽道馆馆主·蓝龙",
-                  "underlined": true
+                  "text": "电系神兽训练家·雷霆",
+                  "underlined": false
                 }
               },
               {
                 "type": "pixelmon:give_money",
-                "money": 10000.0
+                "money": 5000.0
               },
               {
                 "type": "pixelmon:give_item",
                 "items": [
                   {
-                    "count": 2,
-                    "id": "pixelmon:master_ball"
+                    "count": 1,
+                    "id": "pixelmon:thunder_stone"
                   },
                   {
-                    "count": 10,
+                    "count": 5,
                     "id": "pixelmon:rare_candy"
                   }
                 ]
@@ -101,7 +101,7 @@
               },
               {
                 "type": "pixelmon:set_cooldown",
-                "cooldown": 3,
+                "cooldown": 2,
                 "key": "pixelmon:gym_leader",
                 "player": {
                   "type": "pixelmon:context_player",
@@ -124,19 +124,19 @@
                 "type": "pixelmon:open_dialogue",
                 "fire_close_event": false,
                 "message": {
-                  "text": "神兽的力量果然不是那么容易挑战的，继续努力吧！"
+                  "text": "电力的力量无人能挡！"
                 },
                 "title": {
                   "bold": true,
-                  "color": "#4169E1",
+                  "color": "#FFD700",
                   "italic": false,
-                  "text": "神兽道馆馆主·蓝龙",
-                  "underlined": true
+                  "text": "电系神兽训练家·雷霆",
+                  "underlined": false
                 }
               },
               {
                 "type": "pixelmon:set_cooldown",
-                "cooldown": 3,
+                "cooldown": 2,
                 "key": "pixelmon:gym_leader",
                 "player": {
                   "type": "pixelmon:context_player",
@@ -155,13 +155,13 @@
     "value": {
       "type": "pixelmon:player",
       "slim": false,
-      "texture": "rem:textures/npc/battle/blue_dragon.png"
+      "texture": "rem:textures/npc/battle/ender_dragon.png"
     }
   },
   "names": {
     "type": "pixelmon:uniformly_random",
     "values": [
-      "蓝龙"
+      "雷霆"
     ]
   },
   "party": {
@@ -169,12 +169,12 @@
     "value": {
       "type": "pixelmon:spec",
       "specs": [
-        "Zygarde lvl:100 ability:Power Construct helditem:Leftovers nature:Adamant ivhp:31 ivspdef:31 ivdef:31 ivatk:31 ivspatk:31 ivspd:31 evhp:252 evspdef:0 evdef:4 evatk:252 evspatk:0 evspd:0 move1:Thousand Arrows move2:Thousand Waves move3:Core Enforcer move4:Extreme Speed",
-        "Rayquaza lvl:98 ability:Air Lock helditem:Life Orb nature:Jolly ivhp:31 ivspdef:31 ivdef:31 ivatk:31 ivspatk:31 ivspd:31 evhp:0 evspdef:0 evdef:4 evatk:252 evspatk:0 evspd:252 move1:Dragon Ascent move2:Extreme Speed move3:Dragon Dance move4:Earthquake",
-        "Mewtwo lvl:96 ability:Pressure helditem:Mewtwonite X nature:Timid ivhp:31 ivspdef:31 ivdef:31 ivatk:31 ivspatk:31 ivspd:31 evhp:0 evspdef:0 evdef:4 evatk:0 evspatk:252 evspd:252 move1:Psystrike move2:Aura Sphere move3:Ice Beam move4:Recover",
-        "Dialga lvl:95 ability:Pressure helditem:Adamant Orb nature:Modest ivhp:31 ivspdef:31 ivdef:31 ivatk:31 ivspatk:31 ivspd:31 evhp:252 evspdef:4 evdef:0 evatk:0 evspatk:252 evspd:0 move1:Roar of Time move2:Flash Cannon move3:Fire Blast move4:Thunder",
-        "Palkia lvl:94 ability:Pressure helditem:Lustrous Orb nature:Timid ivhp:31 ivspdef:31 ivdef:31 ivatk:31 ivspatk:31 ivspd:31 evhp:0 evspdef:4 evdef:0 evatk:0 evspatk:252 evspd:252 move1:Spacial Rend move2:Hydro Pump move3:Thunderbolt move4:Fire Blast",
-        "Giratina lvl:92 ability:Levitate helditem:Griseous Orb nature:Modest ivhp:31 ivspdef:31 ivdef:31 ivatk:31 ivspatk:31 ivspd:31 evhp:252 evspdef:4 evdef:0 evatk:0 evspatk:252 evspd:0 move1:Shadow Force move2:Dragon Pulse move3:Aura Sphere move4:Earth Power"
+        "Raikou lvl:86 ability:Pressure helditem:Assault Vest nature:Timid ivspatk:31 ivspd:31 ivhp:31 ivspdef:31 ivdef:31 ivatk:31 evspatk:252 evspd:252 evhp:0 evspdef:4 evdef:0 evatk:0 move1:Thunderbolt move2:Volt Switch move3:Shadow Ball move4:Extrasensory",
+        "Zapdos lvl:83 ability:Pressure helditem:Heavy-Duty Boots nature:Timid ivspatk:31 ivspd:31 ivhp:31 ivspdef:31 ivdef:31 ivatk:31 evspatk:252 evspd:252 evhp:0 evspdef:4 evdef:0 evatk:0 move1:Thunderbolt move2:Hurricane move3:Heat Wave move4:Roost",
+        "Thundurus lvl:80 ability:Prankster helditem:Life Orb nature:Timid ivspatk:31 ivspd:31 ivhp:31 ivspdef:31 ivdef:31 ivatk:31 evspatk:252 evspd:252 evhp:0 evspdef:4 evdef:0 evatk:0 move1:Thunderbolt move2:Focus Blast move3:Hidden Power Ice move4:Nasty Plot",
+        "Tapu Koko lvl:78 ability:Electric Surge helditem:Choice Specs nature:Timid ivspatk:31 ivspd:31 ivhp:31 ivspdef:31 ivdef:31 ivatk:31 evspatk:252 evspd:252 evhp:0 evspdef:4 evdef:0 evatk:0 move1:Thunderbolt move2:Dazzling Gleam move3:Volt Switch move4:Grass Knot",
+        "Zeraora lvl:76 ability:Volt Absorb helditem:Expert Belt nature:Jolly ivspatk:31 ivspd:31 ivhp:31 ivspdef:31 ivdef:31 ivatk:31 evspatk:0 evspd:252 evhp:0 evspdef:4 evdef:0 evatk:252 move1:Plasma Fists move2:Close Combat move3:Blaze Kick move4:Volt Switch",
+        "Ampharos lvl:73 ability:Mold Breaker helditem:Ampharosite nature:Modest ivspatk:31 ivspd:31 ivhp:31 ivspdef:31 ivdef:31 ivatk:31 evspatk:252 evspd:0 evhp:248 evspdef:8 evdef:0 evatk:0 move1:Thunderbolt move2:Dragon Pulse move3:Focus Blast move4:Volt Switch"
       ]
     }
   },
@@ -194,10 +194,10 @@
       "pushable": false,
       "title": {
         "bold": true,
-        "color": "#4169E1",
+        "color": "#FFD700",
         "italic": false,
-        "text": "神兽道馆馆主·蓝龙",
-        "underlined": true
+        "text": "电系神兽训练家·雷霆",
+        "underlined": false
       }
     }
   }

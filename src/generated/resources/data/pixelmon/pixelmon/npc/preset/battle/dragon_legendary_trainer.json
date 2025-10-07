@@ -29,13 +29,13 @@
               {
                 "type": "pixelmon:open_dialogue",
                 "message": {
-                  "text": "我是电系神兽训练家雷霆！准备好被电击了吗？"
+                  "text": "我是龙系神兽训练家龙啸！感受龙之怒吧！"
                 },
                 "title": {
                   "bold": true,
-                  "color": "#FFD700",
+                  "color": "#8A2BE2",
                   "italic": false,
-                  "text": "电系神兽训练家·雷霆",
+                  "text": "龙系神兽训练家·龙啸",
                   "underlined": false
                 }
               }
@@ -68,13 +68,13 @@
                 "type": "pixelmon:open_dialogue",
                 "fire_close_event": false,
                 "message": {
-                  "text": "你的实力如闪电般耀眼！继续前进吧！"
+                  "text": "你的实力如同传说中的龙骑士！继续前进吧！"
                 },
                 "title": {
                   "bold": true,
-                  "color": "#FFD700",
+                  "color": "#8A2BE2",
                   "italic": false,
-                  "text": "电系神兽训练家·雷霆",
+                  "text": "龙系神兽训练家·龙啸",
                   "underlined": false
                 }
               },
@@ -87,7 +87,7 @@
                 "items": [
                   {
                     "count": 1,
-                    "id": "pixelmon:thunder_stone"
+                    "id": "pixelmon:dragon_scale"
                   },
                   {
                     "count": 5,
@@ -124,13 +124,13 @@
                 "type": "pixelmon:open_dialogue",
                 "fire_close_event": false,
                 "message": {
-                  "text": "电力的力量无人能挡！"
+                  "text": "龙族的力量永远是最强的！"
                 },
                 "title": {
                   "bold": true,
-                  "color": "#FFD700",
+                  "color": "#8A2BE2",
                   "italic": false,
-                  "text": "电系神兽训练家·雷霆",
+                  "text": "龙系神兽训练家·龙啸",
                   "underlined": false
                 }
               },
@@ -155,13 +155,13 @@
     "value": {
       "type": "pixelmon:player",
       "slim": false,
-      "texture": "rem:textures/npc/battle/ender_dragon.png"
+      "texture": "pixelmon:textures/npc/gym_leaders/dragon_trainer.png"
     }
   },
   "names": {
     "type": "pixelmon:uniformly_random",
     "values": [
-      "雷霆"
+      "龙啸"
     ]
   },
   "party": {
@@ -169,12 +169,12 @@
     "value": {
       "type": "pixelmon:spec",
       "specs": [
-        "Raikou lvl:86 ability:Pressure helditem:Assault Vest nature:Timid ivhp:31 ivspdef:31 ivdef:31 ivatk:31 ivspatk:31 ivspd:31 evhp:0 evspdef:4 evdef:0 evatk:0 evspatk:252 evspd:252 move1:Thunderbolt move2:Volt Switch move3:Shadow Ball move4:Extrasensory",
-        "Zapdos lvl:83 ability:Pressure helditem:Heavy-Duty Boots nature:Timid ivhp:31 ivspdef:31 ivdef:31 ivatk:31 ivspatk:31 ivspd:31 evhp:0 evspdef:4 evdef:0 evatk:0 evspatk:252 evspd:252 move1:Thunderbolt move2:Hurricane move3:Heat Wave move4:Roost",
-        "Thundurus lvl:80 ability:Prankster helditem:Life Orb nature:Timid ivhp:31 ivspdef:31 ivdef:31 ivatk:31 ivspatk:31 ivspd:31 evhp:0 evspdef:4 evdef:0 evatk:0 evspatk:252 evspd:252 move1:Thunderbolt move2:Focus Blast move3:Hidden Power Ice move4:Nasty Plot",
-        "Tapu Koko lvl:78 ability:Electric Surge helditem:Choice Specs nature:Timid ivhp:31 ivspdef:31 ivdef:31 ivatk:31 ivspatk:31 ivspd:31 evhp:0 evspdef:4 evdef:0 evatk:0 evspatk:252 evspd:252 move1:Thunderbolt move2:Dazzling Gleam move3:Volt Switch move4:Grass Knot",
-        "Zeraora lvl:76 ability:Volt Absorb helditem:Expert Belt nature:Jolly ivhp:31 ivspdef:31 ivdef:31 ivatk:31 ivspatk:31 ivspd:31 evhp:0 evspdef:4 evdef:0 evatk:252 evspatk:0 evspd:252 move1:Plasma Fists move2:Close Combat move3:Blaze Kick move4:Volt Switch",
-        "Ampharos lvl:73 ability:Mold Breaker helditem:Ampharosite nature:Modest ivhp:31 ivspdef:31 ivdef:31 ivatk:31 ivspatk:31 ivspd:31 evhp:248 evspdef:8 evdef:0 evatk:0 evspatk:252 evspd:0 move1:Thunderbolt move2:Dragon Pulse move3:Focus Blast move4:Volt Switch"
+        "Kyurem lvl:89 ability:Pressure helditem:Leftovers nature:Timid ivspatk:31 ivspd:31 ivhp:31 ivspdef:31 ivdef:31 ivatk:31 evspatk:200 evspd:252 evhp:56 evspdef:0 evdef:0 evatk:0 move1:Ice Beam move2:Freeze-Dry move3:Earth Power move4:Roost",
+        "Latias lvl:85 ability:Levitate helditem:Soul Dew nature:Timid ivspatk:31 ivspd:31 ivhp:31 ivspdef:31 ivdef:31 ivatk:31 evspatk:252 evspd:252 evhp:0 evspdef:4 evdef:0 evatk:0 move1:Draco Meteor move2:Psyshock move3:Recover move4:Calm Mind",
+        "Latios lvl:85 ability:Levitate helditem:Soul Dew nature:Timid ivspatk:31 ivspd:31 ivhp:31 ivspdef:31 ivdef:31 ivatk:31 evspatk:252 evspd:252 evhp:0 evspdef:4 evdef:0 evatk:0 move1:Draco Meteor move2:Psyshock move3:Recover move4:Calm Mind",
+        "Hydreigon lvl:82 ability:Levitate helditem:Choice Scarf nature:Timid ivspatk:31 ivspd:31 ivhp:31 ivspdef:31 ivdef:31 ivatk:31 evspatk:252 evspd:252 evhp:0 evspdef:4 evdef:0 evatk:0 move1:Draco Meteor move2:Dark Pulse move3:Fire Blast move4:U-turn",
+        "Salamence lvl:79 ability:Aerilate helditem:Salamencite nature:Jolly ivspatk:31 ivspd:31 ivhp:31 ivspdef:31 ivdef:31 ivatk:31 evspatk:0 evspd:252 evhp:0 evspdef:4 evdef:0 evatk:252 move1:Return move2:Dragon Dance move3:Roost move4:Earthquake",
+        "Dragapult lvl:76 ability:Infiltrator helditem:Choice Band nature:Jolly ivspatk:31 ivspd:31 ivhp:31 ivspdef:31 ivdef:31 ivatk:31 evspatk:0 evspd:252 evhp:0 evspdef:4 evdef:0 evatk:252 move1:Dragon Darts move2:Phantom Force move3:U-turn move4:Sucker Punch"
       ]
     }
   },
@@ -194,9 +194,9 @@
       "pushable": false,
       "title": {
         "bold": true,
-        "color": "#FFD700",
+        "color": "#8A2BE2",
         "italic": false,
-        "text": "电系神兽训练家·雷霆",
+        "text": "龙系神兽训练家·龙啸",
         "underlined": false
       }
     }
