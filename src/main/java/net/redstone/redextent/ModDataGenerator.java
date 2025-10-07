@@ -9,7 +9,7 @@ import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.redstone.redextent.data.BattleNPCProvider;
 import net.redstone.redextent.data.TipNPCProvider;
-import net.redstone.redextent.data.ShopNPCProvider;
+import net.redstone.redextent.data.ShopNPCProviders;
 import net.redstone.redextent.data.ModEnglishLanguageProvider;
 import net.redstone.redextent.data.PixelmonAbilityProvider;
 
@@ -23,10 +23,10 @@ public class ModDataGenerator {
         PackOutput packOutput = generator.getPackOutput();
         ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
         CompletableFuture<HolderLookup.Provider> lookupProvider = event.getLookupProvider();
-        generator.addProvider(event.includeServer(),new PixelmonAbilityProvider(packOutput));
+        generator.addProvider(event.includeServer(), new PixelmonAbilityProvider(packOutput));
         generator.addProvider(event.includeClient(), new ModEnglishLanguageProvider(packOutput));
         generator.addProvider(event.includeClient(), new BattleNPCProvider(packOutput));
-        generator.addProvider(event.includeClient(), new ShopNPCProvider(packOutput));
+        generator.addProvider(event.includeServer(), new ShopNPCProviders(packOutput));
         generator.addProvider(event.includeClient(), new TipNPCProvider(packOutput));
     }
 }
