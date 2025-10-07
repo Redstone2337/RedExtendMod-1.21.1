@@ -44,7 +44,7 @@ public class TipNPCProvider extends PixelmonNPCProvider {
         NpcPresetBuilder.NpcTemplate tipNpc = NpcPresetBuilder.createChatNpc(
             "mod_promotion_npc",
             List.of("向导小智"),
-            List.of(new ResourceLocation("textures/entity/npc/guide.png")),
+            List.of(ResourceLocation.fromNamespaceAndPath("textures/entity/npc/guide.png")),
             title,
             dialoguePages,
             false,
