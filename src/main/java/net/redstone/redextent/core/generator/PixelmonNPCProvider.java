@@ -63,7 +63,7 @@ public abstract class PixelmonNPCProvider extends NpcDataProvider {
     /**
      * 创建宝可梦规格字符串（带IVs和EVs）
      */
-    protected String createPokemonSpecWithIVsEVs(String pokemon, int level, String ability, String heldItem, String nature,
+    public String createPokemonSpecWithIVsEVs(String pokemon, int level, String ability, String heldItem, String nature,
                                                 List<String> moves, Map<String, Integer> ivs, Map<String, Integer> evs) {
         StringBuilder spec = new StringBuilder();
         
