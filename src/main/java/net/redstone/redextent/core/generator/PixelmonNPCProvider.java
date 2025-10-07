@@ -1,9 +1,15 @@
+/*
+ * Copyright (c) Forge Development LLC and contributors
+ * SPDX-License-Identifier: LGPL-2.1-only
+ */
+ 
 package net.redstone.redextent.core.generator;
 
 import net.minecraft.data.PackOutput;
 import net.redstone.redextent.core.npc.NpcDataProvider;
 import net.redstone.redextent.core.codecs.NpcDefinitionCodec;
 import net.redstone.redextent.core.npc.NpcPresetBuilder;
+import com.google.gson.JsonObject;
 
 import java.util.List;
 import java.util.Map;
@@ -16,6 +22,42 @@ public abstract class PixelmonNPCProvider extends NpcDataProvider {
     
     protected PixelmonNPCProvider(PackOutput output, String modId, String subPath) {
         super(output, modId, "pixelmon/npc/" + subPath);
+    }
+
+    /**
+     * 创建商店物品JSON对象
+     */
+    public static JsonObject createShopItem(String itemId, int count, double buyPrice, double sellPrice) {
+        JsonObject item = new JsonObject();
+        JsonObject itemData = new JsonObject();
+        itemData.addProperty("id", itemId);
+        itemData.addProperty("count", count);
+        item.add("item", itemData);
+        item.addProperty("buyPrice", buyPrice);
+        item.addProperty("sellPrice", sellPrice);
+        return item;
+    }
+
+    /**
+     * 创建文本标题JSON对象
+     */
+    public static JsonObject createTextTitle(String text, String color, boolean bold, boolean italic, boolean underlined) {
+        JsonObject title = new JsonObject();
+        title.addProperty("translate", text);
+        title.addProperty("color", color);
+        title.addProperty("bold", bold);
+        title.addProperty("italic", italic);
+        title.addProperty("underlined", underlined);
+        return title;
+    }
+
+    /**
+     * 创建文本消息JSON对象
+     */
+    public static JsonObject createTextMessage(String text) {
+        JsonObject message = new JsonObject();
+        message.addProperty("translate", text);
+        return message;
     }
 
     /**
