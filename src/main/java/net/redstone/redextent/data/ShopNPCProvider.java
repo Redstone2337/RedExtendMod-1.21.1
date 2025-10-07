@@ -47,7 +47,7 @@ public class ShopNPCProvider extends PixelmonNPCProvider {
         NpcPresetBuilder.NpcTemplate shopNpc = NpcPresetBuilder.createShopNpc(
             "maomao_dragon_shop",
             List.of("毛毛龙"),
-            List.of(new ResourceLocation("textures/entity/npc/shop_maomao.png")),
+            List.of(ResourceLocation.fromNamespaceAndPath("rem","textures/entity/npc/info_dragon.png")),
             title,
             greeting,
             goodbye,
