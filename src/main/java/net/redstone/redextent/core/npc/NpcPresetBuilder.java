@@ -9,7 +9,10 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.redstone.redextent.core.codecs.*;
-
+import net.redstone.redextent.core.codecs.InteractionDefinition.Interaction;
+import net.redstone.redextent.core.codecs.InteractionDefinition.InteractionResults;
+import net.redstone.redextent.core.codecs.InteractionDefinition.InteractionSet;
+import com.google.gson.JsonElement;
 
 import java.util.*;
 
@@ -227,67 +230,68 @@ public class NpcPresetBuilder {
         List<RewardItem> rewardItems,
         String leaderKey
     ) {
-        List<Map<String, Object>> rewardItemsData = new ArrayList<>();
+        List<JsonElement> rewardItemsData = new ArrayList<>();
         for (RewardItem item : rewardItems) {
-            rewardItemsData.add(Map.of(
+            Map<String, Object> itemData = Map.of(
                 "id", item.itemId(),
                 "count", item.count()
-            ));
+            );
+            rewardItemsData.add(InteractionDefinition.toJsonElement(itemData));
         }
 
         List<Interaction> interactions = List.of(
             // 战斗开始交互
             Interaction.of(
                 "pixelmon:right_click",
-                Map.of("type", "pixelmon:true"),
+                InteractionDefinition.toJsonElement(Map.of("type", "pixelmon:true")),
                 InteractionResults.constant(List.of(
-                    Map.of(
+                    InteractionDefinition.toJsonElement(Map.of(
                         "type", "pixelmon:open_dialogue",
                         "title", titleKey,
                         "message", "pixelmon.npc.dialogue.battle.leader.gym.dragon.1.initiate"
-                    )
+                    ))
                 ))
             ),
             // 战斗胜利交互
             Interaction.of(
                 "pixelmon:win_battle",
-                Map.of("type", "pixelmon:true"),
+                InteractionDefinition.toJsonElement(Map.of("type", "pixelmon:true")),
                 InteractionResults.constant(List.of(
-                    Map.of(
+                    InteractionDefinition.toJsonElement(Map.of(
                         "type", "pixelmon:open_dialogue",
                         "title", titleKey,
                         "message", winMessage.translate(),
                         "fire_close_event", false
-                    ),
-                    Map.of(
+                    )),
+                    InteractionDefinition.toJsonElement(Map.of(
                         "type", "pixelmon:give_money",
                         "money", moneyReward
-                    ),
-                    Map.of(
+                    )),
+                    InteractionDefinition.toJsonElement(Map.of(
                         "type", "pixelmon:give_item",
                         "items", rewardItemsData
-                    ),
-                    Map.of(
+                    )),
+                    InteractionDefinition.toJsonElement(Map.of(
                         "type", "pixelmon:set_cooldown",
                         "player", Map.of(
                             "key", "pixelmon:player",
                             "type", "pixelmon:context_player"
                         ),
                         "key", "pixelmon:" + leaderKey
-                    )
+                    ))
                 ))
             ),
             // 战斗失败交互
             Interaction.of(
                 "pixelmon:lose_battle",
-                Map.of("type", "pixelmon:true"),
+                InteractionDefinition.toJsonElement(Map.of("type", "pixelmon:true")),
                 InteractionResults.constant(List.of(
-                    Map.of(
+                    InteractionDefinition.toJsonElement(Map.of(
                         "type", "pixelmon:open_dialogue",
                         "title", titleKey,
                         "message", loseMessage.translate(),
                         "fire_close_event", false
-                    )
+                    ))
                 ))
             )
         );
@@ -308,13 +312,13 @@ public class NpcPresetBuilder {
         List<Interaction> interactions = List.of(
             Interaction.of(
                 "pixelmon:right_click",
-                Map.of("type", "pixelmon:true"),
+                InteractionDefinition.toJsonElement(Map.of("type", "pixelmon:true")),
                 InteractionResults.constant(List.of(
-                    Map.of(
+                    InteractionDefinition.toJsonElement(Map.of(
                         "type", "pixelmon:open_paged_dialogue",
                         "title", titleKey,
                         "pages", pageKeys
-                    )
+                    ))
                 ))
             )
         );
@@ -332,47 +336,48 @@ public class NpcPresetBuilder {
         TextContent goodbye,
         List<ShopItem> shopItems
     ) {
-        List<Map<String, Object>> shopItemsData = new ArrayList<>();
+        List<JsonElement> shopItemsData = new ArrayList<>();
         for (ShopItem item : shopItems) {
-            shopItemsData.add(Map.of(
+            Map<String, Object> itemData = Map.of(
                 "item", Map.of("id", item.itemId(), "count", item.count()),
                 "buyPrice", item.buyPrice(),
                 "sellPrice", item.sellPrice()
-            ));
+            );
+            shopItemsData.add(InteractionDefinition.toJsonElement(itemData));
         }
 
         List<Interaction> interactions = List.of(
             Interaction.of(
                 "pixelmon:right_click",
-                Map.of("type", "pixelmon:true"),
+                InteractionDefinition.toJsonElement(Map.of("type", "pixelmon:true")),
                 InteractionResults.constant(List.of(
-                    Map.of(
+                    InteractionDefinition.toJsonElement(Map.of(
                         "type", "pixelmon:open_dialogue",
                         "title", titleKey,
                         "message", greeting.translate()
-                    )
+                    ))
                 ))
             ),
             Interaction.of(
                 "pixelmon:close_dialogue",
-                Map.of("type", "pixelmon:true"),
+                InteractionDefinition.toJsonElement(Map.of("type", "pixelmon:true")),
                 InteractionResults.constant(List.of(
-                    Map.of(
+                    InteractionDefinition.toJsonElement(Map.of(
                         "type", "pixelmon:open_shop",
                         "items", shopItemsData
-                    )
+                    ))
                 ))
             ),
             Interaction.of(
                 "pixelmon:close_shop",
-                Map.of("type", "pixelmon:true"),
+                InteractionDefinition.toJsonElement(Map.of("type", "pixelmon:true")),
                 InteractionResults.constant(List.of(
-                    Map.of(
+                    InteractionDefinition.toJsonElement(Map.of(
                         "type", "pixelmon:open_dialogue",
                         "title", titleKey,
                         "message", goodbye.translate(),
                         "fire_close_event", false
-                    )
+                    ))
                 ))
             )
         );
