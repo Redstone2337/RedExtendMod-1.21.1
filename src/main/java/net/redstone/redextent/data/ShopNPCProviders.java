@@ -20,7 +20,7 @@ import java.util.function.BiConsumer;
  */
 public class ShopNPCProviders extends PixelmonNPCProvider {
     
-    public ShopNPCProvider(PackOutput output) {
+    public ShopNPCProviders(PackOutput output) {
         super(output, "pixelmon", "shop");
     }
 
