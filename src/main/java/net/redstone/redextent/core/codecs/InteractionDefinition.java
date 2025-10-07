@@ -9,6 +9,8 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.util.ExtraCodecs;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonArray;
 
 import java.util.List;
 import java.util.Map;
@@ -72,9 +74,9 @@ public record InteractionDefinition(
         }
     }
 
-public record Interaction(
+    public record Interaction(
         String event,
-        Object conditions, // 保持 Object 类型
+        JsonElement conditions,
         InteractionResults results
     ) {
         public static final Codec<Interaction> CODEC = RecordCodecBuilder.create(instance ->
@@ -85,14 +87,14 @@ public record Interaction(
             ).apply(instance, Interaction::new)
         );
 
-        public static Interaction of(String event, Object conditions, InteractionResults results) {
+        public static Interaction of(String event, JsonElement conditions, InteractionResults results) {
             return new Interaction(event, conditions, results);
         }
     }
 
     public record InteractionResults(
         String type,
-        List<Object> value // 保持 List<Object> 类型
+        List<JsonElement> value
     ) {
         public static final Codec<InteractionResults> CODEC = RecordCodecBuilder.create(instance ->
             instance.group(
@@ -101,8 +103,38 @@ public record Interaction(
             ).apply(instance, InteractionResults::new)
         );
 
-        public static InteractionResults constant(List<Object> value) {
+        public static InteractionResults constant(List<JsonElement> value) {
             return new InteractionResults("pixelmon:constant", value);
         }
+    }
+
+    // 工具方法：将Map转换为JsonElement
+    public static JsonElement toJsonElement(Object obj) {
+        if (obj instanceof Map) {
+            JsonObject jsonObject = new JsonObject();
+            ((Map<?, ?>) obj).forEach((key, value) -> {
+                if (key instanceof String) {
+                    if (value instanceof String) {
+                        jsonObject.addProperty((String) key, (String) value);
+                    } else if (value instanceof Number) {
+                        jsonObject.addProperty((String) key, (Number) value);
+                    } else if (value instanceof Boolean) {
+                        jsonObject.addProperty((String) key, (Boolean) value);
+                    } else if (value instanceof Map) {
+                        jsonObject.add((String) key, toJsonElement(value));
+                    } else if (value instanceof List) {
+                        JsonArray array = new JsonArray();
+                        ((List<?>) value).forEach(item -> array.add(toJsonElement(item)));
+                        jsonObject.add((String) key, array);
+                    }
+                }
+            });
+            return jsonObject;
+        } else if (obj instanceof List) {
+            JsonArray array = new JsonArray();
+            ((List<?>) obj).forEach(item -> array.add(toJsonElement(item)));
+            return array;
+        }
+        return new JsonObject();
     }
 }
