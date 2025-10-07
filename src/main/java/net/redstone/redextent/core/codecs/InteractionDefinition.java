@@ -8,6 +8,7 @@ package net.redstone.redextent.core.codecs;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.util.ExtraCodecs;
+import com.google.gson.JsonElement;
 
 import java.util.List;
 import java.util.Map;
@@ -71,14 +72,11 @@ public record InteractionDefinition(
         }
     }
 
-    // 修改这两个有问题的行
-    public record Interaction(
+public record Interaction(
         String event,
-        JsonElement conditions, // 从 Object 改为 JsonElement
+        Object conditions, // 保持 Object 类型
         InteractionResults results
     ) {
-        // ...
-
         public static final Codec<Interaction> CODEC = RecordCodecBuilder.create(instance ->
             instance.group(
                 Codec.STRING.fieldOf("event").forGetter(Interaction::event),
@@ -86,19 +84,25 @@ public record InteractionDefinition(
                 InteractionResults.CODEC.fieldOf("results").forGetter(Interaction::results)
             ).apply(instance, Interaction::new)
         );
+
+        public static Interaction of(String event, Object conditions, InteractionResults results) {
+            return new Interaction(event, conditions, results);
+        }
     }
 
     public record InteractionResults(
         String type,
-        List<JsonElement> value // 从 List<Object> 改为 List<JsonElement>
+        List<Object> value // 保持 List<Object> 类型
     ) {
-        // ...
-    
         public static final Codec<InteractionResults> CODEC = RecordCodecBuilder.create(instance ->
             instance.group(
                 Codec.STRING.fieldOf("type").forGetter(InteractionResults::type),
                 ExtraCodecs.JSON.listOf().fieldOf("value").forGetter(InteractionResults::value)
             ).apply(instance, InteractionResults::new)
         );
+
+        public static InteractionResults constant(List<Object> value) {
+            return new InteractionResults("pixelmon:constant", value);
+        }
     }
 }
