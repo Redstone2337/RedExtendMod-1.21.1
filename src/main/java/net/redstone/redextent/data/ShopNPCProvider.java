@@ -20,8 +20,8 @@ import java.util.function.BiConsumer;
  */
 public class ShopNPCProvider extends PixelmonNPCProvider {
     
-    public ShopNPCProvider(PackOutput output, String modId) {
-        super(output, modId, "shop");
+    public ShopNPCProvider(PackOutput output) {
+        super(output, "pixelmon", "shop");
     }
 
     @Override
@@ -43,11 +43,16 @@ public class ShopNPCProvider extends PixelmonNPCProvider {
         NpcPresetBuilder.TextContent greeting = NpcPresetBuilder.TextContent.literal("欢迎来到毛毛龙商店，这里只有最稀有的商品！");
         NpcPresetBuilder.TextContent goodbye = NpcPresetBuilder.TextContent.literal("感谢您的光临，期待再次为您服务！");
 
+        // 修复 ResourceLocation 创建方式
+        List<ResourceLocation> textures = List.of(
+            ResourceLocation.parse("rem:textures/steve/info_dragon.png")
+        );
+
         // 创建商店NPC
         NpcPresetBuilder.NpcTemplate shopNpc = NpcPresetBuilder.createShopNpc(
             "maomao_dragon_shop",
             List.of("毛毛龙"),
-            List.of(ResourceLocation.fromNamespaceAndPath("rem","textures/entity/npc/info_dragon.png")),
+            textures,
             title,
             greeting,
             goodbye,

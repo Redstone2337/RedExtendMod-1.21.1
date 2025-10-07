@@ -20,8 +20,8 @@ import java.util.function.BiConsumer;
  */
 public class TipNPCProvider extends PixelmonNPCProvider {
     
-    public TipNPCProvider(PackOutput output, String modId) {
-        super(output, modId, "tips");
+    public TipNPCProvider(PackOutput output) {
+        super(output, "pixelmon", "tips");
     }
 
     @Override
@@ -40,11 +40,18 @@ public class TipNPCProvider extends PixelmonNPCProvider {
         // 创建标题
         NpcPresetBuilder.TextContent title = NpcPresetBuilder.TextContent.literal("模组宣传");
 
+        // 修复 ResourceLocation 创建方式
+        List<ResourceLocation> textures = List.of(
+            ResourceLocation.parse("rem:textures/steve/fire_dragon.png"),
+            ResourceLocation.parse("rem:textures/steve/gwenthe_dragon.png.png"),
+            ResourceLocation.parse("rem:textures/steve/magic_dragon_electricity.png")
+        );
+
         // 创建提示NPC
         NpcPresetBuilder.NpcTemplate tipNpc = NpcPresetBuilder.createChatNpc(
             "mod_promotion_npc",
             List.of("向导小智"),
-            List.of(ResourceLocation.fromNamespaceAndPath("textures/entity/npc/guide.png")),
+            textures,
             title,
             dialoguePages,
             false,
