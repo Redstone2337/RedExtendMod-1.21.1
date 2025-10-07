@@ -1,54 +1,56 @@
+/*
+ * Copyright (c) Forge Development LLC and contributors
+ * SPDX-License-Identifier: LGPL-2.1-only
+ */
+ 
 package net.redstone.redextent.data;
 
 import net.minecraft.data.PackOutput;
-import net.minecraft.resources.ResourceLocation;
 import net.redstone.redextent.core.generator.PixelmonNPCProvider;
-import net.redstone.redextent.core.npc.NpcPresetBuilder;
-import net.redstone.redextent.core.npc.NpcPresetBuilder.*;
 import net.redstone.redextent.core.codecs.NpcDefinitionCodec;
+import net.redstone.redextent.core.npc.NpcPresetBuilder;
+import net.minecraft.resources.ResourceLocation;
+import com.google.gson.JsonObject;
 
 import java.util.List;
 import java.util.function.BiConsumer;
 
 /**
- * 提示NPC数据提供者 - 专门生成提示NPC
+ * 提示NPC提供者
  */
-public class TipsNPCProvider extends PixelmonNPCProvider {
+public class TipNPCProvider extends PixelmonNPCProvider {
     
-    public TipsNPCProvider(PackOutput output) {
-        super(output, "pixelmon", "info");
+    public TipNPCProvider(PackOutput output, String modId) {
+        super(output, modId, "tips");
     }
 
     @Override
     protected void registerNpcs(BiConsumer<String, NpcDefinitionCodec> consumer) {
-        createModPublicityAmbassador(consumer);
+        registerTipNpcs(consumer);
     }
 
-    /**
-     * 创建模组宣传大使NPC
-     */
-    private void createModPublicityAmbassador(BiConsumer<String, NpcDefinitionCodec> consumer) {
-        TextContent title = TextContent.literal("模组宣传");
-        List<TextContent> tipMessages = List.of(
-                TextContent.literal("欢迎来到我们的像素精灵世界！"),
-                TextContent.literal("探索、战斗、培育，体验前所未有的冒险！"),
-                TextContent.literal("记得定期检查我们的更新，获取最新内容和活动信息！")
+    private void registerTipNpcs(BiConsumer<String, NpcDefinitionCodec> consumer) {
+        // 创建对话页面
+        List<NpcPresetBuilder.TextContent> dialoguePages = List.of(
+            NpcPresetBuilder.TextContent.literal("欢迎来到我们的像素精灵世界！"),
+            NpcPresetBuilder.TextContent.literal("探索、战斗、培育，体验前所未有的冒险！"),
+            NpcPresetBuilder.TextContent.literal("记得定期检查我们的更新，获取最新内容和活动信息！")
         );
 
-        NpcTemplate ambassador = NpcPresetBuilder.createChatNpc(
-            "publicity_ambassador",
-            List.of("Fire Dragon Kael", "Lu Ming Fei", "Magic Dragon An Ye"),
-            List.of(
-                ResourceLocation.parse("rem:textures/steve/fire_dragon.png"),
-                ResourceLocation.parse("rem:textures/steve/gwenthe_dragon.png"),
-                ResourceLocation.parse("rem:textures/steve/magic_dragon_electricity.png")
-            ),
+        // 创建标题
+        NpcPresetBuilder.TextContent title = NpcPresetBuilder.TextContent.literal("模组宣传");
+
+        // 创建提示NPC
+        NpcPresetBuilder.NpcTemplate tipNpc = NpcPresetBuilder.createChatNpc(
+            "mod_promotion_npc",
+            List.of("向导小智"),
+            List.of(new ResourceLocation("textures/entity/npc/guide.png")),
             title,
-            tipMessages,
-            true,
-            true
+            dialoguePages,
+            false,
+            false
         );
 
-        consumer.accept(ambassador.name(), ambassador.build());
+        consumer.accept("mod_promotion_npc", tipNpc.build());
     }
 }
