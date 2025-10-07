@@ -26,7 +26,7 @@ public class ModDataGenerator {
         generator.addProvider(event.includeServer(), new PixelmonAbilityProvider(packOutput));
         generator.addProvider(event.includeClient(), new ModEnglishLanguageProvider(packOutput));
         generator.addProvider(event.includeClient(), new BattleNPCProvider(packOutput));
-        generator.addProvider(event.includeServer(), new ShopNPCProviders(packOutput));
+       // generator.addProvider(event.includeClient(), new ShopNPCProviders(packOutput));
         generator.addProvider(event.includeClient(), new TipNPCProvider(packOutput));
     }
 }
