@@ -9,7 +9,7 @@ import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.redstone.redextent.data.BattleNPCProvider;
 import net.redstone.redextent.data.TipNPCProvider;
-import net.redstone.redextent.data.ShopNPCPrevider;
+import net.redstone.redextent.data.ShopNPCProvider;
 import net.redstone.redextent.data.ModEnglishLanguageProvider;
 import net.redstone.redextent.data.PixelmonAbilityProvider;
 
