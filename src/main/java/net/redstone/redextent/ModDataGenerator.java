@@ -25,8 +25,8 @@ public class ModDataGenerator {
         CompletableFuture<HolderLookup.Provider> lookupProvider = event.getLookupProvider();
         generator.addProvider(event.includeServer(), new PixelmonAbilityProvider(packOutput));
         generator.addProvider(event.includeClient(), new ModEnglishLanguageProvider(packOutput));
-        generator.addProvider(event.includeClient(), new BattleNPCProvider(packOutput));
-       // generator.addProvider(event.includeClient(), new ShopNPCProviders(packOutput));
-        generator.addProvider(event.includeClient(), new TipNPCProvider(packOutput));
+        //generator.addProvider(event.includeClient(), new BattleNPCProvider(packOutput));
+        //generator.addProvider(event.includeClient(), new ShopNPCProviders(packOutput));
+        //generator.addProvider(event.includeClient(), new TipNPCProvider(packOutput));
     }
 }
