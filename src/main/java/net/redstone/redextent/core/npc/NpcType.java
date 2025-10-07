@@ -8,7 +8,7 @@ package net.redstone.redextent.core.npc;
 /**
  * NPC 类型枚举
  */
-public enum NPCType {
+public enum NpcType {
     /** 战斗类型 - 格式同 dragon_1.json */
     BATTLE,
     /** 聊天类型 - 格式同 evostones_1.json */
