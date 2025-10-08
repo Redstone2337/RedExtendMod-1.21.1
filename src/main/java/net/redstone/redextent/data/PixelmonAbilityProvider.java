@@ -11,7 +11,8 @@ public class PixelmonAbilityProvider extends BaseAbilitiesProvider {
 
     @Override
     protected void addAbilities() {
-        addAbility("net.redstone.redextent.ability.FastStart");
+        addAbility("net.redstone.redextent.ability.FastStartReforged");
         addAbility("net.redstone.redextent.ability.DragonRise");
+        addAbility("net.redstone.redextent.ability.FightingDivinity");
     }
 }

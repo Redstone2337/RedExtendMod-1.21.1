@@ -6,12 +6,12 @@ import com.pixelmonmod.pixelmon.api.pokemon.ability.AbstractAbility;
 import com.pixelmonmod.pixelmon.api.pokemon.stats.BattleStatsType;
 import com.pixelmonmod.pixelmon.battles.controller.participants.PixelmonWrapper;
 
-public class FastStart extends AbstractAbility {
+public class FastStartReforged extends AbstractAbility {
     private int turnsRemaining = 3; // 快启动持续时间更短
 
     @Override
     public void applySwitchInEffect(PixelmonWrapper newPokemon) {
-        newPokemon.bc.sendToAll("pixelmon.abilities.faststart", newPokemon.getNickname());
+        newPokemon.bc.sendToAll("pixelmon.abilities.fast_start.activate", newPokemon.getNickname());
         this.turnsRemaining = 3;
     }
 
@@ -62,7 +62,7 @@ public class FastStart extends AbstractAbility {
         int i = this.turnsRemaining - 1;
         this.turnsRemaining = i;
         if (i == 0) {
-            pokemon.bc.sendToAll("pixelmon.abilities.faststartend", pokemon.getNickname());
+            pokemon.bc.sendToAll("pixelmon.abilities.fast_start.end", pokemon.getNickname());
         }
     }
 

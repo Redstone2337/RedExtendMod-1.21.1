@@ -3,14 +3,13 @@ package net.redstone.redextent;
 import com.pixelmonmod.pixelmon.api.pokemon.ability.AbilityRegistry;
 import net.neoforged.neoforge.event.server.ServerStoppingEvent;
 import net.redstone.redextent.ability.DragonRise;
-import net.redstone.redextent.ability.FastStart;
+import net.redstone.redextent.ability.FastStartReforged;
+import net.redstone.redextent.ability.FightingDivinity;
 import net.redstone.redextent.manager.ItemClearManager;
 import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
 
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.world.level.block.Blocks;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
@@ -40,8 +39,9 @@ public class RedExtendMod {
     private static final Set<String> KNOWN_ABILITIES = new HashSet<>();
     static {
         // 注册已知的特性类
-        KNOWN_ABILITIES.add("FastStart");
+        KNOWN_ABILITIES.add("FastStartReforged");
         KNOWN_ABILITIES.add("DragonRise");
+        KNOWN_ABILITIES.add("FightingDivinity");
         // 未来可以在这里添加更多已知特性
         // KNOWN_ABILITIES.add("AnotherAbility");
     }
@@ -140,8 +140,9 @@ public class RedExtendMod {
     private boolean registerAbility(String abilityName) {
         try {
             switch (abilityName) {
+                case "FastStartReforged":
                 case "FastStart":
-                    AbilityRegistry.register(FastStart.class.getName());
+                    AbilityRegistry.register(FastStartReforged.class.getName());
                     LOGGER.info("注册自定义特性: Fast Start");
                     return true;
                 // 未来可以在这里添加更多特性
@@ -149,6 +150,10 @@ public class RedExtendMod {
                      AbilityRegistry.register(DragonRise.class.getName());
                      LOGGER.info("注册自定义特性: Dragon Rise");
                      return true;
+                case "FightingDivinity":
+                    AbilityRegistry.register(FightingDivinity.class.getName());
+                    LOGGER.info("注册自定义特性: Fighting Divinity");
+                    return true;
                 default:
                     LOGGER.warn("未知的自定义特性: {}", abilityName);
                     return false;
