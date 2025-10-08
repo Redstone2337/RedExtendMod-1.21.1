@@ -169,12 +169,12 @@
     "value": {
       "type": "pixelmon:spec",
       "specs": [
-        "Groudon lvl:88 ability:Drought helditem:Red Orb nature:Adamant ivspatk:31 ivspd:31 ivhp:31 ivspdef:31 ivdef:31 ivatk:31 evspatk:0 evspd:252 evhp:0 evspdef:4 evdef:0 evatk:252 move1:Precipice Blades move2:Fire Punch move3:Rock Slide move4:Swords Dance",
-        "Ho-Oh lvl:85 ability:Pressure helditem:Life Orb nature:Adamant ivspatk:31 ivspd:31 ivhp:31 ivspdef:31 ivdef:31 ivatk:31 evspatk:0 evspd:0 evhp:248 evspdef:8 evdef:0 evatk:252 move1:Sacred Fire move2:Brave Bird move3:Earthquake move4:Recover",
-        "Moltres lvl:82 ability:Pressure helditem:Heavy-Duty Boots nature:Timid ivspatk:31 ivspd:31 ivhp:31 ivspdef:31 ivdef:31 ivatk:31 evspatk:252 evspd:252 evhp:0 evspdef:4 evdef:0 evatk:0 move1:Hurricane move2:Fire Blast move3:Roost move4:U-turn",
-        "Entei lvl:80 ability:Pressure helditem:Choice Band nature:Adamant ivspatk:31 ivspd:31 ivhp:31 ivspdef:31 ivdef:31 ivatk:31 evspatk:0 evspd:252 evhp:0 evspdef:4 evdef:0 evatk:252 move1:Sacred Fire move2:Extreme Speed move3:Stone Edge move4:Iron Head",
-        "Reshiram lvl:78 ability:Turboblaze helditem:Choice Scarf nature:Modest ivspatk:31 ivspd:31 ivhp:31 ivspdef:31 ivdef:31 ivatk:31 evspatk:252 evspd:252 evhp:0 evspdef:4 evdef:0 evatk:0 move1:Blue Flare move2:Draco Meteor move3:Focus Blast move4:Stone Edge",
-        "Blaziken lvl:75 ability:Speed Boost helditem:Blazikenite nature:Adamant ivspatk:31 ivspd:31 ivhp:31 ivspdef:31 ivdef:31 ivatk:31 evspatk:0 evspd:252 evhp:0 evspdef:4 evdef:0 evatk:252 move1:Flare Blitz move2:High Jump Kick move3:Stone Edge move4:Protect"
+        "Groudon lvl:88 ability:Drought helditem:Red Orb nature:Adamant ivspdef:31 ivdef:31 ivatk:31 ivspatk:31 ivspd:31 ivhp:31 evspdef:4 evdef:0 evatk:252 evspatk:0 evspd:252 evhp:0 move1:Precipice Blades move2:Fire Punch move3:Rock Slide move4:Swords Dance",
+        "Ho-Oh lvl:85 ability:Pressure helditem:Life Orb nature:Adamant ivspdef:31 ivdef:31 ivatk:31 ivspatk:31 ivspd:31 ivhp:31 evspdef:8 evdef:0 evatk:252 evspatk:0 evspd:0 evhp:248 move1:Sacred Fire move2:Brave Bird move3:Earthquake move4:Recover",
+        "Moltres lvl:82 ability:Pressure helditem:Heavy-Duty Boots nature:Timid ivspdef:31 ivdef:31 ivatk:31 ivspatk:31 ivspd:31 ivhp:31 evspdef:4 evdef:0 evatk:0 evspatk:252 evspd:252 evhp:0 move1:Hurricane move2:Fire Blast move3:Roost move4:U-turn",
+        "Entei lvl:80 ability:Pressure helditem:Choice Band nature:Adamant ivspdef:31 ivdef:31 ivatk:31 ivspatk:31 ivspd:31 ivhp:31 evspdef:4 evdef:0 evatk:252 evspatk:0 evspd:252 evhp:0 move1:Sacred Fire move2:Extreme Speed move3:Stone Edge move4:Iron Head",
+        "Reshiram lvl:78 ability:Turboblaze helditem:Choice Scarf nature:Modest ivspdef:31 ivdef:31 ivatk:31 ivspatk:31 ivspd:31 ivhp:31 evspdef:4 evdef:0 evatk:0 evspatk:252 evspd:252 evhp:0 move1:Blue Flare move2:Draco Meteor move3:Focus Blast move4:Stone Edge",
+        "Blaziken lvl:75 ability:Speed Boost helditem:Blazikenite nature:Adamant ivspdef:31 ivdef:31 ivatk:31 ivspatk:31 ivspd:31 ivhp:31 evspdef:4 evdef:0 evatk:252 evspatk:0 evspd:252 evhp:0 move1:Flare Blitz move2:High Jump Kick move3:Stone Edge move4:Protect"
       ]
     }
   },
