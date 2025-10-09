@@ -3,6 +3,7 @@ package net.redstone.redextent;
 import com.pixelmonmod.pixelmon.api.pokemon.ability.AbilityRegistry;
 import net.neoforged.neoforge.event.server.ServerStoppingEvent;
 import net.redstone.redextent.ability.DragonRise;
+import net.redstone.redextent.ability.ElectricDivinity;
 import net.redstone.redextent.ability.FastStartReforged;
 import net.redstone.redextent.ability.FightingDivinity;
 import net.redstone.redextent.manager.ItemClearManager;
@@ -42,6 +43,7 @@ public class RedExtendMod {
         KNOWN_ABILITIES.add("FastStartReforged");
         KNOWN_ABILITIES.add("DragonRise");
         KNOWN_ABILITIES.add("FightingDivinity");
+        KNOWN_ABILITIES.add("ElectricDivinity");
         // 未来可以在这里添加更多已知特性
         // KNOWN_ABILITIES.add("AnotherAbility");
     }
@@ -153,6 +155,10 @@ public class RedExtendMod {
                 case "FightingDivinity":
                     AbilityRegistry.register(FightingDivinity.class.getName());
                     LOGGER.info("注册自定义特性: Fighting Divinity");
+                    return true;
+                case "ElectricDivinity":
+                    AbilityRegistry.register(ElectricDivinity.class.getName());
+                    LOGGER.info("注册自定义特性: Electric Divinity");
                     return true;
                 default:
                     LOGGER.warn("未知的自定义特性: {}", abilityName);
