@@ -36,7 +36,7 @@ public class Config {
     public static final ModConfigSpec.ConfigValue<List<? extends String>> ITEM_WHITELIST = BUILDER
             .comment("物品过滤器列表(若物品过滤器模式属于开启状态的话)")
             .defineListAllowEmpty("ServerItemSettings.itemWhitelist",
-                    Arrays.asList("minecraft:command_block"),
+                    List.of("minecraft:command_block"),
                     Config::validateItemName);
 
     // 客户端清理设置子节
@@ -60,7 +60,7 @@ public class Config {
     public static final ModConfigSpec.ConfigValue<List<? extends String>> CUSTOM_ABILITY_WHITELIST = BUILDER
             .comment("设定白名单列表\n检测整个模组中是否有与其字符串匹配的类名\n白名单用于设定哪些加载，哪些不加载。")
             .defineListAllowEmpty("ClientSettings.customAbilityWhitelist",
-                    Arrays.asList("FastStart"),
+                    List.of("FastStart"),
                     Config::validateClassName);
 
     static final ModConfigSpec SPEC = BUILDER.build();
