@@ -1,6 +1,6 @@
-// 1.21.1	2025-10-08T14:34:43.8848151	Pixelmon NPC 定义: pixelmon/npc/preset/battle
-567f530d806e9045238c18026b81b0eb98a0992f data/pixelmon/pixelmon/npc/preset/battle/blue_dragon_leader.json
-db7d828d6a639c6e45d6b405c50b4fb896295247 data/pixelmon/pixelmon/npc/preset/battle/dragon_legendary_trainer.json
-e67e05a8154183be1f99e35afc6c3b33871ffdaf data/pixelmon/pixelmon/npc/preset/battle/electric_legendary_trainer.json
-6d0f04292b5083c6c59475f842353a91e35d03e5 data/pixelmon/pixelmon/npc/preset/battle/fire_legendary_trainer.json
-d94a72ba1f32163d5c9026a067d0df2305574853 data/pixelmon/pixelmon/npc/preset/battle/water_legendary_trainer.json
+// 1.21.1	2025-10-09T16:21:57.0430765	Pixelmon NPC 定义: pixelmon/npc/preset/battle
+40bb360636e745063b97e8d3732643566e0db55c data/pixelmon/pixelmon/npc/preset/battle/blue_dragon_leader.json
+f4fd0457fa23817418638468ae5dc5ca2d4ca27b data/pixelmon/pixelmon/npc/preset/battle/dragon_legendary_trainer.json
+f32e39429801cbe1f50edbe38b9a2e59d010aabe data/pixelmon/pixelmon/npc/preset/battle/electric_legendary_trainer.json
+b8eca21eeac948700e6bbc62dc198a1b233a3a07 data/pixelmon/pixelmon/npc/preset/battle/fire_legendary_trainer.json
+865dc44d2a863c8312fb6ca87871302f0cc9efbb data/pixelmon/pixelmon/npc/preset/battle/water_legendary_trainer.json

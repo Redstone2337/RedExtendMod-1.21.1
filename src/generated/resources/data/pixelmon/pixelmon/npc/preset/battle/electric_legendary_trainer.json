@@ -169,12 +169,12 @@
     "value": {
       "type": "pixelmon:spec",
       "specs": [
-        "Raikou lvl:86 ability:Pressure helditem:Assault Vest nature:Timid ivspdef:31 ivdef:31 ivatk:31 ivspatk:31 ivspd:31 ivhp:31 evspdef:4 evdef:0 evatk:0 evspatk:252 evspd:252 evhp:0 move1:Thunderbolt move2:Volt Switch move3:Shadow Ball move4:Extrasensory",
-        "Zapdos lvl:83 ability:Pressure helditem:Heavy-Duty Boots nature:Timid ivspdef:31 ivdef:31 ivatk:31 ivspatk:31 ivspd:31 ivhp:31 evspdef:4 evdef:0 evatk:0 evspatk:252 evspd:252 evhp:0 move1:Thunderbolt move2:Hurricane move3:Heat Wave move4:Roost",
-        "Thundurus lvl:80 ability:Prankster helditem:Life Orb nature:Timid ivspdef:31 ivdef:31 ivatk:31 ivspatk:31 ivspd:31 ivhp:31 evspdef:4 evdef:0 evatk:0 evspatk:252 evspd:252 evhp:0 move1:Thunderbolt move2:Focus Blast move3:Hidden Power Ice move4:Nasty Plot",
-        "Tapu Koko lvl:78 ability:Electric Surge helditem:Choice Specs nature:Timid ivspdef:31 ivdef:31 ivatk:31 ivspatk:31 ivspd:31 ivhp:31 evspdef:4 evdef:0 evatk:0 evspatk:252 evspd:252 evhp:0 move1:Thunderbolt move2:Dazzling Gleam move3:Volt Switch move4:Grass Knot",
-        "Zeraora lvl:76 ability:Volt Absorb helditem:Expert Belt nature:Jolly ivspdef:31 ivdef:31 ivatk:31 ivspatk:31 ivspd:31 ivhp:31 evspdef:4 evdef:0 evatk:252 evspatk:0 evspd:252 evhp:0 move1:Plasma Fists move2:Close Combat move3:Blaze Kick move4:Volt Switch",
-        "Ampharos lvl:73 ability:Mold Breaker helditem:Ampharosite nature:Modest ivspdef:31 ivdef:31 ivatk:31 ivspatk:31 ivspd:31 ivhp:31 evspdef:8 evdef:0 evatk:0 evspatk:252 evspd:0 evhp:248 move1:Thunderbolt move2:Dragon Pulse move3:Focus Blast move4:Volt Switch"
+        "Raikou lvl:86 ability:Pressure helditem:Assault Vest nature:Timid ivdef:31 ivspdef:31 ivhp:31 ivspd:31 ivspatk:31 ivatk:31 evdef:0 evspdef:4 evhp:0 evspd:252 evspatk:252 evatk:0 move1:Thunderbolt move2:Volt Switch move3:Shadow Ball move4:Extrasensory",
+        "Zapdos lvl:83 ability:Pressure helditem:Heavy-Duty Boots nature:Timid ivdef:31 ivspdef:31 ivhp:31 ivspd:31 ivspatk:31 ivatk:31 evdef:0 evspdef:4 evhp:0 evspd:252 evspatk:252 evatk:0 move1:Thunderbolt move2:Hurricane move3:Heat Wave move4:Roost",
+        "Thundurus lvl:80 ability:Prankster helditem:Life Orb nature:Timid ivdef:31 ivspdef:31 ivhp:31 ivspd:31 ivspatk:31 ivatk:31 evdef:0 evspdef:4 evhp:0 evspd:252 evspatk:252 evatk:0 move1:Thunderbolt move2:Focus Blast move3:Hidden Power Ice move4:Nasty Plot",
+        "Tapu Koko lvl:78 ability:Electric Surge helditem:Choice Specs nature:Timid ivdef:31 ivspdef:31 ivhp:31 ivspd:31 ivspatk:31 ivatk:31 evdef:0 evspdef:4 evhp:0 evspd:252 evspatk:252 evatk:0 move1:Thunderbolt move2:Dazzling Gleam move3:Volt Switch move4:Grass Knot",
+        "Zeraora lvl:76 ability:Volt Absorb helditem:Expert Belt nature:Jolly ivdef:31 ivspdef:31 ivhp:31 ivspd:31 ivspatk:31 ivatk:31 evdef:0 evspdef:4 evhp:0 evspd:252 evspatk:0 evatk:252 move1:Plasma Fists move2:Close Combat move3:Blaze Kick move4:Volt Switch",
+        "Ampharos lvl:73 ability:Mold Breaker helditem:Ampharosite nature:Modest ivdef:31 ivspdef:31 ivhp:31 ivspd:31 ivspatk:31 ivatk:31 evdef:0 evspdef:8 evhp:248 evspd:0 evspatk:252 evatk:0 move1:Thunderbolt move2:Dragon Pulse move3:Focus Blast move4:Volt Switch"
       ]
     }
   },

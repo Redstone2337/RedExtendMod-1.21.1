@@ -1,6 +1,8 @@
 {
   "ability.DragonRise": "Dragon Rise",
   "ability.DragonRise.description": "When the Pokémon enters the field, if it is Dragon-type, its Special Attack, Attack, and Speed are boosted for 3 turns. The boosts increase each turn.",
+  "ability.ElectricDivinity": "Electric Divinity",
+  "ability.ElectricDivinity.description": "Electric-type Pokémon gain 20% Attack, 25% Special Attack, and 5% Speed upon entering battle, and reduce damage from super effective moves by 5%.",
   "ability.FastStartReforged": "Fast Start",
   "ability.FastStartReforged.description": "For the first 3 rounds after the Pokémon enters the field, its attack and speed increase by 50%, and the effect ends after 3 rounds.",
   "ability.FightingDivinity": "Fighting Divinity",
@@ -9,6 +11,8 @@
   "pixelmon.abilities.dragon_rise.boost": "%s's Dragon Rise: Special Attack +%d%%, Attack +%d%%, Speed +%d%% (Turn %d)",
   "pixelmon.abilities.dragon_rise.dragon_ascent": "%s's Dragon Ascent is empowered by Dragon Rise!",
   "pixelmon.abilities.dragon_rise.end": "%s's Dragon Rise effect ended.",
+  "pixelmon.abilities.electric_divinity.activate": "%s's Electric Divinity activated!",
+  "pixelmon.abilities.electric_divinity.reduce_damage": "%s's Electric Divinity reduced the power of %s!",
   "pixelmon.abilities.fast_start.activate": "%s has entered the Fast Start state! Speed and attack have been greatly increased!",
   "pixelmon.abilities.fast_start.end": "The Fast Start effect of %s has ended! Speed and attack have returned to normal.",
   "pixelmon.abilities.fighting_divinity.activate": "%s's Fighting Divinity activated!",

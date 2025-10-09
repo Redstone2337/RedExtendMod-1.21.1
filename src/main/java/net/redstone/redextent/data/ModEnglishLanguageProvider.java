@@ -14,6 +14,8 @@ public class ModEnglishLanguageProvider extends LanguageProvider {
         add("ability.FastStartReforged", "Fast Start");
         add("ability.DragonRise","Dragon Rise");
         add( "ability.FightingDivinity", "Fighting Divinity");
+        add("ability.ElectricDivinity", "Electric Divinity");
+        add("ability.ElectricDivinity.description", "Electric-type Pokémon gain 20% Attack, 25% Special Attack, and 5% Speed upon entering battle, and reduce damage from super effective moves by 5%.");
         add("ability.FightingDivinity.description", "Greatly boosts the power of Fighting-type moves. If the Pokémon is Fighting-type, its Special Attack and Attack damage are increased by 10% when it enters the field.");
         add("ability.DragonRise.description", "When the Pokémon enters the field, if it is Dragon-type, its Special Attack, Attack, and Speed are boosted for 3 turns. The boosts increase each turn.");
         add("ability.FastStartReforged.description","For the first 3 rounds after the Pokémon enters the field, its attack and speed increase by 50%, and the effect ends after 3 rounds.");
@@ -27,5 +29,7 @@ public class ModEnglishLanguageProvider extends LanguageProvider {
         add("pixelmon.abilities.dragon_rise.dragon_ascent", "%s's Dragon Ascent is empowered by Dragon Rise!");
         add("pixelmon.abilities.fighting_divinity.activate", "%s's Fighting Divinity activated!");
         add("pixelmon.abilities.fighting_divinity.boost", "%s's %s is empowered by Fighting Divinity!");
+        add("pixelmon.abilities.electric_divinity.activate", "%s's Electric Divinity activated!");
+        add("pixelmon.abilities.electric_divinity.reduce_damage", "%s's Electric Divinity reduced the power of %s!");
     }
 }
