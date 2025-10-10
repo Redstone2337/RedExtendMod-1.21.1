@@ -1,7 +1,9 @@
 package net.redstone.redextent.mixin;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.BlockTypes;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -16,6 +18,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.List;
 import java.util.Set;
 
 @Mixin(AbstractFurnaceBlockEntity.class)
@@ -34,20 +37,33 @@ public abstract class SuperFurnaceBlockEntityMixin {
 
     @Unique
     private final static BlockPattern SUPER_BLAST_FURNACE = BlockPatternBuilder.start()
+            .aisle("CCC","CCC","CCC")
+            .aisle("CCC","CCC","CBC")
             .aisle("AAA","AAA","AAA")
-            .aisle("AAA","AAA","ABA")
-            .aisle("AAA","AAA","AAA")
-            .where('A', BlockInWorld.hasState(BlockStatePredicate.forBlock(Blocks.STONE)))
+            .where('A', BlockInWorld.hasState(BlockStatePredicate.forBlock(Blocks.SMOOTH_STONE)))
             .where('B', BlockInWorld.hasState(BlockStatePredicate.forBlock(Blocks.BLAST_FURNACE)))
+            .where('C', BlockInWorld.hasState(BlockStatePredicate.forBlock(Blocks.IRON_BLOCK)))
             .build();
 
     @Unique
     private final static BlockPattern SUPER_SMOKER = BlockPatternBuilder.start()
-            .aisle("AAA","AAA","AAA")
-            .aisle("AAA","AAA","ABA")
-            .aisle("AAA","AAA","AAA")
-            .where('A', BlockInWorld.hasState(BlockStatePredicate.forBlock(Blocks.STONE)))
+            .aisle("CAC","ACA","CAC")
+            .aisle("CAC","ACA","CBC")
+            .aisle("CAC","ACA","CAC")
+            .where('A', BlockInWorld.hasState(BlockStatePredicate.forBlock(Blocks.OAK_LOG)
+                    .or(BlockStatePredicate.forBlock(Blocks.OAK_LOG))
+                    .or(BlockStatePredicate.forBlock(Blocks.SPRUCE_LOG))
+                    .or(BlockStatePredicate.forBlock(Blocks.BIRCH_LOG))
+                    .or(BlockStatePredicate.forBlock(Blocks.JUNGLE_LOG))
+                    .or(BlockStatePredicate.forBlock(Blocks.ACACIA_LOG))
+                    .or(BlockStatePredicate.forBlock(Blocks.DARK_OAK_LOG))
+                    .or(BlockStatePredicate.forBlock(Blocks.MANGROVE_LOG))
+                    .or(BlockStatePredicate.forBlock(Blocks.CHERRY_LOG))
+                    .or(BlockStatePredicate.forBlock(Blocks.CRIMSON_STEM))
+                    .or(BlockStatePredicate.forBlock(Blocks.WARPED_STEM))
+            ))
             .where('B', BlockInWorld.hasState(BlockStatePredicate.forBlock(Blocks.SMOKER)))
+            .where('C', BlockInWorld.hasState(BlockStatePredicate.forBlock(Blocks.COAL_BLOCK)))
             .build();
 
     @Unique
