@@ -3,8 +3,7 @@ package net.redstone.redextent.mixin;
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.BlockTypes;
-import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.pattern.BlockInWorld;
@@ -72,9 +71,9 @@ public abstract class SuperFurnaceBlockEntityMixin {
 
     @Inject(method = "serverTick", at = @At("TAIL"))
     private static void onServerTick(Level level, BlockPos pos, BlockState state, AbstractFurnaceBlockEntity blockEntity, CallbackInfo ci) {
-        if (!(state.getBlock() instanceof net.minecraft.world.level.block.FurnaceBlock ||
-              state.getBlock() instanceof net.minecraft.world.level.block.BlastFurnaceBlock ||
-              state.getBlock() instanceof net.minecraft.world.level.block.SmokerBlock)) return;
+        if (!(state.getBlock() instanceof FurnaceBlock ||
+              state.getBlock() instanceof BlastFurnaceBlock ||
+              state.getBlock() instanceof SmokerBlock)) return;
         SuperFurnaceBlockEntityMixin mixin = (SuperFurnaceBlockEntityMixin) (Object) blockEntity;
         boolean bl = rem_template_1_21_1$PATTERNS.stream().anyMatch(pattern -> pattern.find(level, pos) != null);
         if (bl && mixin != null) {
