@@ -5,8 +5,13 @@
 
 package net.redstone.redextent.core.generator;
 
+import com.google.common.hash.HashCode;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -33,6 +38,7 @@ public abstract class PixelmonNPCProvider implements DataProvider {
     private final String modId;
     private final String subDirectory;
     private final String customOutputPath;
+    private final NPCDefinition.SaveMode saveMode;
 
     private final Map<String, JsonObject> npcs = new LinkedHashMap<>();
 
@@ -44,10 +50,7 @@ public abstract class PixelmonNPCProvider implements DataProvider {
      * @param subDirectory 在 data/modid/pixelmon/npc/preset/ 中放置文件的子目录。
      */
     protected PixelmonNPCProvider(final PackOutput output, final String modId, final String subDirectory) {
-        this.output = output;
-        this.modId = modId;
-        this.subDirectory = subDirectory;
-        this.customOutputPath = null; // 使用默认路径
+        this(output, modId, subDirectory, null, NPCDefinition.SaveMode.UNORDERED_FORMATTED);
     }
 
     /**
@@ -59,10 +62,37 @@ public abstract class PixelmonNPCProvider implements DataProvider {
      * @param customOutputPath 自定义输出路径，如果为null则使用默认路径 data/modid/pixelmon/npc/preset/。
      */
     protected PixelmonNPCProvider(final PackOutput output, final String modId, final String subDirectory, final String customOutputPath) {
+        this(output, modId, subDirectory, customOutputPath, NPCDefinition.SaveMode.UNORDERED_FORMATTED);
+    }
+
+    /**
+     * 创建此数据提供者的新实例，支持自定义保存模式。
+     *
+     * @param output 数据生成器提供的 {@linkplain PackOutput} 实例。
+     * @param modId  当前模组的模组ID。
+     * @param subDirectory 放置文件的子目录。
+     * @param saveMode JSON保存模式。
+     */
+    protected PixelmonNPCProvider(final PackOutput output, final String modId, final String subDirectory, final NPCDefinition.SaveMode saveMode) {
+        this(output, modId, subDirectory, null, saveMode);
+    }
+
+    /**
+     * 创建此数据提供者的新实例，支持自定义输出路径和保存模式。
+     *
+     * @param output 数据生成器提供的 {@linkplain PackOutput} 实例。
+     * @param modId  当前模组的模组ID。
+     * @param subDirectory 放置文件的子目录。
+     * @param customOutputPath 自定义输出路径，如果为null则使用默认路径 data/modid/pixelmon/npc/preset/。
+     * @param saveMode JSON保存模式。
+     */
+    protected PixelmonNPCProvider(final PackOutput output, final String modId, final String subDirectory,
+                                  final String customOutputPath, final NPCDefinition.SaveMode saveMode) {
         this.output = output;
         this.modId = modId;
         this.subDirectory = subDirectory;
         this.customOutputPath = customOutputPath;
+        this.saveMode = saveMode;
     }
 
     /**
@@ -97,7 +127,21 @@ public abstract class PixelmonNPCProvider implements DataProvider {
 
             for (Map.Entry<String, JsonObject> entry : this.npcs.entrySet()) {
                 Path filePath = npcPath.resolve(entry.getKey() + ".json");
-                futures[i++] = DataProvider.saveStable(cache, entry.getValue(), filePath);
+
+                switch (this.saveMode) {
+                    case ORIGINAL:
+                        futures[i++] = saveOriginal(cache, entry.getValue(), filePath);
+                        break;
+                    case UNORDERED_FORMATTED:
+                        futures[i++] = saveFormattedUnordered(cache, entry.getValue(), filePath);
+                        break;
+                    case COMPACT:
+                        futures[i++] = saveCompactJson(cache, entry.getValue(), filePath);
+                        break;
+                    default:
+                        futures[i++] = saveOriginal(cache, entry.getValue(), filePath);
+                        break;
+                }
             }
 
             return CompletableFuture.allOf(futures);
@@ -111,7 +155,7 @@ public abstract class PixelmonNPCProvider implements DataProvider {
         String pathInfo = (customOutputPath != null && !customOutputPath.isEmpty())
                 ? customOutputPath + "/" + subDirectory
                 : "pixelmon/npc/preset/" + subDirectory;
-        return "Pixelmon NPC 定义: " + pathInfo;
+        return "Pixelmon NPC 定义 (" + saveMode + "): " + pathInfo;
     }
 
     /**
@@ -133,22 +177,152 @@ public abstract class PixelmonNPCProvider implements DataProvider {
         return NPCDefinition.builder();
     }
 
-    // ==================== 快速生成方法 ====================
+    // ==================== 自定义商店NPC生成方法 ====================
+
+    /**
+     * 生成自定义商店NPC，结构与evostones_1.json完全一致
+     *
+     * @param fileName 文件名
+     * @param npcNames NPC名称列表
+     * @param propertyTitle 属性标题配置（显示在名称牌上）
+     * @param interactionTitle 交互标题配置（显示在对话框上）
+     * @param greeting 问候语配置
+     * @param goodbye 告别语配置
+     * @param shopItems 商店物品列表
+     * @param textureResources 纹理资源列表
+     * @param lookDistance 查看距离
+     * @param lookProbability 查看概率
+     */
+    protected void addCustomShopNPC(String fileName, List<String> npcNames,
+                                    JsonObject propertyTitle, JsonObject interactionTitle,
+                                    JsonObject greeting, JsonObject goodbye,
+                                    List<JsonObject> shopItems, List<String> textureResources,
+                                    float lookDistance, float lookProbability) {
+
+        // 创建玩家模型列表，使用完整的fallback结构
+        List<NPCDefinition.PlayerModel> models = textureResources.stream()
+                .map(texture -> createPlayerModelWithFallback(false, texture, texture))
+                .toList();
+
+        JsonObject npcDefinition = definition()
+                .withUniformInteractions(List.of(createCustomShopInteractions(interactionTitle, greeting, goodbye, shopItems)))
+                .withTitleProperties(20.0f, 1.0f, 1.0f, 2.0f, propertyTitle, false, false, false, false, true)
+                .withEmptyParty()
+                .withRandomNames(npcNames)
+                .withRandomPlayerModels(models)
+                .withLookAtNearbyGoal(lookDistance, lookProbability, 1)
+                .build()
+                .serialize();
+
+        this.add(fileName, npcDefinition);
+    }
+
+    /**
+     * 生成自定义商店NPC（简化版，使用翻译键）
+     */
+    protected void addCustomShopNPC(String fileName, List<String> npcNames,
+                                    String propertyTitleTranslate, String interactionTitleTranslate,
+                                    String greetingTranslate, String goodbyeTranslate,
+                                    List<JsonObject> shopItems, List<String> textureResources) {
+
+        JsonObject propertyTitle = createTranslateTitle(propertyTitleTranslate, "#2176FF", true, false, false);
+        JsonObject interactionTitle = createTranslateTitle(interactionTitleTranslate, "#2176FF", true, false, false);
+        JsonObject greeting = createTranslateMessage(greetingTranslate);
+        JsonObject goodbye = createTranslateMessage(goodbyeTranslate);
+
+        addCustomShopNPC(fileName, npcNames, propertyTitle, interactionTitle,
+                greeting, goodbye, shopItems, textureResources, 5.0f, 0.9f);
+    }
+
+    // ==================== 其他快速生成方法 ====================
+
+    /**
+     * 快速生成多页提示NPC（类似 ivs_basic_m.json）
+     */
+    protected void addMultiPageTipNPC(String fileName, List<String> npcNames,
+                                      JsonObject propertyTitle, JsonObject interactionTitle,
+                                      List<JsonObject> messagePages, List<String> textureResources,
+                                      float lookDistance, float lookProbability) {
+
+        List<NPCDefinition.PlayerModel> models = textureResources.stream()
+                .map(texture -> createPlayerModelWithFallback(false, texture, texture))
+                .toList();
+
+        JsonObject npcDefinition = definition()
+                .withUniformInteractions(List.of(createMultiPageTipInteractions(interactionTitle, messagePages)))
+                .withTitleProperties(20.0f, 1.0f, 1.0f, 2.0f, propertyTitle, false, false, false, false, true)
+                .withEmptyParty()
+                .withRandomNames(npcNames)
+                .withRandomPlayerModels(models)
+                .withLookAtNearbyGoal(lookDistance, lookProbability, 1)
+                .build()
+                .serialize();
+
+        this.add(fileName, npcDefinition);
+    }
+
+    /**
+     * 快速生成多页提示NPC（简化版）
+     */
+    protected void addMultiPageTipNPC(String fileName, List<String> npcNames,
+                                      String propertyTitleTranslate, String interactionTitleTranslate,
+                                      List<String> messageTranslates, List<String> textureResources) {
+
+        JsonObject propertyTitle = createTranslateTitle(propertyTitleTranslate, "#F8F8F2", true, false, false);
+        JsonObject interactionTitle = createTranslateTitle(interactionTitleTranslate, "#F8F8F2", true, false, false);
+        List<JsonObject> messagePages = messageTranslates.stream()
+                .map(PixelmonNPCProvider::createTranslateMessage)
+                .toList();
+
+        addMultiPageTipNPC(fileName, npcNames, propertyTitle, interactionTitle,
+                messagePages, textureResources, 4.0f, 0.9f);
+    }
+
+    /**
+     * 快速生成进化石商店NPC（类似 evostones_1.json）
+     */
+    protected void addEvolutionStoneShop(String fileName, List<String> npcNames,
+                                         JsonObject propertyTitle, JsonObject interactionTitle,
+                                         JsonObject greeting, JsonObject goodbye,
+                                         List<JsonObject> shopItems, List<String> textureResources,
+                                         float lookDistance, float lookProbability) {
+
+        List<NPCDefinition.PlayerModel> models = textureResources.stream()
+                .map(texture -> createPlayerModelWithFallback(false, texture, texture))
+                .toList();
+
+        JsonObject npcDefinition = definition()
+                .withUniformInteractions(List.of(createCustomShopInteractions(interactionTitle, greeting, goodbye, shopItems)))
+                .withTitleProperties(20.0f, 1.0f, 1.0f, 2.0f, propertyTitle, false, false, false, false, true)
+                .withEmptyParty()
+                .withRandomNames(npcNames)
+                .withRandomPlayerModels(models)
+                .withLookAtNearbyGoal(lookDistance, lookProbability, 1)
+                .build()
+                .serialize();
+
+        this.add(fileName, npcDefinition);
+    }
+
+    /**
+     * 快速生成进化石商店NPC（简化版）
+     */
+    protected void addEvolutionStoneShop(String fileName, List<String> npcNames,
+                                         String propertyTitleTranslate, String interactionTitleTranslate,
+                                         String greetingTranslate, String goodbyeTranslate,
+                                         List<JsonObject> shopItems, List<String> textureResources) {
+
+        JsonObject propertyTitle = createTranslateTitle(propertyTitleTranslate, "#2176FF", true, false, false);
+        JsonObject interactionTitle = createTranslateTitle(interactionTitleTranslate, "#2176FF", true, false, false);
+        JsonObject greeting = createTranslateMessage(greetingTranslate);
+        JsonObject goodbye = createTranslateMessage(goodbyeTranslate);
+
+        addEvolutionStoneShop(fileName, npcNames, propertyTitle, interactionTitle,
+                greeting, goodbye, shopItems, textureResources, 5.0f, 0.9f);
+    }
 
     /**
      * 快速生成馆主NPC
-     *
-     * @param fileName 文件名
-     * @param npcName NPC名称
-     * @param title 标题配置（JsonObject，支持translate或text）
-     * @param greeting 问候语配置（JsonObject，支持translate或text）
-     * @param winMessage 胜利消息配置（JsonObject，支持translate或text）
-     * @param loseMessage 失败消息配置（JsonObject，支持translate或text）
-     * @param pokemonSpecs 宝可梦配置列表
-     * @param rewardMoney 奖励金钱
-     * @param rewardItems 奖励物品列表
-     * @param cooldownDays 冷却天数
-     * @param texture 纹理路径
      */
     protected void addGymLeader(String fileName, String npcName, JsonObject title,
                                 JsonObject greeting, JsonObject winMessage, JsonObject loseMessage,
@@ -184,95 +358,6 @@ public abstract class PixelmonNPCProvider implements DataProvider {
 
         addGymLeader(fileName, npcName, title, greeting, winMessage, loseMessage,
                 pokemonSpecs, rewardMoney, rewardItems, cooldownDays, texture);
-    }
-
-    /**
-     * 快速生成商店NPC
-     *
-     * @param fileName 文件名
-     * @param npcNames NPC名称列表
-     * @param title 标题配置（JsonObject，支持translate或text）
-     * @param greeting 问候语配置（JsonObject，支持translate或text）
-     * @param goodbye 告别语配置（JsonObject，支持translate或text）
-     * @param shopItems 商店物品列表
-     * @param textureResources 纹理资源列表
-     */
-    protected void addShopKeeper(String fileName, List<String> npcNames, JsonObject title,
-                                 JsonObject greeting, JsonObject goodbye, List<JsonObject> shopItems,
-                                 List<String> textureResources) {
-
-        List<NPCDefinition.PlayerModel> models = textureResources.stream()
-                .map(texture -> NPCDefinition.PlayerModel.of(false, texture))
-                .toList();
-
-        JsonObject npcDefinition = definition()
-                .withUniformInteractions(List.of(createShopInteractions(title, greeting, goodbye, shopItems)))
-                .withTitleProperties(20.0f, 1.0f, 1.0f, 2.0f, title, false, false, false, false, true)
-                .withEmptyParty()
-                .withRandomNames(npcNames)
-                .withRandomPlayerModels(models)
-                .withLookAtNearbyGoal(5.0f, 0.9f, 1)
-                .build()
-                .serialize();
-
-        this.add(fileName, npcDefinition);
-    }
-
-    /**
-     * 快速生成商店NPC（简化版，使用翻译键作为消息）
-     */
-    protected void addShopKeeper(String fileName, List<String> npcNames, String titleTranslate,
-                                 String greetingTranslate, String goodbyeTranslate, List<JsonObject> shopItems,
-                                 List<String> textureResources) {
-
-        JsonObject title = createTranslateTitle(titleTranslate, "#2176FF", true, false, false);
-        JsonObject greeting = createTranslateMessage(greetingTranslate);
-        JsonObject goodbye = createTranslateMessage(goodbyeTranslate);
-
-        addShopKeeper(fileName, npcNames, title, greeting, goodbye, shopItems, textureResources);
-    }
-
-    /**
-     * 快速生成提示NPC
-     *
-     * @param fileName 文件名
-     * @param npcNames NPC名称列表
-     * @param title 标题配置（JsonObject，支持translate或text）
-     * @param messages 消息配置列表（JsonObject，支持translate或text）
-     * @param textureResources 纹理资源列表
-     */
-    protected void addTipNPC(String fileName, List<String> npcNames, JsonObject title,
-                             List<JsonObject> messages, List<String> textureResources) {
-
-        List<NPCDefinition.PlayerModel> models = textureResources.stream()
-                .map(texture -> NPCDefinition.PlayerModel.of(false, texture))
-                .toList();
-
-        JsonObject npcDefinition = definition()
-                .withUniformInteractions(List.of(createTipInteractions(title, messages)))
-                .withTitleProperties(20.0f, 1.0f, 1.0f, 2.0f, title, false, false, false, false, true)
-                .withEmptyParty()
-                .withRandomNames(npcNames)
-                .withRandomPlayerModels(models)
-                .withLookAtNearbyGoal(4.0f, 0.9f, 1)
-                .build()
-                .serialize();
-
-        this.add(fileName, npcDefinition);
-    }
-
-    /**
-     * 快速生成提示NPC（简化版，使用翻译键作为消息）
-     */
-    protected void addTipNPC(String fileName, List<String> npcNames, String titleTranslate,
-                             List<String> messageTranslates, List<String> textureResources) {
-
-        JsonObject title = createTranslateTitle(titleTranslate, "#F8F8F2", true, false, false);
-        List<JsonObject> messages = messageTranslates.stream()
-                .map(PixelmonNPCProvider::createTranslateMessage)
-                .toList();
-
-        addTipNPC(fileName, npcNames, title, messages, textureResources);
     }
 
     // ==================== 辅助类方法 ====================
@@ -351,12 +436,6 @@ public abstract class PixelmonNPCProvider implements DataProvider {
 
     /**
      * 创建商店物品（使用Item对象）
-     *
-     * @param item 物品对象
-     * @param count 数量
-     * @param buyPrice 购买价格
-     * @param sellPrice 出售价格
-     * @return 商店物品JSON对象
      */
     public static JsonObject createShopItem(Item item, int count, double buyPrice, double sellPrice) {
         ResourceLocation itemId = BuiltInRegistries.ITEM.getKey(item);
@@ -368,12 +447,6 @@ public abstract class PixelmonNPCProvider implements DataProvider {
 
     /**
      * 创建商店物品（使用物品ID字符串）
-     *
-     * @param itemId 物品ID
-     * @param count 数量
-     * @param buyPrice 购买价格
-     * @param sellPrice 出售价格
-     * @return 商店物品JSON对象
      */
     public static JsonObject createShopItem(String itemId, int count, double buyPrice, double sellPrice) {
         JsonObject item = new JsonObject();
@@ -390,11 +463,14 @@ public abstract class PixelmonNPCProvider implements DataProvider {
     }
 
     /**
+     * 创建进化石商店物品（简化版）
+     */
+    public static JsonObject createEvolutionStoneItem(String stoneId, double buyPrice, double sellPrice) {
+        return createShopItem(stoneId, 1, buyPrice, sellPrice);
+    }
+
+    /**
      * 创建物品奖励（使用Item对象）
-     *
-     * @param item 物品对象
-     * @param count 数量
-     * @return 物品奖励JSON对象
      */
     public static JsonObject createItemReward(Item item, int count) {
         ResourceLocation itemId = BuiltInRegistries.ITEM.getKey(item);
@@ -406,10 +482,6 @@ public abstract class PixelmonNPCProvider implements DataProvider {
 
     /**
      * 创建物品奖励（使用物品ID字符串）
-     *
-     * @param itemId 物品ID
-     * @param count 数量
-     * @return 物品奖励JSON对象
      */
     public static JsonObject createItemReward(String itemId, int count) {
         JsonObject item = new JsonObject();
@@ -420,14 +492,6 @@ public abstract class PixelmonNPCProvider implements DataProvider {
 
     /**
      * 创建宝可梦队伍配置
-     *
-     * @param pokemon 宝可梦名称
-     * @param level 等级
-     * @param ability 特性
-     * @param heldItem 持有物品
-     * @param nature 性格
-     * @param moves 招式列表
-     * @return 宝可梦配置字符串
      */
     public static String createPokemonSpec(String pokemon, int level, String ability, String heldItem,
                                            String nature, List<String> moves) {
@@ -497,7 +561,138 @@ public abstract class PixelmonNPCProvider implements DataProvider {
         return new NPCDefinition.PlayerModel(slim, textureResource, textureFallback);
     }
 
+    /**
+     * 创建玩家模型配置（带完整的fallback结构，与evostones_1.json一致）
+     */
+    public static NPCDefinition.PlayerModel createPlayerModelWithFallback(boolean slim, String textureResource, String textureFallback) {
+        return new NPCDefinition.PlayerModel(slim, textureResource, textureFallback);
+    }
+
     // ==================== 私有辅助方法 ====================
+
+    /**
+     * 创建自定义商店交互（与evostones_1.json结构完全一致）
+     */
+    private JsonObject createCustomShopInteractions(JsonObject title, JsonObject greeting,
+                                                    JsonObject goodbye, List<JsonObject> shopItems) {
+        JsonObject interactionsWrapper = new JsonObject();
+        JsonArray interactionsArray = new JsonArray();
+
+        // 右键点击交互
+        JsonObject rightClickInteraction = new JsonObject();
+        rightClickInteraction.addProperty("event", "pixelmon:right_click");
+
+        JsonObject rightClickConditions = new JsonObject();
+        rightClickConditions.addProperty("type", "pixelmon:true");
+        rightClickInteraction.add("conditions", rightClickConditions);
+
+        JsonObject rightClickResults = new JsonObject();
+        JsonArray rightClickResultsArray = new JsonArray();
+
+        JsonObject dialogue = new JsonObject();
+        dialogue.add("title", title);
+        dialogue.add("message", greeting);
+        dialogue.addProperty("type", "pixelmon:open_dialogue");
+        rightClickResultsArray.add(dialogue);
+
+        rightClickResults.add("value", rightClickResultsArray);
+        rightClickResults.addProperty("type", "pixelmon:constant");
+        rightClickInteraction.add("results", rightClickResults);
+
+        interactionsArray.add(rightClickInteraction);
+
+        // 关闭对话打开商店交互
+        JsonObject closeDialogueInteraction = new JsonObject();
+        closeDialogueInteraction.addProperty("event", "pixelmon:close_dialogue");
+
+        JsonObject closeDialogueConditions = new JsonObject();
+        closeDialogueConditions.addProperty("type", "pixelmon:true");
+        closeDialogueInteraction.add("conditions", closeDialogueConditions);
+
+        JsonObject closeDialogueResults = new JsonObject();
+        JsonArray closeDialogueResultsArray = new JsonArray();
+
+        JsonObject shop = new JsonObject();
+        shop.addProperty("type", "pixelmon:open_shop");
+
+        JsonArray itemsArray = new JsonArray();
+        for (JsonObject item : shopItems) {
+            itemsArray.add(item);
+        }
+        shop.add("items", itemsArray);
+
+        closeDialogueResultsArray.add(shop);
+        closeDialogueResults.add("value", closeDialogueResultsArray);
+        closeDialogueResults.addProperty("type", "pixelmon:constant");
+        closeDialogueInteraction.add("results", closeDialogueResults);
+
+        interactionsArray.add(closeDialogueInteraction);
+
+        // 关闭商店显示告别语交互
+        JsonObject closeShopInteraction = new JsonObject();
+        closeShopInteraction.addProperty("event", "pixelmon:close_shop");
+
+        JsonObject closeShopConditions = new JsonObject();
+        closeShopConditions.addProperty("type", "pixelmon:true");
+        closeShopInteraction.add("conditions", closeShopConditions);
+
+        JsonObject closeShopResults = new JsonObject();
+        JsonArray closeShopResultsArray = new JsonArray();
+
+        JsonObject goodbyeDialogue = new JsonObject();
+        goodbyeDialogue.add("title", title);
+        goodbyeDialogue.add("message", goodbye);
+        goodbyeDialogue.addProperty("fire_close_event", false);
+        goodbyeDialogue.addProperty("type", "pixelmon:open_dialogue");
+        closeShopResultsArray.add(goodbyeDialogue);
+
+        closeShopResults.add("value", closeShopResultsArray);
+        closeShopResults.addProperty("type", "pixelmon:constant");
+        closeShopInteraction.add("results", closeShopResults);
+
+        interactionsArray.add(closeShopInteraction);
+
+        interactionsWrapper.add("interactions", interactionsArray);
+        return interactionsWrapper;
+    }
+
+    /**
+     * 创建多页提示交互（类似 ivs_basic_m.json）
+     */
+    private JsonObject createMultiPageTipInteractions(JsonObject title, List<JsonObject> messagePages) {
+        JsonObject interactionsWrapper = new JsonObject();
+        JsonArray interactionsArray = new JsonArray();
+
+        // 右键点击打开多页对话
+        JsonObject interaction = new JsonObject();
+        interaction.addProperty("event", "pixelmon:right_click");
+
+        JsonObject conditions = new JsonObject();
+        conditions.addProperty("type", "pixelmon:true");
+        interaction.add("conditions", conditions);
+
+        JsonObject results = new JsonObject();
+        JsonArray resultsArray = new JsonArray();
+
+        JsonObject dialogue = new JsonObject();
+        dialogue.add("title", title);
+        dialogue.addProperty("type", "pixelmon:open_paged_dialogue");
+
+        JsonArray pagesArray = new JsonArray();
+        for (JsonObject message : messagePages) {
+            pagesArray.add(message);
+        }
+        dialogue.add("pages", pagesArray);
+
+        resultsArray.add(dialogue);
+        results.add("value", resultsArray);
+        results.addProperty("type", "pixelmon:constant");
+        interaction.add("results", results);
+
+        interactionsArray.add(interaction);
+        interactionsWrapper.add("interactions", interactionsArray);
+        return interactionsWrapper;
+    }
 
     private JsonObject createGymLeaderInteractions(JsonObject title, JsonObject greeting,
                                                    JsonObject winMessage, JsonObject loseMessage,
@@ -519,57 +714,6 @@ public abstract class PixelmonNPCProvider implements DataProvider {
         return interactions;
     }
 
-    private JsonObject createShopInteractions(JsonObject title, JsonObject greeting,
-                                              JsonObject goodbye, List<JsonObject> shopItems) {
-        JsonObject interactionsWrapper = new JsonObject();
-        JsonArray interactionsArray = new JsonArray();
-
-        // 右键点击打开对话
-        interactionsArray.add(createRightClickInteraction(greeting, title));
-        // 关闭对话打开商店
-        interactionsArray.add(createOpenShopInteraction(shopItems));
-        // 关闭商店显示告别语
-        interactionsArray.add(createShopGoodbyeInteraction(goodbye, title));
-
-        interactionsWrapper.add("interactions", interactionsArray);
-        return interactionsWrapper;
-    }
-
-    private JsonObject createTipInteractions(JsonObject title, List<JsonObject> messages) {
-        JsonObject interactionsWrapper = new JsonObject();
-        JsonArray interactionsArray = new JsonArray();
-
-        // 右键点击打开多页对话
-        JsonObject interaction = new JsonObject();
-        interaction.addProperty("event", "pixelmon:right_click");
-
-        JsonObject conditions = new JsonObject();
-        conditions.addProperty("type", "pixelmon:true");
-        interaction.add("conditions", conditions);
-
-        JsonObject results = new JsonObject();
-        JsonArray resultsArray = new JsonArray();
-
-        JsonObject dialogue = new JsonObject();
-        dialogue.add("title", title); // 使用传入的标题对象
-
-        JsonArray pagesArray = new JsonArray();
-        for (JsonObject message : messages) {
-            pagesArray.add(message); // 使用传入的消息对象
-        }
-        dialogue.add("pages", pagesArray);
-        dialogue.addProperty("type", "pixelmon:open_paged_dialogue");
-
-        resultsArray.add(dialogue);
-        results.add("value", resultsArray);
-        results.addProperty("type", "pixelmon:constant");
-        interaction.add("results", results);
-
-        interactionsArray.add(interaction);
-        interactionsWrapper.add("interactions", interactionsArray);
-        return interactionsWrapper;
-    }
-
     private JsonObject createRightClickInteraction(JsonObject message, JsonObject title) {
         JsonObject interaction = new JsonObject();
         interaction.addProperty("event", "pixelmon:right_click");
@@ -582,8 +726,8 @@ public abstract class PixelmonNPCProvider implements DataProvider {
         JsonArray resultsArray = new JsonArray();
 
         JsonObject dialogue = new JsonObject();
-        dialogue.add("title", title); // 使用传入的标题对象
-        dialogue.add("message", message); // 使用传入的消息对象
+        dialogue.add("title", title);
+        dialogue.add("message", message);
         dialogue.addProperty("type", "pixelmon:open_dialogue");
         resultsArray.add(dialogue);
 
@@ -631,8 +775,8 @@ public abstract class PixelmonNPCProvider implements DataProvider {
 
         // 胜利对话
         JsonObject dialogue = new JsonObject();
-        dialogue.add("title", title); // 使用传入的标题对象
-        dialogue.add("message", message); // 使用传入的消息对象
+        dialogue.add("title", title);
+        dialogue.add("message", message);
         dialogue.addProperty("fire_close_event", false);
         dialogue.addProperty("type", "pixelmon:open_dialogue");
         resultsArray.add(dialogue);
@@ -698,8 +842,8 @@ public abstract class PixelmonNPCProvider implements DataProvider {
 
         // 失败对话
         JsonObject dialogue = new JsonObject();
-        dialogue.add("title", title); // 使用传入的标题对象
-        dialogue.add("message", message); // 使用传入的消息对象
+        dialogue.add("title", title);
+        dialogue.add("message", message);
         dialogue.addProperty("fire_close_event", false);
         dialogue.addProperty("type", "pixelmon:open_dialogue");
         resultsArray.add(dialogue);
@@ -725,56 +869,65 @@ public abstract class PixelmonNPCProvider implements DataProvider {
         return interaction;
     }
 
-    private JsonObject createOpenShopInteraction(List<JsonObject> shopItems) {
-        JsonObject interaction = new JsonObject();
-        interaction.addProperty("event", "pixelmon:close_dialogue");
+    // ==================== JSON保存方法 ====================
 
-        JsonObject conditions = new JsonObject();
-        conditions.addProperty("type", "pixelmon:true");
-        interaction.add("conditions", conditions);
-
-        JsonObject results = new JsonObject();
-        JsonArray resultsArray = new JsonArray();
-
-        JsonObject shop = new JsonObject();
-
-        JsonArray itemsArray = new JsonArray();
-        for (JsonObject item : shopItems) {
-            itemsArray.add(item);
-        }
-        shop.add("items", itemsArray);
-        shop.addProperty("type", "pixelmon:open_shop");
-
-        resultsArray.add(shop);
-        results.add("value", resultsArray);
-        results.addProperty("type", "pixelmon:constant");
-        interaction.add("results", results);
-
-        return interaction;
+    private CompletableFuture<?> saveOriginal(CachedOutput cache, JsonObject json, Path path) {
+        return CompletableFuture.runAsync(() -> {
+            try {
+                // 使用原版DataProvider.saveStable方法
+                DataProvider.saveStable(cache, json, path);
+            } catch (Exception e) {
+                LOGGER.error("Failed to save original JSON to {}", path, e);
+                throw new RuntimeException(e);
+            }
+        });
     }
 
-    private JsonObject createShopGoodbyeInteraction(JsonObject message, JsonObject title) {
-        JsonObject interaction = new JsonObject();
-        interaction.addProperty("event", "pixelmon:close_shop");
+    private CompletableFuture<?> saveFormattedUnordered(CachedOutput cache, JsonObject json, Path path) {
+        return CompletableFuture.runAsync(() -> {
+            try {
+                // 创建保持格式但不排序的Gson
+                Gson unorderedGson = new GsonBuilder()
+                        .setPrettyPrinting()
+                        .disableHtmlEscaping()
+                        .create();
 
-        JsonObject conditions = new JsonObject();
-        conditions.addProperty("type", "pixelmon:true");
-        interaction.add("conditions", conditions);
+                // 通过字符串转换来保持插入顺序
+                String jsonString = unorderedGson.toJson(json);
+                byte[] data = jsonString.getBytes(StandardCharsets.UTF_8);
 
-        JsonObject results = new JsonObject();
-        JsonArray resultsArray = new JsonArray();
+                // 确保目录存在
+                Files.createDirectories(path.getParent());
 
-        JsonObject dialogue = new JsonObject();
-        dialogue.add("title", title); // 使用传入的标题对象
-        dialogue.add("message", message); // 使用传入的消息对象
-        dialogue.addProperty("fire_close_event", false);
-        dialogue.addProperty("type", "pixelmon:open_dialogue");
-        resultsArray.add(dialogue);
+                // 使用CachedOutput写入文件
+                cache.writeIfNeeded(path, data, HashCode.fromInt(DataProvider.INDENT_WIDTH.hashCode()));
+            } catch (Exception e) {
+                LOGGER.error("Failed to save formatted unordered JSON to {}", path, e);
+                throw new RuntimeException(e);
+            }
+        });
+    }
 
-        results.add("value", resultsArray);
-        results.addProperty("type", "pixelmon:constant");
-        interaction.add("results", results);
+    private CompletableFuture<?> saveCompactJson(CachedOutput cache, JsonObject json, Path path) {
+        return CompletableFuture.runAsync(() -> {
+            try {
+                // 创建紧凑格式的Gson
+                Gson compactGson = new GsonBuilder()
+                        .disableHtmlEscaping()
+                        .create();
 
-        return interaction;
+                String content = compactGson.toJson(json);
+                byte[] data = content.getBytes(StandardCharsets.UTF_8);
+
+                // 确保目录存在
+                Files.createDirectories(path.getParent());
+
+                // 使用CachedOutput写入文件
+                cache.writeIfNeeded(path, data, HashCode.fromInt(DataProvider.INDENT_WIDTH.hashCode()));
+            } catch (Exception e) {
+                LOGGER.error("Failed to save compact JSON to {}", path, e);
+                throw new RuntimeException(e);
+            }
+        });
     }
 }

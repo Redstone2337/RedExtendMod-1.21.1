@@ -1,6 +1,0 @@
-// 1.21.1	2025-10-09T16:21:57.0430765	Pixelmon NPC 定义: pixelmon/npc/preset/battle
-40bb360636e745063b97e8d3732643566e0db55c data/pixelmon/pixelmon/npc/preset/battle/blue_dragon_leader.json
-f4fd0457fa23817418638468ae5dc5ca2d4ca27b data/pixelmon/pixelmon/npc/preset/battle/dragon_legendary_trainer.json
-f32e39429801cbe1f50edbe38b9a2e59d010aabe data/pixelmon/pixelmon/npc/preset/battle/electric_legendary_trainer.json
-b8eca21eeac948700e6bbc62dc198a1b233a3a07 data/pixelmon/pixelmon/npc/preset/battle/fire_legendary_trainer.json
-865dc44d2a863c8312fb6ca87871302f0cc9efbb data/pixelmon/pixelmon/npc/preset/battle/water_legendary_trainer.json

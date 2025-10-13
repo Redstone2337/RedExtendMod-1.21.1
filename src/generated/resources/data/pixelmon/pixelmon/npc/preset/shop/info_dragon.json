@@ -1,174 +1,174 @@
 {
-  "goals": {
-    "type": "pixelmon:constant",
-    "value": {
-      "goals": [
-        {
-          "priority": 1,
-          "provider": {
-            "type": "pixelmon:look_at_nearby",
-            "look_distance": 5.0,
-            "probability": 0.9
-          }
-        }
-      ]
-    }
-  },
   "interactions": {
-    "type": "pixelmon:uniformly_random",
     "values": [
       {
         "interactions": [
           {
+            "event": "pixelmon:right_click",
             "conditions": {
               "type": "pixelmon:true"
             },
-            "event": "pixelmon:right_click",
             "results": {
-              "type": "pixelmon:constant",
               "value": [
                 {
-                  "type": "pixelmon:open_dialogue",
-                  "message": {
-                    "text": "欢迎来到毛毛龙商店，这里只有最稀有的商品！"
-                  },
                   "title": {
+                    "translate": "商店交互",
+                    "color": "#2176FF",
                     "bold": true,
-                    "color": "#FFD700",
                     "italic": false,
-                    "text": "毛毛龙的商店",
-                    "underlined": true
-                  }
+                    "underlined": false
+                  },
+                  "message": {
+                    "translate": "欢迎来到毛毛龙商店，这里只有最稀有的商品！"
+                  },
+                  "type": "pixelmon:open_dialogue"
                 }
-              ]
+              ],
+              "type": "pixelmon:constant"
             }
           },
           {
+            "event": "pixelmon:close_dialogue",
             "conditions": {
               "type": "pixelmon:true"
             },
-            "event": "pixelmon:close_dialogue",
             "results": {
-              "type": "pixelmon:constant",
               "value": [
                 {
                   "type": "pixelmon:open_shop",
                   "items": [
                     {
-                      "buyPrice": 50000.0,
                       "item": {
-                        "count": 1,
-                        "id": "pixelmon:master_ball"
+                        "id": "pixelmon:master_ball",
+                        "count": 1
                       },
+                      "buyPrice": 50000.0,
                       "sellPrice": 12500.0
                     },
                     {
-                      "buyPrice": 50000.0,
                       "item": {
-                        "count": 10,
-                        "id": "pixelmon:rare_candy"
+                        "id": "pixelmon:rare_candy",
+                        "count": 10
                       },
+                      "buyPrice": 50000.0,
                       "sellPrice": 12500.0
                     },
                     {
+                      "item": {
+                        "id": "pixelmon:park_ball",
+                        "count": 1
+                      },
                       "buyPrice": 30000.0,
-                      "item": {
-                        "count": 1,
-                        "id": "pixelmon:park_ball"
-                      },
                       "sellPrice": 15000.0
                     },
                     {
-                      "buyPrice": 10000.0,
                       "item": {
-                        "count": 1,
-                        "id": "pixelmon:ability_capsule"
+                        "id": "pixelmon:ability_capsule",
+                        "count": 1
                       },
+                      "buyPrice": 10000.0,
                       "sellPrice": 2500.0
                     }
                   ]
                 }
-              ]
+              ],
+              "type": "pixelmon:constant"
             }
           },
           {
+            "event": "pixelmon:close_shop",
             "conditions": {
               "type": "pixelmon:true"
             },
-            "event": "pixelmon:close_shop",
             "results": {
-              "type": "pixelmon:constant",
               "value": [
                 {
-                  "type": "pixelmon:open_dialogue",
-                  "fire_close_event": false,
-                  "message": {
-                    "text": "感谢您的光临，期待再次为您服务！"
-                  },
                   "title": {
+                    "translate": "商店交互",
+                    "color": "#2176FF",
                     "bold": true,
-                    "color": "#FFD700",
                     "italic": false,
-                    "text": "毛毛龙的商店",
-                    "underlined": true
-                  }
+                    "underlined": false
+                  },
+                  "message": {
+                    "translate": "感谢您的光临，期待再次为您服务！"
+                  },
+                  "fire_close_event": false,
+                  "type": "pixelmon:open_dialogue"
                 }
-              ]
+              ],
+              "type": "pixelmon:constant"
             }
           }
         ]
       }
-    ]
-  },
-  "models": {
-    "type": "pixelmon:uniformly_random",
-    "values": [
-      {
-        "type": "pixelmon:player",
-        "slim": false,
-        "texture": {
-          "type": "pixelmon:fallback",
-          "resource": {
-            "fallback": "rem:textures/steve/info_dragon.png",
-            "resource": "rem:textures/steve/info_dragon.png"
-          }
-        }
-      }
-    ]
-  },
-  "names": {
-    "type": "pixelmon:uniformly_random",
-    "values": [
-      "毛毛龙·晨曦"
-    ]
-  },
-  "party": {
-    "type": "pixelmon:constant",
-    "value": {
-      "type": "pixelmon:empty"
-    }
+    ],
+    "type": "pixelmon:uniformly_random"
   },
   "properties": {
-    "type": "pixelmon:constant",
     "value": {
-      "child": false,
-      "dimensions": {
-        "height": 2.0,
-        "width": 1.0
-      },
-      "eyeHeight": 1.0,
       "health": 20.0,
-      "immovable": false,
-      "invulnerable": false,
-      "nameplate": true,
-      "pushable": false,
+      "eyeHeight": 1.0,
+      "dimensions": {
+        "width": 1.0,
+        "height": 2.0
+      },
       "title": {
+        "translate": "毛毛龙的商店",
+        "color": "#2176FF",
         "bold": true,
-        "color": "#FFD700",
         "italic": false,
-        "text": "毛毛龙的商店",
-        "underlined": true
+        "underlined": false
+      },
+      "pushable": false,
+      "child": false,
+      "invulnerable": false,
+      "immovable": false,
+      "nameplate": true
+    },
+    "type": "pixelmon:constant"
+  },
+  "party": {
+    "value": {
+      "type": "pixelmon:empty"
+    },
+    "type": "pixelmon:constant"
+  },
+  "names": {
+    "values": [
+      "毛毛龙·晨曦"
+    ],
+    "type": "pixelmon:uniformly_random"
+  },
+  "models": {
+    "values": [
+      {
+        "slim": false,
+        "type": "pixelmon:player",
+        "texture": {
+          "resource": {
+            "resource": "rem:textures/steve/info_dragon.png",
+            "fallback": "rem:textures/steve/info_dragon.png"
+          },
+          "type": "pixelmon:fallback"
+        }
       }
-    }
+    ],
+    "type": "pixelmon:uniformly_random"
+  },
+  "goals": {
+    "value": {
+      "goals": [
+        {
+          "provider": {
+            "type": "pixelmon:look_at_nearby",
+            "look_distance": 5.0,
+            "probability": 0.9
+          },
+          "priority": 1
+        }
+      ]
+    },
+    "type": "pixelmon:constant"
   }
 }

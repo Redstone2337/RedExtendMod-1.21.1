@@ -135,6 +135,12 @@ dependencies {
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
 
+
+    //jarJar(implementation 'tools.jackson.core:jackson-core:3.0.0')
+
+    //jarJar(implementation 'tools.jackson.core:jackson-databind:3.0.0')
+
+
     compileOnly("maven.modrinth:pixelmon:${project.pixelmon_version}")
 }
 

@@ -1,14 +1,11 @@
 package net.redstone.redextent;
 
 import java.util.List;
-import java.util.Arrays;
 import java.util.stream.Collectors;
 
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Item;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.config.ModConfigEvent;
 import net.neoforged.neoforge.common.ModConfigSpec;
 
@@ -61,6 +58,13 @@ public class Config {
             .comment("设定白名单列表\n检测整个模组中是否有与其字符串匹配的类名\n白名单用于设定哪些加载，哪些不加载。")
             .defineListAllowEmpty("ClientSettings.customAbilityWhitelist",
                     List.of("FastStart"),
+                    Config::validateClassName);
+
+    // 新增的幽灵宝可梦配置
+    public static final ModConfigSpec.ConfigValue<List<? extends String>> ON_GHOST_PIXELMONS = BUILDER
+            .comment("用于检测是否是幽灵属性的宝可梦\n若为幽灵属性，则在指定群系会有加成\n一行一个宝可梦")
+            .defineListAllowEmpty("ClientSettings.onGhostPixelmons",
+                    List.of("Gengar"),
                     Config::validateClassName);
 
     static final ModConfigSpec SPEC = BUILDER.build();
@@ -132,6 +136,13 @@ public class Config {
 
     public static List<String> getCustomAbilityWhitelist() {
         return CUSTOM_ABILITY_WHITELIST.get().stream()
+                .map(String::valueOf)
+                .collect(Collectors.toList());
+    }
+
+    // 新增的幽灵宝可梦配置访问方法
+    public static List<String> getOnGhostPixelmons() {
+        return ON_GHOST_PIXELMONS.get().stream()
                 .map(String::valueOf)
                 .collect(Collectors.toList());
     }

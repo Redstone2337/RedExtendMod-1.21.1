@@ -13,7 +13,7 @@ public class ShopNPCProvider extends PixelmonNPCProvider {
 
     @Override
     public void registerNPCs() {
-// 创建更多商店物品的示例
+        // 创建更多商店物品的示例
         List<JsonObject> premiumItems = List.of(
                 PixelmonNPCProvider.createShopItem("pixelmon:master_ball", 1, 50000.0, 12500.0),
                 PixelmonNPCProvider.createShopItem("pixelmon:rare_candy", 10, 50000.0, 12500.0),
@@ -21,14 +21,36 @@ public class ShopNPCProvider extends PixelmonNPCProvider {
                 PixelmonNPCProvider.createShopItem("pixelmon:ability_capsule", 1, 10000.0, 2500.0)
         );
 
-        addShopKeeper(
+        // 使用新的 addCustomShopNPC 方法
+        addCustomShopNPC(
                 "info_dragon",                       // 文件名
                 List.of("毛毛龙·晨曦"),              // NPC名称列表
-                PixelmonNPCProvider.createTextTitle("毛毛龙的商店", "#FFD700", true, false, true),
-                PixelmonNPCProvider.createTextMessage("欢迎来到毛毛龙商店，这里只有最稀有的商品！"),
-                PixelmonNPCProvider.createTextMessage("感谢您的光临，期待再次为您服务！"),
-                premiumItems,
-                List.of("rem:textures/steve/info_dragon.png")
+                "毛毛龙的商店",                      // 属性标题翻译键
+                "商店交互",                          // 交互标题翻译键
+                "欢迎来到毛毛龙商店，这里只有最稀有的商品！", // 问候语翻译键
+                "感谢您的光临，期待再次为您服务！",   // 告别语翻译键
+                premiumItems,                        // 商店物品列表
+                List.of("rem:textures/steve/info_dragon.png") // 纹理资源
         );
+
+        // 添加更多商店NPC示例
+//        List<JsonObject> evolutionStones = List.of(
+//                PixelmonNPCProvider.createEvolutionStoneItem("pixelmon:fire_stone", 5000.0, 1250.0),
+//                PixelmonNPCProvider.createEvolutionStoneItem("pixelmon:water_stone", 5000.0, 1250.0),
+//                PixelmonNPCProvider.createEvolutionStoneItem("pixelmon:thunder_stone", 5000.0, 1250.0),
+//                PixelmonNPCProvider.createEvolutionStoneItem("pixelmon:leaf_stone", 5000.0, 1250.0),
+//                PixelmonNPCProvider.createEvolutionStoneItem("pixelmon:moon_stone", 8000.0, 2000.0)
+//        );
+
+//        addEvolutionStoneShop(
+//                "evolution_stone_shop",
+//                List.of("石头商人·小刚"),
+//                "进化石商店",
+//                "进化石交易",
+//                "需要进化石吗？我这里有各种进化石！",
+//                "进化愉快！记得再来哦！",
+//                evolutionStones,
+//                List.of("rem:textures/steve/stone_merchant.png")
+//        );
     }
 }

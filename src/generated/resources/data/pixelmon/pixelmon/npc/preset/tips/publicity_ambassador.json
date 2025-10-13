@@ -1,133 +1,139 @@
 {
-  "goals": {
-    "type": "pixelmon:constant",
-    "value": {
-      "goals": [
-        {
-          "priority": 1,
-          "provider": {
-            "type": "pixelmon:look_at_nearby",
-            "look_distance": 4.0,
-            "probability": 0.9
-          }
-        }
-      ]
-    }
-  },
   "interactions": {
-    "type": "pixelmon:uniformly_random",
     "values": [
       {
         "interactions": [
           {
+            "event": "pixelmon:right_click",
             "conditions": {
               "type": "pixelmon:true"
             },
-            "event": "pixelmon:right_click",
             "results": {
-              "type": "pixelmon:constant",
               "value": [
                 {
+                  "title": {
+                    "translate": "游戏提示",
+                    "color": "#F8F8F2",
+                    "bold": true,
+                    "italic": false,
+                    "underlined": false
+                  },
                   "type": "pixelmon:open_paged_dialogue",
                   "pages": [
                     {
-                      "text": "欢迎来到我们的像素精灵世界！"
+                      "translate": "欢迎来到我们的像素精灵世界！"
                     },
                     {
-                      "text": "探索、战斗、培育，体验前所未有的冒险！"
+                      "translate": "探索、战斗、培育，体验前所未有的冒险！"
                     },
                     {
-                      "text": "记得定期检查我们的更新，获取最新内容和活动信息！"
+                      "translate": "记得定期检查我们的更新，获取最新内容和活动信息！"
+                    },
+                    {
+                      "translate": "与朋友组队挑战道馆，获得稀有奖励！"
+                    },
+                    {
+                      "translate": "野外探险时注意稀有宝可梦的出现时机！"
                     }
-                  ],
-                  "title": {
-                    "bold": true,
-                    "color": "#F8F8F2",
-                    "italic": false,
-                    "text": "模组宣传",
-                    "underlined": false
-                  }
+                  ]
                 }
-              ]
+              ],
+              "type": "pixelmon:constant"
             }
           }
         ]
       }
-    ]
+    ],
+    "type": "pixelmon:uniformly_random"
   },
-  "models": {
-    "type": "pixelmon:uniformly_random",
-    "values": [
-      {
-        "type": "pixelmon:player",
-        "slim": false,
-        "texture": {
-          "type": "pixelmon:fallback",
-          "resource": {
-            "fallback": "rem:textures/steve/fire_dragon.png",
-            "resource": "rem:textures/steve/fire_dragon.png"
-          }
-        }
+  "properties": {
+    "value": {
+      "health": 20.0,
+      "eyeHeight": 1.0,
+      "dimensions": {
+        "width": 1.0,
+        "height": 2.0
       },
-      {
-        "type": "pixelmon:player",
-        "slim": false,
-        "texture": {
-          "type": "pixelmon:fallback",
-          "resource": {
-            "fallback": "rem:textures/steve/gwenthe_dragon.png",
-            "resource": "rem:textures/steve/gwenthe_dragon.png"
-          }
-        }
+      "title": {
+        "translate": "模组宣传",
+        "color": "#F8F8F2",
+        "bold": true,
+        "italic": false,
+        "underlined": false
       },
-      {
-        "type": "pixelmon:player",
-        "slim": false,
-        "texture": {
-          "type": "pixelmon:fallback",
-          "resource": {
-            "fallback": "rem:textures/steve/magic_dragon_electricity.png",
-            "resource": "rem:textures/steve/magic_dragon_electricity.png"
-          }
-        }
-      }
-    ]
+      "pushable": false,
+      "child": false,
+      "invulnerable": false,
+      "immovable": false,
+      "nameplate": true
+    },
+    "type": "pixelmon:constant"
+  },
+  "party": {
+    "value": {
+      "type": "pixelmon:empty"
+    },
+    "type": "pixelmon:constant"
   },
   "names": {
-    "type": "pixelmon:uniformly_random",
     "values": [
       "Fire Dragon Kael",
       "Lu Ming Fei",
       "Magic Dragon An Ye"
-    ]
+    ],
+    "type": "pixelmon:uniformly_random"
   },
-  "party": {
-    "type": "pixelmon:constant",
-    "value": {
-      "type": "pixelmon:empty"
-    }
-  },
-  "properties": {
-    "type": "pixelmon:constant",
-    "value": {
-      "child": false,
-      "dimensions": {
-        "height": 2.0,
-        "width": 1.0
+  "models": {
+    "values": [
+      {
+        "slim": false,
+        "type": "pixelmon:player",
+        "texture": {
+          "resource": {
+            "resource": "rem:textures/steve/fire_dragon.png",
+            "fallback": "rem:textures/steve/fire_dragon.png"
+          },
+          "type": "pixelmon:fallback"
+        }
       },
-      "eyeHeight": 1.0,
-      "health": 20.0,
-      "immovable": false,
-      "invulnerable": false,
-      "nameplate": true,
-      "pushable": false,
-      "title": {
-        "bold": true,
-        "color": "#F8F8F2",
-        "italic": false,
-        "text": "模组宣传",
-        "underlined": false
+      {
+        "slim": false,
+        "type": "pixelmon:player",
+        "texture": {
+          "resource": {
+            "resource": "rem:textures/steve/gwenthe_dragon.png",
+            "fallback": "rem:textures/steve/gwenthe_dragon.png"
+          },
+          "type": "pixelmon:fallback"
+        }
+      },
+      {
+        "slim": false,
+        "type": "pixelmon:player",
+        "texture": {
+          "resource": {
+            "resource": "rem:textures/steve/magic_dragon_electricity.png",
+            "fallback": "rem:textures/steve/magic_dragon_electricity.png"
+          },
+          "type": "pixelmon:fallback"
+        }
       }
-    }
+    ],
+    "type": "pixelmon:uniformly_random"
+  },
+  "goals": {
+    "value": {
+      "goals": [
+        {
+          "provider": {
+            "type": "pixelmon:look_at_nearby",
+            "look_distance": 4.0,
+            "probability": 0.9
+          },
+          "priority": 1
+        }
+      ]
+    },
+    "type": "pixelmon:constant"
   }
 }

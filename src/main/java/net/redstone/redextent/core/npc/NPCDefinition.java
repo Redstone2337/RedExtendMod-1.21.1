@@ -7,7 +7,7 @@ package net.redstone.redextent.core.npc;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import java.util.ArrayList;
+
 import java.util.List;
 
 /**
@@ -38,6 +38,26 @@ public class NPCDefinition {
         if (goals != null) root.add("goals", goals);
 
         return root;
+    }
+
+    /**
+     * JSON保存模式枚举
+     */
+    public enum SaveMode {
+        /**
+         * 使用原版保存方式（可能对键排序）
+         */
+        ORIGINAL,
+
+        /**
+         * 使用自定义保存方式（保持键的插入顺序，保留格式）
+         */
+        UNORDERED_FORMATTED,
+
+        /**
+         * 使用紧凑保存方式（无空格和换行）
+         */
+        COMPACT
     }
 
     public static class Builder {
@@ -322,28 +342,19 @@ public class NPCDefinition {
     }
 
     /**
-     * 玩家模型配置类
-     */
-    public static class PlayerModel {
-        public final boolean slim;
-        public final String textureResource;
-        public final String textureFallback;
-
-        public PlayerModel(boolean slim, String textureResource, String textureFallback) {
-            this.slim = slim;
-            this.textureResource = textureResource;
-            this.textureFallback = textureFallback;
-        }
+         * 玩家模型配置类
+         */
+        public record PlayerModel(boolean slim, String textureResource, String textureFallback) {
 
         /**
          * 创建玩家模型实例
          *
-         * @param slim 是否为瘦手臂模型
+         * @param slim            是否为瘦手臂模型
          * @param textureResource 纹理资源路径
          * @return 玩家模型实例
          */
-        public static PlayerModel of(boolean slim, String textureResource) {
-            return new PlayerModel(slim, textureResource, textureResource);
+            public static PlayerModel of(boolean slim, String textureResource) {
+                return new PlayerModel(slim, textureResource, textureResource);
+            }
         }
-    }
 }
