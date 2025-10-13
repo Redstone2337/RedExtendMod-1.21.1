@@ -11,14 +11,14 @@
             "value": [
               {
                 "title": {
-                  "translate": "龙系神兽训练家·龙啸",
-                  "color": "#FF6B35",
+                  "text": "龙系神兽训练家·龙啸",
+                  "color": "#8A2BE2",
                   "bold": true,
                   "italic": false,
                   "underlined": false
                 },
                 "message": {
-                  "translate": "我是龙系神兽训练家龙啸！感受龙之怒吧！"
+                  "text": "我是龙系神兽训练家龙啸！感受龙之怒吧！"
                 },
                 "type": "pixelmon:open_dialogue"
               }
@@ -49,14 +49,14 @@
             "value": [
               {
                 "title": {
-                  "translate": "龙系神兽训练家·龙啸",
-                  "color": "#FF6B35",
+                  "text": "龙系神兽训练家·龙啸",
+                  "color": "#8A2BE2",
                   "bold": true,
                   "italic": false,
                   "underlined": false
                 },
                 "message": {
-                  "translate": "你的实力如同传说中的龙骑士！继续前进吧！"
+                  "text": "你的实力如同传说中的龙骑士！继续前进吧！"
                 },
                 "fire_close_event": false,
                 "type": "pixelmon:open_dialogue"
@@ -105,14 +105,14 @@
             "value": [
               {
                 "title": {
-                  "translate": "龙系神兽训练家·龙啸",
-                  "color": "#FF6B35",
+                  "text": "龙系神兽训练家·龙啸",
+                  "color": "#8A2BE2",
                   "bold": true,
                   "italic": false,
                   "underlined": false
                 },
                 "message": {
-                  "translate": "龙族的力量永远是最强的！"
+                  "text": "龙族的力量永远是最强的！"
                 },
                 "fire_close_event": false,
                 "type": "pixelmon:open_dialogue"
@@ -144,8 +144,8 @@
         "height": 2.0
       },
       "title": {
-        "translate": "龙系神兽训练家·龙啸",
-        "color": "#FF6B35",
+        "text": "龙系神兽训练家·龙啸",
+        "color": "#8A2BE2",
         "bold": true,
         "italic": false,
         "underlined": false

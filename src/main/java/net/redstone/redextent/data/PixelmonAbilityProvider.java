@@ -15,5 +15,6 @@ public class PixelmonAbilityProvider extends BaseAbilitiesProvider {
         addAbility("net.redstone.redextent.ability.DragonRise");
         addAbility("net.redstone.redextent.ability.FightingDivinity");
         addAbility("net.redstone.redextent.ability.ElectricDivinity");
+        addAbility("net.redstone.redextent.ability.BiomeBlessingSwamp");
     }
 }

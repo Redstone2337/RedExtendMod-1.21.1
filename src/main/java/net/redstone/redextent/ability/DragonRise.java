@@ -129,7 +129,7 @@ public class DragonRise extends AbstractAbility {
             return 1.0F;
         }
 
-        RegistryValue specSpecies = spawnInfoPokemon.getPokemonSpec().getValue(SpeciesRequirement.class).orElse(null);
+        RegistryValue<Species> specSpecies = spawnInfoPokemon.getPokemonSpec().getValue(SpeciesRequirement.class).orElse(null);
         if (spawnInfoPokemon.getPokemonSpec() != null && specSpecies != null && specSpecies.isInitialized()) {
             Species species = spawnInfoPokemon.getSpecies();
             if (species == null) {

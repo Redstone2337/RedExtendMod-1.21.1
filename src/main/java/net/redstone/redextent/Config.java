@@ -61,9 +61,9 @@ public class Config {
                     Config::validateClassName);
 
     // 新增的幽灵宝可梦配置
-    public static final ModConfigSpec.ConfigValue<List<? extends String>> ON_GHOST_PIXELMONS = BUILDER
+    public static final ModConfigSpec.ConfigValue<List<? extends String>> ON_GHOST_POKEMON_NAMES = BUILDER
             .comment("用于检测是否是幽灵属性的宝可梦\n若为幽灵属性，则在指定群系会有加成\n一行一个宝可梦")
-            .defineListAllowEmpty("ClientSettings.onGhostPixelmons",
+            .defineListAllowEmpty("ClientSettings.onGhostPokemonNames",
                     List.of("Gengar"),
                     Config::validateClassName);
 
@@ -141,8 +141,8 @@ public class Config {
     }
 
     // 新增的幽灵宝可梦配置访问方法
-    public static List<String> getOnGhostPixelmons() {
-        return ON_GHOST_PIXELMONS.get().stream()
+    public static List<String> getOnGhostPokemonNames() {
+        return ON_GHOST_POKEMON_NAMES.get().stream()
                 .map(String::valueOf)
                 .collect(Collectors.toList());
     }

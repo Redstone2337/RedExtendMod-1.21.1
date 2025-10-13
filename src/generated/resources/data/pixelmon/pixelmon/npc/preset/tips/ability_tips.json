@@ -12,8 +12,8 @@
               "value": [
                 {
                   "title": {
-                    "text": "游戏提示",
-                    "color": "#F8F8F2",
+                    "text": "特性教学",
+                    "color": "#FF6B6B",
                     "bold": true,
                     "italic": false,
                     "underlined": false
@@ -21,19 +21,22 @@
                   "type": "pixelmon:open_paged_dialogue",
                   "pages": [
                     {
-                      "text": "欢迎来到我们的像素精灵世界！"
+                      "text": "关于自定义特性类型，模组内有5个，每个都有其独特的能力。"
                     },
                     {
-                      "text": "探索、战斗、培育，体验前所未有的冒险！"
+                      "text": "快启动：宝可梦登场后的前3回合内，攻击与速度提升50%，3回合后效果结"
                     },
                     {
-                      "text": "记得定期检查我们的更新，获取最新内容和活动信息！"
+                      "text": "升龙崛起：当宝可梦登场时，若其为龙属性，则特攻、攻击与速度提升，持续3回合。每回合提升效果增强"
                     },
                     {
-                      "text": "与朋友组队挑战道馆，获得稀有奖励！"
+                      "text": "斗神神格：大幅提升格斗属性技能的威力。若宝可梦为格斗属性，登场时特攻与攻击造成的伤害提升10%。"
                     },
                     {
-                      "text": "野外探险时注意稀有宝可梦的出现时机！"
+                      "text": "雷神神格：电属性宝可梦登场时攻击提升20%，特攻提升25%，速度提升5%，且受到效果绝佳技能的伤害减少5%。"
+                    },
+                    {
+                      "text": "沼泽赐福：宝可梦在沼泽上场时，特攻物攻各加5%，速度加15%。如果是名单里的幽灵系宝可梦，特攻物攻直接加10%，速度加15%，然后攻击和特攻再额外加20%，总共能加到30%！"
                     }
                   ]
                 }
@@ -55,8 +58,8 @@
         "height": 2.0
       },
       "title": {
-        "text": "模组宣传",
-        "color": "#F8F8F2",
+        "text": "特性介绍",
+        "color": "#FF6B6B",
         "bold": true,
         "italic": false,
         "underlined": false
@@ -77,9 +80,7 @@
   },
   "names": {
     "values": [
-      "Fire Dragon Kael",
-      "Lu Ming Fei",
-      "Magic Dragon An Ye"
+      "特性介绍师·菲尔特"
     ],
     "type": "pixelmon:uniformly_random"
   },
@@ -90,30 +91,8 @@
         "type": "pixelmon:player",
         "texture": {
           "resource": {
-            "resource": "rem:textures/steve/fire_dragon.png",
-            "fallback": "rem:textures/steve/fire_dragon.png"
-          },
-          "type": "pixelmon:fallback"
-        }
-      },
-      {
-        "slim": false,
-        "type": "pixelmon:player",
-        "texture": {
-          "resource": {
-            "resource": "rem:textures/steve/gwenthe_dragon.png",
-            "fallback": "rem:textures/steve/gwenthe_dragon.png"
-          },
-          "type": "pixelmon:fallback"
-        }
-      },
-      {
-        "slim": false,
-        "type": "pixelmon:player",
-        "texture": {
-          "resource": {
-            "resource": "rem:textures/steve/magic_dragon_electricity.png",
-            "fallback": "rem:textures/steve/magic_dragon_electricity.png"
+            "resource": "rem:textures/steve/ender_dragon.png",
+            "fallback": "rem:textures/steve/ender_dragon.png"
           },
           "type": "pixelmon:fallback"
         }
@@ -127,7 +106,7 @@
         {
           "provider": {
             "type": "pixelmon:look_at_nearby",
-            "look_distance": 4.0,
+            "look_distance": 5.0,
             "probability": 0.9
           },
           "priority": 1

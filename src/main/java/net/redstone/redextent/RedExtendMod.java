@@ -2,10 +2,7 @@ package net.redstone.redextent;
 
 import com.pixelmonmod.pixelmon.api.pokemon.ability.AbilityRegistry;
 import net.neoforged.neoforge.event.server.ServerStoppingEvent;
-import net.redstone.redextent.ability.DragonRise;
-import net.redstone.redextent.ability.ElectricDivinity;
-import net.redstone.redextent.ability.FastStartReforged;
-import net.redstone.redextent.ability.FightingDivinity;
+import net.redstone.redextent.ability.*;
 import net.redstone.redextent.manager.ItemClearManager;
 import org.slf4j.Logger;
 
@@ -44,6 +41,7 @@ public class RedExtendMod {
         KNOWN_ABILITIES.add("DragonRise");
         KNOWN_ABILITIES.add("FightingDivinity");
         KNOWN_ABILITIES.add("ElectricDivinity");
+        KNOWN_ABILITIES.add("BiomeBlessingSwamp");
         // 未来可以在这里添加更多已知特性
         // KNOWN_ABILITIES.add("AnotherAbility");
     }
@@ -160,6 +158,9 @@ public class RedExtendMod {
                     AbilityRegistry.register(ElectricDivinity.class.getName());
                     LOGGER.info("注册自定义特性: Electric Divinity");
                     return true;
+                case "BiomeBlessingSwamp":
+                    AbilityRegistry.register(BiomeBlessingSwamp.class.getName());
+                    LOGGER.info("注册自定义特性： Biome Blessing Swamp");
                 default:
                     LOGGER.warn("未知的自定义特性: {}", abilityName);
                     return false;

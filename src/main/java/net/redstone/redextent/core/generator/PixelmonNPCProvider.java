@@ -129,15 +129,13 @@ public abstract class PixelmonNPCProvider implements DataProvider {
                 Path filePath = npcPath.resolve(entry.getKey() + ".json");
 
                 switch (this.saveMode) {
-                    case ORIGINAL:
-                        futures[i++] = saveOriginal(cache, entry.getValue(), filePath);
-                        break;
                     case UNORDERED_FORMATTED:
                         futures[i++] = saveFormattedUnordered(cache, entry.getValue(), filePath);
                         break;
                     case COMPACT:
                         futures[i++] = saveCompactJson(cache, entry.getValue(), filePath);
                         break;
+                    case ORIGINAL:
                     default:
                         futures[i++] = saveOriginal(cache, entry.getValue(), filePath);
                         break;

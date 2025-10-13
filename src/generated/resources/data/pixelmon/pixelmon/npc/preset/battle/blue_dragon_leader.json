@@ -11,14 +11,14 @@
             "value": [
               {
                 "title": {
-                  "translate": "神兽道馆馆主·蓝龙",
-                  "color": "#FF6B35",
+                  "text": "神兽道馆馆主·蓝龙",
+                  "color": "#4169E1",
                   "bold": true,
                   "italic": false,
-                  "underlined": false
+                  "underlined": true
                 },
                 "message": {
-                  "translate": "欢迎来到神兽道馆！我是馆主蓝龙。准备好面对传说中的宝可梦了吗？"
+                  "text": "欢迎来到神兽道馆！我是馆主蓝龙。准备好面对传说中的宝可梦了吗？"
                 },
                 "type": "pixelmon:open_dialogue"
               }
@@ -49,14 +49,14 @@
             "value": [
               {
                 "title": {
-                  "translate": "神兽道馆馆主·蓝龙",
-                  "color": "#FF6B35",
+                  "text": "神兽道馆馆主·蓝龙",
+                  "color": "#4169E1",
                   "bold": true,
                   "italic": false,
-                  "underlined": false
+                  "underlined": true
                 },
                 "message": {
-                  "translate": "不可思议！你竟然战胜了我的神兽队伍！这是神兽徽章，你值得拥有！"
+                  "text": "不可思议！你竟然战胜了我的神兽队伍！这是神兽徽章，你值得拥有！"
                 },
                 "fire_close_event": false,
                 "type": "pixelmon:open_dialogue"
@@ -105,14 +105,14 @@
             "value": [
               {
                 "title": {
-                  "translate": "神兽道馆馆主·蓝龙",
-                  "color": "#FF6B35",
+                  "text": "神兽道馆馆主·蓝龙",
+                  "color": "#4169E1",
                   "bold": true,
                   "italic": false,
-                  "underlined": false
+                  "underlined": true
                 },
                 "message": {
-                  "translate": "神兽的力量果然不是那么容易挑战的，继续努力吧！"
+                  "text": "神兽的力量果然不是那么容易挑战的，继续努力吧！"
                 },
                 "fire_close_event": false,
                 "type": "pixelmon:open_dialogue"
@@ -144,11 +144,11 @@
         "height": 2.0
       },
       "title": {
-        "translate": "神兽道馆馆主·蓝龙",
-        "color": "#FF6B35",
+        "text": "神兽道馆馆主·蓝龙",
+        "color": "#4169E1",
         "bold": true,
         "italic": false,
-        "underlined": false
+        "underlined": true
       },
       "pushable": false,
       "child": false,
