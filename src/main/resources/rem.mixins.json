@@ -1,9 +1,9 @@
 {
   "required": true,
-  "package": "net.redstone.redextent.mixin",
+  "package": "net.redstone233.redextent.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "net.redstone233.redextent.mixin.SuperFurnaceBlockEntityMixin"
+    "SuperFurnaceBlockEntityMixin"
   ],
   "injectors": {
     "defaultRequire": 1
