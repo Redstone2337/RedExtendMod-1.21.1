@@ -1,4 +1,4 @@
-package net.redstone.redextent.core.generator;
+package net.redstone233.redextent.core.generator;
 
 import com.google.gson.JsonObject;
 import java.nio.file.Path;

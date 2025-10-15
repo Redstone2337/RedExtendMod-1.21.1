@@ -1,4 +1,4 @@
-package net.redstone.redextent;
+package net.redstone233.redextent;
 
 import java.util.List;
 import java.util.stream.Collectors;

@@ -1,8 +1,8 @@
-package net.redstone.redextent.manager;
+package net.redstone233.redextent.manager;
 
-import net.redstone.redextent.Config;
-import net.redstone.redextent.RedExtendMod;
-import net.redstone.redextent.task.ItemClearTask;
+import net.redstone233.redextent.Config;
+import net.redstone233.redextent.RedExtendMod;
+import net.redstone233.redextent.task.ItemClearTask;
 
 import net.minecraft.server.MinecraftServer;
 

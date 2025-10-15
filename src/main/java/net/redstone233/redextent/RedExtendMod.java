@@ -1,9 +1,10 @@
-package net.redstone.redextent;
+package net.redstone233.redextent;
 
 import com.pixelmonmod.pixelmon.api.pokemon.ability.AbilityRegistry;
 import net.neoforged.neoforge.event.server.ServerStoppingEvent;
 import net.redstone.redextent.ability.*;
-import net.redstone.redextent.manager.ItemClearManager;
+import net.redstone233.redextent.ability.*;
+import net.redstone233.redextent.manager.ItemClearManager;
 import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;

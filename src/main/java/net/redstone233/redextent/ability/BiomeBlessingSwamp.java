@@ -1,10 +1,10 @@
-package net.redstone.redextent.ability;
+package net.redstone233.redextent.ability;
 
 import com.pixelmonmod.pixelmon.api.pokemon.ability.AbstractAbility;
 import com.pixelmonmod.pixelmon.api.pokemon.stats.BattleStatsType;
 import com.pixelmonmod.pixelmon.api.pokemon.type.Type;
 import com.pixelmonmod.pixelmon.battles.controller.participants.PixelmonWrapper;
-import net.redstone.redextent.Config;
+import net.redstone233.redextent.Config;
 
 import java.util.List;
 

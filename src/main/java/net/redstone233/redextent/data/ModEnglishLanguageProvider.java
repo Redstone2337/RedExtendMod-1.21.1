@@ -1,8 +1,8 @@
-package net.redstone.redextent.data;
+package net.redstone233.redextent.data;
 
 import net.minecraft.data.PackOutput;
 import net.neoforged.neoforge.common.data.LanguageProvider;
-import net.redstone.redextent.RedExtendMod;
+import net.redstone233.redextent.RedExtendMod;
 
 public class ModEnglishLanguageProvider extends LanguageProvider {
     public ModEnglishLanguageProvider(PackOutput output) {

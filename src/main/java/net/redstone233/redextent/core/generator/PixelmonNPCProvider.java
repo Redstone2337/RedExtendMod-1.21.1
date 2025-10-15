@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: LGPL-2.1-only
  */
 
-package net.redstone.redextent.core.generator;
+package net.redstone233.redextent.core.generator;
 
 import com.google.common.hash.HashCode;
 import com.google.gson.Gson;
@@ -23,7 +23,7 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.redstone.redextent.core.npc.NPCDefinition;
+import net.redstone233.redextent.core.npc.NPCDefinition;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;

@@ -1,7 +1,7 @@
-package net.redstone.redextent.task;
+package net.redstone233.redextent.task;
 
-import net.redstone.redextent.Config;
-import net.redstone.redextent.RedExtendMod;
+import net.redstone233.redextent.Config;
+import net.redstone233.redextent.RedExtendMod;
 
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -13,7 +13,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 /**
  * 掉落物清理任务

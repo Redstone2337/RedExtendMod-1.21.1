@@ -1,4 +1,4 @@
-package net.redstone.redextent;
+package net.redstone233.redextent;
 
 import net.minecraft.client.Minecraft;
 import net.neoforged.api.distmarker.Dist;

@@ -1,4 +1,4 @@
-package net.redstone.redextent.ability;
+package net.redstone233.redextent.ability;
 
 import com.pixelmonmod.api.pokemon.requirement.impl.FormRequirement;
 import com.pixelmonmod.api.pokemon.requirement.impl.SpeciesRequirement;

@@ -1,8 +1,8 @@
-package net.redstone.redextent.data;
+package net.redstone233.redextent.data;
 
 import com.google.gson.JsonObject;
 import net.minecraft.data.PackOutput;
-import net.redstone.redextent.core.generator.PixelmonNPCProvider;
+import net.redstone233.redextent.core.generator.PixelmonNPCProvider;
 
 import java.util.List;
 import java.util.Map;

@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: LGPL-2.1-only
  */
 
-package net.redstone.redextent.core.npc;
+package net.redstone233.redextent.core.npc;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;

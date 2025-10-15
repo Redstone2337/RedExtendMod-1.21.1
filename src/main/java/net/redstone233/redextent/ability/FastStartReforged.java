@@ -1,4 +1,4 @@
-package net.redstone.redextent.ability;
+package net.redstone233.redextent.ability;
 
 import com.pixelmonmod.pixelmon.api.battles.AttackCategory;
 import com.pixelmonmod.pixelmon.api.battles.attack.AttackRegistry;
