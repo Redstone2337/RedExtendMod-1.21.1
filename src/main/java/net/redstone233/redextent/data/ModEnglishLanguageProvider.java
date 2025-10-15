@@ -13,7 +13,7 @@ public class ModEnglishLanguageProvider extends LanguageProvider {
     protected void addTranslations() {
         add("ability.FastStartReforged", "Fast Start");
         add("ability.DragonRise","Dragon Rise");
-        add( "ability.FightingDivinity", "Fighting Divinity");
+        add("ability.FightingDivinity", "Fighting Divinity");
         add("ability.ElectricDivinity", "Electric Divinity");
         add("ability.BiomeBlessingSwamp", "Biome Blessing Swamp");
         add("ability.BiomeBlessingSwamp.description", "When the Pokémon enters a swamp biome, its Special Attack and Attack are increased by 5% and Speed by 15%. If it's a Ghost-type Pokémon listed in the config, its Special Attack and Attack are increased by 10% and Speed by 15%, then further increases Attack and Special Attack by 20% for a total of 30%.");
