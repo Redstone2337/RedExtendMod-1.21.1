@@ -4,7 +4,12 @@ import com.pixelmonmod.pixelmon.api.pokemon.ability.AbilityRegistry;
 import net.neoforged.neoforge.event.server.ServerStoppingEvent;
 import net.redstone233.redextent.ability.*;
 import net.redstone233.redextent.ability.*;
+import net.redstone233.redextent.core.mod.SuperFurnaceRegistration;
 import net.redstone233.redextent.manager.ItemClearManager;
+import net.redstone233.redextent.ponder.SuperBlastFurnaceScene;
+import net.redstone233.redextent.ponder.SuperFurnaceScene;
+import net.redstone233.redextent.ponder.SuperSmokerScene;
+import net.redstone233.redextent.ponder.tags.ModPonderTags;
 import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
@@ -73,6 +78,8 @@ public class RedExtendMod {
 
     private void commonSetup(FMLCommonSetupEvent event) {
         // Some common setup code
+        LOGGER.info("开始初始化模组内容...");
+        long startTime = System.currentTimeMillis();
         LOGGER.info("HELLO FROM COMMON SETUP");
 
         // 调试信息
@@ -92,6 +99,24 @@ public class RedExtendMod {
             }
             LOGGER.info("======================");
         }
+        LOGGER.info("调试功能初始化完成，耗时: {}ms", System.currentTimeMillis() - startTime);
+
+        SuperFurnaceScene.init();
+        LOGGER.info("超级熔炉思索初始化完成，耗时{}ms", System.currentTimeMillis() - startTime);
+
+        SuperBlastFurnaceScene.init();
+        LOGGER.info("超级高炉思索初始化完成，耗时{}ms", System.currentTimeMillis() - startTime);
+
+        SuperSmokerScene.init();
+        LOGGER.info("超级烟熏炉思索初始化完成，耗时{}ms", System.currentTimeMillis() - startTime);
+
+        ModPonderTags.init();
+        LOGGER.info("思索标签初始化完成，耗时{}ms", System.currentTimeMillis() - startTime);
+
+        SuperFurnaceRegistration.init();
+        LOGGER.info("超级熔炼系统注册初始化完成，耗时{}ms", System.currentTimeMillis() - startTime);
+
+        LOGGER.info("模组初始化完成，总耗时{}ms", System.currentTimeMillis() - startTime);
 
     }
 

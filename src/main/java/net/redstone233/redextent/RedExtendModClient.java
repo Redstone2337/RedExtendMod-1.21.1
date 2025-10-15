@@ -1,5 +1,6 @@
 package net.redstone233.redextent;
 
+import net.createmod.ponder.foundation.PonderIndex;
 import net.minecraft.client.Minecraft;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -9,6 +10,7 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.gui.ConfigurationScreen;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
+import net.redstone233.redextent.core.mod.RedExtendModPonderPlugin;
 
 // This class will not load on dedicated servers. Accessing client side code from here is safe.
 @Mod(value = RedExtendMod.MOD_ID, dist = Dist.CLIENT)
@@ -24,6 +26,9 @@ public class RedExtendModClient {
 
     @SubscribeEvent
     static void onClientSetup(FMLClientSetupEvent event) {
+        if (Config.isOnPonderEnabled()) {
+            PonderIndex.addPlugin(new RedExtendModPonderPlugin());
+        }
         // Some client setup code
         RedExtendMod.LOGGER.info("HELLO FROM CLIENT SETUP");
         RedExtendMod.LOGGER.info("MINECRAFT NAME >> {}", Minecraft.getInstance().getUser().getName());

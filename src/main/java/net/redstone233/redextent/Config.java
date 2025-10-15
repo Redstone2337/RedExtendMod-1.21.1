@@ -25,13 +25,17 @@ public class Config {
             .comment("调试模式(默认为关闭)")
             .define("isDebugMode", false);
 
+    public static final ModConfigSpec.BooleanValue IS_ON_PONDER = BUILDER
+            .comment("启用内置思索(默认开启)")
+            .define("isOnPonder", true);
+
     // 服务器物品设置子节
     public static final ModConfigSpec.IntValue CLEAR_TIME = BUILDER
             .comment("清理的时间(单位:游戏刻)\n清理时间的范围在180t ~ 36000t以内\n超过范围或者范围，越界则不执行，默认5分钟。")
             .defineInRange("ServerItemSettings.clearTime", 6000, 180, 36000);
 
     public static final ModConfigSpec.ConfigValue<List<? extends String>> ITEM_WHITELIST = BUILDER
-            .comment("物品过滤器列表(若物品过滤器模式属于开启状态的话)")
+            .comment("物品过滤器列表(若物品过滤器模式属于开启状态的话)\n一行一个物品id")
             .defineListAllowEmpty("ServerItemSettings.itemWhitelist",
                     List.of("minecraft:command_block"),
                     Config::validateItemName);
@@ -55,15 +59,15 @@ public class Config {
             .define("ClientSettings.startAbilityWhitelist", false);
 
     public static final ModConfigSpec.ConfigValue<List<? extends String>> CUSTOM_ABILITY_WHITELIST = BUILDER
-            .comment("设定白名单列表\n检测整个模组中是否有与其字符串匹配的类名\n白名单用于设定哪些加载，哪些不加载。")
+            .comment("设定白名单列表\n检测整个模组中是否有与其字符串匹配的类名\n一行一个自定义特性\n白名单用于设定哪些加载，哪些不加载。")
             .defineListAllowEmpty("ClientSettings.customAbilityWhitelist",
                     List.of("FastStart"),
                     Config::validateClassName);
 
-    // 新增的幽灵宝可梦配置
-    public static final ModConfigSpec.ConfigValue<List<? extends String>> ON_GHOST_POKEMON_NAMES = BUILDER
+    // 幽灵宝可梦配置
+    public static final ModConfigSpec.ConfigValue<List<? extends String>> ON_GHOST_PIXELMONS = BUILDER
             .comment("用于检测是否是幽灵属性的宝可梦\n若为幽灵属性，则在指定群系会有加成\n一行一个宝可梦")
-            .defineListAllowEmpty("ClientSettings.onGhostPokemonNames",
+            .defineListAllowEmpty("ClientSettings.onGhostPixelmons",
                     List.of("Gengar"),
                     Config::validateClassName);
 
@@ -107,6 +111,10 @@ public class Config {
         return IS_DEBUG_MODE.get();
     }
 
+    public static boolean isOnPonderEnabled() {
+        return IS_ON_PONDER.get();
+    }
+
     public static int getClearTime() {
         int time = CLEAR_TIME.get();
         return (time >= 180 && time <= 36000) ? time : 6000;
@@ -140,9 +148,9 @@ public class Config {
                 .collect(Collectors.toList());
     }
 
-    // 新增的幽灵宝可梦配置访问方法
-    public static List<String> getOnGhostPokemonNames() {
-        return ON_GHOST_POKEMON_NAMES.get().stream()
+    // 幽灵宝可梦配置访问方法
+    public static List<String> getOnGhostPixelmons() {
+        return ON_GHOST_PIXELMONS.get().stream()
                 .map(String::valueOf)
                 .collect(Collectors.toList());
     }

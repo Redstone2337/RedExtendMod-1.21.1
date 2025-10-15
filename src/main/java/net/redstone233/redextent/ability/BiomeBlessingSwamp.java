@@ -26,7 +26,7 @@ public class BiomeBlessingSwamp extends AbstractAbility {
             boolean isGhostType = newPokemon.isType(Type.GHOST);
 
             // 获取配置中的幽灵宝可梦名单
-            List<String> ghostPokemonNames = Config.getOnGhostPokemonNames();
+            List<String> ghostPokemonNames = Config.getOnGhostPixelmons();
             String currentPokemonName = newPokemon.getSpecies().getName();
 
             // 检查当前宝可梦是否在配置列表中
