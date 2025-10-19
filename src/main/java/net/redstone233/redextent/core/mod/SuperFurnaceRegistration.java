@@ -12,21 +12,21 @@ public class SuperFurnaceRegistration {
     public static void registerAll(PonderSceneRegistrationHelper<ResourceLocation> helper) {
         // 注册超级熔炉场景
         helper.addStoryBoard(
-                ResourceLocation.fromNamespaceAndPath(RedExtendMod.MOD_ID,"super_furnace"),
+                ResourceLocation.withDefaultNamespace("furnace"),
                 "super_furnace_structure",
                 SuperFurnaceScene::superFurnace
         ).highlightAllTags();
 
         // 注册超级高炉场景
         helper.addStoryBoard(
-                ResourceLocation.fromNamespaceAndPath(RedExtendMod.MOD_ID,"super_blast_furnace"),
+                ResourceLocation.withDefaultNamespace("blast_furnace"),
                 "super_blast_furnace_structure",
                 SuperBlastFurnaceScene::superBlastFurnace
         ).highlightAllTags();
 
         // 注册超级烟熏炉场景
         helper.addStoryBoard(
-                ResourceLocation.fromNamespaceAndPath(RedExtendMod.MOD_ID,"super_smoker"),
+                ResourceLocation.withDefaultNamespace("smoker"),
                 "super_smoker_structure",
                 SuperSmokerScene::superSmoker
         ).highlightAllTags();
