@@ -161,12 +161,12 @@
   "party": {
     "value": {
       "specs": [
-        "Kyurem lvl:89 ability:Pressure helditem:Leftovers nature:Timid ivhp:31 ivspdef:31 ivdef:31 ivatk:31 ivspatk:31 ivspd:31 evhp:56 evspdef:0 evdef:0 evatk:0 evspatk:200 evspd:252 move1:Ice Beam move2:Freeze-Dry move3:Earth Power move4:Roost",
-        "Latias lvl:85 ability:Levitate helditem:Soul Dew nature:Timid ivhp:31 ivspdef:31 ivdef:31 ivatk:31 ivspatk:31 ivspd:31 evhp:0 evspdef:4 evdef:0 evatk:0 evspatk:252 evspd:252 move1:Draco Meteor move2:Psyshock move3:Recover move4:Calm Mind",
-        "Latios lvl:85 ability:Levitate helditem:Soul Dew nature:Timid ivhp:31 ivspdef:31 ivdef:31 ivatk:31 ivspatk:31 ivspd:31 evhp:0 evspdef:4 evdef:0 evatk:0 evspatk:252 evspd:252 move1:Draco Meteor move2:Psyshock move3:Recover move4:Calm Mind",
-        "Hydreigon lvl:82 ability:Levitate helditem:Choice Scarf nature:Timid ivhp:31 ivspdef:31 ivdef:31 ivatk:31 ivspatk:31 ivspd:31 evhp:0 evspdef:4 evdef:0 evatk:0 evspatk:252 evspd:252 move1:Draco Meteor move2:Dark Pulse move3:Fire Blast move4:U-turn",
-        "Salamence lvl:79 ability:Aerilate helditem:Salamencite nature:Jolly ivhp:31 ivspdef:31 ivdef:31 ivatk:31 ivspatk:31 ivspd:31 evhp:0 evspdef:4 evdef:0 evatk:252 evspatk:0 evspd:252 move1:Return move2:Dragon Dance move3:Roost move4:Earthquake",
-        "Dragapult lvl:76 ability:Infiltrator helditem:Choice Band nature:Jolly ivhp:31 ivspdef:31 ivdef:31 ivatk:31 ivspatk:31 ivspd:31 evhp:0 evspdef:4 evdef:0 evatk:252 evspatk:0 evspd:252 move1:Dragon Darts move2:Phantom Force move3:U-turn move4:Sucker Punch"
+        "Kyurem lvl:89 ability:Pressure helditem:Leftovers nature:Timid ivatk:31 ivspatk:31 ivspd:31 ivhp:31 ivspdef:31 ivdef:31 evatk:0 evspatk:200 evspd:252 evhp:56 evspdef:0 evdef:0 move1:Ice Beam move2:Freeze-Dry move3:Earth Power move4:Roost",
+        "Latias lvl:85 ability:Levitate helditem:Soul Dew nature:Timid ivatk:31 ivspatk:31 ivspd:31 ivhp:31 ivspdef:31 ivdef:31 evatk:0 evspatk:252 evspd:252 evhp:0 evspdef:4 evdef:0 move1:Draco Meteor move2:Psyshock move3:Recover move4:Calm Mind",
+        "Latios lvl:85 ability:Levitate helditem:Soul Dew nature:Timid ivatk:31 ivspatk:31 ivspd:31 ivhp:31 ivspdef:31 ivdef:31 evatk:0 evspatk:252 evspd:252 evhp:0 evspdef:4 evdef:0 move1:Draco Meteor move2:Psyshock move3:Recover move4:Calm Mind",
+        "Hydreigon lvl:82 ability:Levitate helditem:Choice Scarf nature:Timid ivatk:31 ivspatk:31 ivspd:31 ivhp:31 ivspdef:31 ivdef:31 evatk:0 evspatk:252 evspd:252 evhp:0 evspdef:4 evdef:0 move1:Draco Meteor move2:Dark Pulse move3:Fire Blast move4:U-turn",
+        "Salamence lvl:79 ability:Aerilate helditem:Salamencite nature:Jolly ivatk:31 ivspatk:31 ivspd:31 ivhp:31 ivspdef:31 ivdef:31 evatk:252 evspatk:0 evspd:252 evhp:0 evspdef:4 evdef:0 move1:Return move2:Dragon Dance move3:Roost move4:Earthquake",
+        "Dragapult lvl:76 ability:Infiltrator helditem:Choice Band nature:Jolly ivatk:31 ivspatk:31 ivspd:31 ivhp:31 ivspdef:31 ivdef:31 evatk:252 evspatk:0 evspd:252 evhp:0 evspdef:4 evdef:0 move1:Dragon Darts move2:Phantom Force move3:U-turn move4:Sucker Punch"
       ],
       "type": "pixelmon:spec"
     },

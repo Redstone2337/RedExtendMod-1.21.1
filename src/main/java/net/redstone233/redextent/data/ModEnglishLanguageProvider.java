@@ -49,10 +49,10 @@ public class ModEnglishLanguageProvider extends LanguageProvider {
         // Super Blast Furnace - 使用正确的键名格式
         add("rem.ponder.super_blast_furnace.header", "Super Blast Furnace Construction Guide");
         add("rem.ponder.super_blast_furnace.text_1", "Super Blast Furnace: A special structure for highly efficient ore smelting");
-        add("rem.ponder.super_blast_furnace.text_2", "Layer 1: 3x3 iron block base");
+        add("rem.ponder.super_blast_furnace.text_2", "Layer 1: 3x3 smooth stone base");
         add("rem.ponder.super_blast_furnace.text_3", "Layer 2: Surround the blast furnace with iron blocks");
         add("rem.ponder.super_blast_furnace.text_4", "Place a blast furnace in the center");
-        add("rem.ponder.super_blast_furnace.text_5", "Layer 3: 3x3 smooth stone top cover");
+        add("rem.ponder.super_blast_furnace.text_5", "Layer 3: 3x3 block of iron top cover");
         add("rem.ponder.super_blast_furnace.text_6", "Compared to a regular blast furnace, the Super Blast Furnace is far more efficient");
 
         // Super Smoker - 使用正确的键名格式
