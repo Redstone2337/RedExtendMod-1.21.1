@@ -161,12 +161,12 @@
   "party": {
     "value": {
       "specs": [
-        "Kyogre lvl:87 ability:Drizzle helditem:Blue Orb nature:Modest ivspatk:31 ivatk:31 ivdef:31 ivspdef:31 ivhp:31 ivspd:31 evspatk:252 evatk:0 evdef:0 evspdef:0 evhp:4 evspd:252 move1:Origin Pulse move2:Water Spout move3:Thunder move4:Ice Beam",
-        "Lugia lvl:84 ability:Pressure helditem:Leftovers nature:Bold ivspatk:31 ivatk:31 ivdef:31 ivspdef:31 ivhp:31 ivspd:31 evspatk:0 evatk:0 evdef:252 evspdef:4 evhp:252 evspd:0 move1:Aeroblast move2:Calm Mind move3:Roost move4:Ice Beam",
-        "Articuno lvl:81 ability:Pressure helditem:Heavy-Duty Boots nature:Calm ivspatk:31 ivatk:31 ivdef:31 ivspdef:31 ivhp:31 ivspd:31 evspatk:0 evatk:0 evdef:0 evspdef:252 evhp:248 evspd:8 move1:Freeze-Dry move2:Hurricane move3:Roost move4:Toxic",
-        "Suicune lvl:79 ability:Pressure helditem:Leftovers nature:Bold ivspatk:31 ivatk:31 ivdef:31 ivspdef:31 ivhp:31 ivspd:31 evspatk:0 evatk:0 evdef:252 evspdef:4 evhp:252 evspd:0 move1:Scald move2:Ice Beam move3:Calm Mind move4:Rest",
-        "Zekrom lvl:77 ability:Teravolt helditem:Choice Band nature:Adamant ivspatk:31 ivatk:31 ivdef:31 ivspdef:31 ivhp:31 ivspd:31 evspatk:0 evatk:252 evdef:0 evspdef:4 evhp:0 evspd:252 move1:Bolt Strike move2:Outrage move3:Stone Edge move4:Volt Switch",
-        "Swampert lvl:74 ability:Swift Swim helditem:Swampertite nature:Adamant ivspatk:31 ivatk:31 ivdef:31 ivspdef:31 ivhp:31 ivspd:31 evspatk:0 evatk:252 evdef:0 evspdef:4 evhp:0 evspd:252 move1:Waterfall move2:Earthquake move3:Ice Punch move4:Rain Dance"
+        "Kyogre lvl:87 ability:Drizzle helditem:Blue Orb nature:Modest ivhp:31 ivspdef:31 ivdef:31 ivatk:31 ivspatk:31 ivspd:31 evhp:4 evspdef:0 evdef:0 evatk:0 evspatk:252 evspd:252 move1:Origin Pulse move2:Water Spout move3:Thunder move4:Ice Beam",
+        "Lugia lvl:84 ability:Pressure helditem:Leftovers nature:Bold ivhp:31 ivspdef:31 ivdef:31 ivatk:31 ivspatk:31 ivspd:31 evhp:252 evspdef:4 evdef:252 evatk:0 evspatk:0 evspd:0 move1:Aeroblast move2:Calm Mind move3:Roost move4:Ice Beam",
+        "Articuno lvl:81 ability:Pressure helditem:Heavy-Duty Boots nature:Calm ivhp:31 ivspdef:31 ivdef:31 ivatk:31 ivspatk:31 ivspd:31 evhp:248 evspdef:252 evdef:0 evatk:0 evspatk:0 evspd:8 move1:Freeze-Dry move2:Hurricane move3:Roost move4:Toxic",
+        "Suicune lvl:79 ability:Pressure helditem:Leftovers nature:Bold ivhp:31 ivspdef:31 ivdef:31 ivatk:31 ivspatk:31 ivspd:31 evhp:252 evspdef:4 evdef:252 evatk:0 evspatk:0 evspd:0 move1:Scald move2:Ice Beam move3:Calm Mind move4:Rest",
+        "Zekrom lvl:77 ability:Teravolt helditem:Choice Band nature:Adamant ivhp:31 ivspdef:31 ivdef:31 ivatk:31 ivspatk:31 ivspd:31 evhp:0 evspdef:4 evdef:0 evatk:252 evspatk:0 evspd:252 move1:Bolt Strike move2:Outrage move3:Stone Edge move4:Volt Switch",
+        "Swampert lvl:74 ability:Swift Swim helditem:Swampertite nature:Adamant ivhp:31 ivspdef:31 ivdef:31 ivatk:31 ivspatk:31 ivspd:31 evhp:0 evspdef:4 evdef:0 evatk:252 evspatk:0 evspd:252 move1:Waterfall move2:Earthquake move3:Ice Punch move4:Rain Dance"
       ],
       "type": "pixelmon:spec"
     },

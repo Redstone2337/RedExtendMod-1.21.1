@@ -161,12 +161,12 @@
   "party": {
     "value": {
       "specs": [
-        "Zygarde lvl:100 ability:Power Construct helditem:Leftovers nature:Adamant ivspatk:31 ivatk:31 ivdef:31 ivspdef:31 ivhp:31 ivspd:31 evspatk:0 evatk:252 evdef:4 evspdef:0 evhp:252 evspd:0 move1:Thousand Arrows move2:Thousand Waves move3:Core Enforcer move4:Extreme Speed",
-        "Rayquaza lvl:98 ability:Air Lock helditem:Life Orb nature:Jolly ivspatk:31 ivatk:31 ivdef:31 ivspdef:31 ivhp:31 ivspd:31 evspatk:0 evatk:252 evdef:4 evspdef:0 evhp:0 evspd:252 move1:Dragon Ascent move2:Extreme Speed move3:Dragon Dance move4:Earthquake",
-        "Mewtwo lvl:96 ability:Pressure helditem:Mewtwonite X nature:Timid ivspatk:31 ivatk:31 ivdef:31 ivspdef:31 ivhp:31 ivspd:31 evspatk:252 evatk:0 evdef:4 evspdef:0 evhp:0 evspd:252 move1:Psystrike move2:Aura Sphere move3:Ice Beam move4:Recover",
-        "Dialga lvl:95 ability:Pressure helditem:Adamant Orb nature:Modest ivspatk:31 ivatk:31 ivdef:31 ivspdef:31 ivhp:31 ivspd:31 evspatk:252 evatk:0 evdef:0 evspdef:4 evhp:252 evspd:0 move1:Roar of Time move2:Flash Cannon move3:Fire Blast move4:Thunder",
-        "Palkia lvl:94 ability:Pressure helditem:Lustrous Orb nature:Timid ivspatk:31 ivatk:31 ivdef:31 ivspdef:31 ivhp:31 ivspd:31 evspatk:252 evatk:0 evdef:0 evspdef:4 evhp:0 evspd:252 move1:Spacial Rend move2:Hydro Pump move3:Thunderbolt move4:Fire Blast",
-        "Giratina lvl:92 ability:Levitate helditem:Griseous Orb nature:Modest ivspatk:31 ivatk:31 ivdef:31 ivspdef:31 ivhp:31 ivspd:31 evspatk:252 evatk:0 evdef:0 evspdef:4 evhp:252 evspd:0 move1:Shadow Force move2:Dragon Pulse move3:Aura Sphere move4:Earth Power"
+        "Zygarde lvl:100 ability:Power Construct helditem:Leftovers nature:Adamant ivhp:31 ivspdef:31 ivdef:31 ivatk:31 ivspatk:31 ivspd:31 evhp:252 evspdef:0 evdef:4 evatk:252 evspatk:0 evspd:0 move1:Thousand Arrows move2:Thousand Waves move3:Core Enforcer move4:Extreme Speed",
+        "Rayquaza lvl:98 ability:Air Lock helditem:Life Orb nature:Jolly ivhp:31 ivspdef:31 ivdef:31 ivatk:31 ivspatk:31 ivspd:31 evhp:0 evspdef:0 evdef:4 evatk:252 evspatk:0 evspd:252 move1:Dragon Ascent move2:Extreme Speed move3:Dragon Dance move4:Earthquake",
+        "Mewtwo lvl:96 ability:Pressure helditem:Mewtwonite X nature:Timid ivhp:31 ivspdef:31 ivdef:31 ivatk:31 ivspatk:31 ivspd:31 evhp:0 evspdef:0 evdef:4 evatk:0 evspatk:252 evspd:252 move1:Psystrike move2:Aura Sphere move3:Ice Beam move4:Recover",
+        "Dialga lvl:95 ability:Pressure helditem:Adamant Orb nature:Modest ivhp:31 ivspdef:31 ivdef:31 ivatk:31 ivspatk:31 ivspd:31 evhp:252 evspdef:4 evdef:0 evatk:0 evspatk:252 evspd:0 move1:Roar of Time move2:Flash Cannon move3:Fire Blast move4:Thunder",
+        "Palkia lvl:94 ability:Pressure helditem:Lustrous Orb nature:Timid ivhp:31 ivspdef:31 ivdef:31 ivatk:31 ivspatk:31 ivspd:31 evhp:0 evspdef:4 evdef:0 evatk:0 evspatk:252 evspd:252 move1:Spacial Rend move2:Hydro Pump move3:Thunderbolt move4:Fire Blast",
+        "Giratina lvl:92 ability:Levitate helditem:Griseous Orb nature:Modest ivhp:31 ivspdef:31 ivdef:31 ivatk:31 ivspatk:31 ivspd:31 evhp:252 evspdef:4 evdef:0 evatk:0 evspatk:252 evspd:0 move1:Shadow Force move2:Dragon Pulse move3:Aura Sphere move4:Earth Power"
       ],
       "type": "pixelmon:spec"
     },

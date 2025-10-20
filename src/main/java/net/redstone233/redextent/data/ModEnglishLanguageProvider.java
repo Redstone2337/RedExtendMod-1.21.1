@@ -37,7 +37,7 @@ public class ModEnglishLanguageProvider extends LanguageProvider {
         add( "pixelmon.abilities.biome_blessing_swamp.ghost_boost", "%s's Biome Blessing: Swamp activated! As a blessed Ghost-type, its Special Attack and Attack increased by 10%, Speed by 15%, and then total Attack and Special Attack increased by 30%.");
 
 
-        // Super Furnace
+        // Super Furnace - 使用正确的键名格式
         add("rem.ponder.super_furnace.header", "Super Furnace Construction Guide");
         add("rem.ponder.super_furnace.text_1", "Super Furnace: A special structure that greatly improves smelting efficiency");
         add("rem.ponder.super_furnace.text_2", "Build Layer 1: 3x3 stone base");
@@ -46,16 +46,16 @@ public class ModEnglishLanguageProvider extends LanguageProvider {
         add("rem.ponder.super_furnace.text_5", "Build Layer 3: 3x3 stone top cover");
         add("rem.ponder.super_furnace.text_6", "Done! The Super Furnace significantly boosts smelting speed");
 
-        // Super Blast Furnace
+        // Super Blast Furnace - 使用正确的键名格式
         add("rem.ponder.super_blast_furnace.header", "Super Blast Furnace Construction Guide");
         add("rem.ponder.super_blast_furnace.text_1", "Super Blast Furnace: A special structure for highly efficient ore smelting");
-        add("rem.ponder.super_blast_furnace.text_2", "Layer 1: 3x3 smooth stone base");
+        add("rem.ponder.super_blast_furnace.text_2", "Layer 1: 3x3 iron block base");
         add("rem.ponder.super_blast_furnace.text_3", "Layer 2: Surround the blast furnace with iron blocks");
         add("rem.ponder.super_blast_furnace.text_4", "Place a blast furnace in the center");
-        add("rem.ponder.super_blast_furnace.text_5", "Layer 3: 3x3 block of iron top cover");
+        add("rem.ponder.super_blast_furnace.text_5", "Layer 3: 3x3 smooth stone top cover");
         add("rem.ponder.super_blast_furnace.text_6", "Compared to a regular blast furnace, the Super Blast Furnace is far more efficient");
 
-        // Super Smoker
+        // Super Smoker - 使用正确的键名格式
         add("rem.ponder.super_smoker.header", "Super Smoker Construction Guide");
         add("rem.ponder.super_smoker.text_1", "Super Smoker: A special structure for quickly smoking food");
         add("rem.ponder.super_smoker.text_2", "Layer 1: Alternate coal blocks and logs in a cross pattern");
@@ -63,6 +63,7 @@ public class ModEnglishLanguageProvider extends LanguageProvider {
         add("rem.ponder.super_smoker.text_4", "Place a smoker in the center");
         add("rem.ponder.super_smoker.text_5", "Layer 3: Mirror Layer 1 exactly");
         add("rem.ponder.super_smoker.text_6", "Done! The Super Smoker greatly increases food smoking speed");
+
 
         // New category tags
         add("rem.furnace.tag.title", "Super Furnaces");
