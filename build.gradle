@@ -28,6 +28,14 @@ base {
     archivesName = archives_base_name + "-${minecraft_version}"
 }
 
+boolean ponderInWorkspace = rootProject.hasProperty("multiModWorkspace.ponder")
+
+if (ponderInWorkspace) {
+    evaluationDependsOn(":ponder:NeoForge")
+}
+
+project.logger.lifecycle("Dependencies included in Workspace: [Ponder: ${ponderInWorkspace}]")
+
 // Mojang ships Java 21 to end users in 1.21.1, so mods should target Java 21.
 java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 
@@ -145,7 +153,20 @@ dependencies {
 
     compileOnly("maven.modrinth:pixelmon:${project.pixelmon_version}")
 
-    jarJar(implementation("net.createmod.ponder:Ponder-NeoForge-${minecraft_version}:${ponder_version}"))
+    compileOnly("dev.engine-room.flywheel:flywheel-neoforge-api-$minecraft_version:$flywheel_version")
+    runtimeOnly(jarJar("dev.engine-room.flywheel:flywheel-neoforge-$minecraft_version:$flywheel_version") {
+        version {
+            strictly "[1.0,2.0)"
+            prefer flywheel_version
+        }
+    })
+
+    if (ponderInWorkspace) {
+        jarJar(implementation(project(":ponder:Common")))
+        jarJar(implementation(project(":ponder:NeoForge")))
+    } else {
+        jarJar(implementation("net.createmod.ponder:Ponder-NeoForge-$minecraft_version:$ponder_version"))
+    }
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.
