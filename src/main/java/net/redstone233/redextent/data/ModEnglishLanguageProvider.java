@@ -68,5 +68,19 @@ public class ModEnglishLanguageProvider extends LanguageProvider {
         // New category tags
         add("rem.furnace.tag.title", "Super Furnaces");
         add("rem.furnace.tag.description", "Construction guides for high-efficiency smelting setups");
+
+        // 配置文件翻译文本
+        add("rem.configuration.isClearServerItem","Clear server item");
+        add("rem.configuration.isItemFilter","Item filter mode");
+        add("rem.configuration.isDebugMode","Debug mode");
+        add("rem.configuration.isOnPonder","Enable built-in pondering");
+        add("rem.configuration.clearTime","Clear time (in ticks)");
+        add("rem.configuration.itemWhitelist", "Item white lists");
+        add("rem.configuration.displayTextHead","Display text head");
+        add("rem.configuration.displayTextBody","Display text body");
+        add("rem.configuration.customAbility","Custom ability");
+        add("rem.configuration.startAbilityWhitelist","Custom ability whitelist");
+        add("rem.configuration.customAbilityWhitelist","Custom ability white lists");
+        add("rem.configuration.onGhostPixelmons","Ghost-type pixelmons");
     }
 }

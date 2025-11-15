@@ -68,6 +68,37 @@ public class NPCDefinition {
         }
 
         /**
+         * 使用字符串标题的属性配置（宝可梦NPC兼容）
+         */
+        public Builder withStringTitleProperties(float health, float eyeHeight, float width, float height,
+                                                 String title, boolean pushable, boolean child,
+                                                 boolean invulnerable, boolean immovable, boolean nameplate) {
+            JsonObject properties = new JsonObject();
+            JsonObject value = new JsonObject();
+
+            value.addProperty("health", health);
+            value.addProperty("eyeHeight", eyeHeight);
+
+            JsonObject dimensions = new JsonObject();
+            dimensions.addProperty("width", width);
+            dimensions.addProperty("height", height);
+            value.add("dimensions", dimensions);
+
+            value.addProperty("title", title); // 使用纯字符串而不是JsonObject
+
+            value.addProperty("pushable", pushable);
+            value.addProperty("child", child);
+            value.addProperty("invulnerable", invulnerable);
+            value.addProperty("immovable", immovable);
+            value.addProperty("nameplate", nameplate);
+
+            properties.add("value", value);
+            properties.addProperty("type", "pixelmon:constant");
+            definition.properties = properties;
+            return this;
+        }
+
+        /**
          * 使用自定义标题对象的属性配置
          */
         public Builder withTitleProperties(float health, float eyeHeight, float width, float height,
@@ -342,9 +373,9 @@ public class NPCDefinition {
     }
 
     /**
-         * 玩家模型配置类
-         */
-        public record PlayerModel(boolean slim, String textureResource, String textureFallback) {
+     * 玩家模型配置类
+     */
+    public record PlayerModel(boolean slim, String textureResource, String textureFallback) {
 
         /**
          * 创建玩家模型实例
@@ -353,8 +384,8 @@ public class NPCDefinition {
          * @param textureResource 纹理资源路径
          * @return 玩家模型实例
          */
-            public static PlayerModel of(boolean slim, String textureResource) {
-                return new PlayerModel(slim, textureResource, textureResource);
-            }
+        public static PlayerModel of(boolean slim, String textureResource) {
+            return new PlayerModel(slim, textureResource, textureResource);
         }
+    }
 }

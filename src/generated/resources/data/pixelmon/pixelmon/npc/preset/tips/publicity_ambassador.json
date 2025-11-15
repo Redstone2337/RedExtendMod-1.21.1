@@ -11,30 +11,14 @@
             "results": {
               "value": [
                 {
-                  "title": {
-                    "text": "游戏提示",
-                    "color": "#F8F8F2",
-                    "bold": true,
-                    "italic": false,
-                    "underlined": false
-                  },
+                  "title": "游戏提示",
                   "type": "pixelmon:open_paged_dialogue",
                   "pages": [
-                    {
-                      "text": "欢迎来到我们的像素精灵世界！"
-                    },
-                    {
-                      "text": "探索、战斗、培育，体验前所未有的冒险！"
-                    },
-                    {
-                      "text": "记得定期检查我们的更新，获取最新内容和活动信息！"
-                    },
-                    {
-                      "text": "与朋友组队挑战道馆，获得稀有奖励！"
-                    },
-                    {
-                      "text": "野外探险时注意稀有宝可梦的出现时机！"
-                    }
+                    "欢迎来到我们的像素精灵世界！",
+                    "探索、战斗、培育，体验前所未有的冒险！",
+                    "记得定期检查我们的更新，获取最新内容和活动信息！",
+                    "与朋友组队挑战道馆，获得稀有奖励！",
+                    "野外探险时注意稀有宝可梦的出现时机！"
                   ]
                 }
               ],
@@ -54,13 +38,7 @@
         "width": 1.0,
         "height": 2.0
       },
-      "title": {
-        "text": "模组宣传",
-        "color": "#F8F8F2",
-        "bold": true,
-        "italic": false,
-        "underlined": false
-      },
+      "title": "模组宣传",
       "pushable": false,
       "child": false,
       "invulnerable": false,

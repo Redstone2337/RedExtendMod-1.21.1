@@ -10,16 +10,8 @@
           "results": {
             "value": [
               {
-                "title": {
-                  "text": "神兽道馆馆主·蓝龙",
-                  "color": "#4169E1",
-                  "bold": true,
-                  "italic": false,
-                  "underlined": true
-                },
-                "message": {
-                  "text": "欢迎来到神兽道馆！我是馆主蓝龙。准备好面对传说中的宝可梦了吗？"
-                },
+                "title": "神兽道馆馆主·蓝龙",
+                "message": "欢迎来到神兽道馆！我是馆主蓝龙。准备好面对传说中的宝可梦了吗？",
                 "type": "pixelmon:open_dialogue"
               }
             ],
@@ -48,16 +40,8 @@
           "results": {
             "value": [
               {
-                "title": {
-                  "text": "神兽道馆馆主·蓝龙",
-                  "color": "#4169E1",
-                  "bold": true,
-                  "italic": false,
-                  "underlined": true
-                },
-                "message": {
-                  "text": "不可思议！你竟然战胜了我的神兽队伍！这是神兽徽章，你值得拥有！"
-                },
+                "title": "神兽道馆馆主·蓝龙",
+                "message": "不可思议！你竟然战胜了我的神兽队伍！这是神兽徽章，你值得拥有！",
                 "fire_close_event": false,
                 "type": "pixelmon:open_dialogue"
               },
@@ -104,16 +88,8 @@
           "results": {
             "value": [
               {
-                "title": {
-                  "text": "神兽道馆馆主·蓝龙",
-                  "color": "#4169E1",
-                  "bold": true,
-                  "italic": false,
-                  "underlined": true
-                },
-                "message": {
-                  "text": "神兽的力量果然不是那么容易挑战的，继续努力吧！"
-                },
+                "title": "神兽道馆馆主·蓝龙",
+                "message": "神兽的力量果然不是那么容易挑战的，继续努力吧！",
                 "fire_close_event": false,
                 "type": "pixelmon:open_dialogue"
               },
@@ -143,13 +119,7 @@
         "width": 0.65,
         "height": 2.0
       },
-      "title": {
-        "text": "神兽道馆馆主·蓝龙",
-        "color": "#4169E1",
-        "bold": true,
-        "italic": false,
-        "underlined": true
-      },
+      "title": "神兽道馆馆主·蓝龙",
       "pushable": false,
       "child": false,
       "invulnerable": false,
@@ -161,12 +131,12 @@
   "party": {
     "value": {
       "specs": [
-        "Zygarde lvl:100 ability:Power Construct helditem:Leftovers nature:Adamant ivatk:31 ivspatk:31 ivspd:31 ivhp:31 ivspdef:31 ivdef:31 evatk:252 evspatk:0 evspd:0 evhp:252 evspdef:0 evdef:4 move1:Thousand Arrows move2:Thousand Waves move3:Core Enforcer move4:Extreme Speed",
-        "Rayquaza lvl:98 ability:Air Lock helditem:Life Orb nature:Jolly ivatk:31 ivspatk:31 ivspd:31 ivhp:31 ivspdef:31 ivdef:31 evatk:252 evspatk:0 evspd:252 evhp:0 evspdef:0 evdef:4 move1:Dragon Ascent move2:Extreme Speed move3:Dragon Dance move4:Earthquake",
-        "Mewtwo lvl:96 ability:Pressure helditem:Mewtwonite X nature:Timid ivatk:31 ivspatk:31 ivspd:31 ivhp:31 ivspdef:31 ivdef:31 evatk:0 evspatk:252 evspd:252 evhp:0 evspdef:0 evdef:4 move1:Psystrike move2:Aura Sphere move3:Ice Beam move4:Recover",
-        "Dialga lvl:95 ability:Pressure helditem:Adamant Orb nature:Modest ivatk:31 ivspatk:31 ivspd:31 ivhp:31 ivspdef:31 ivdef:31 evatk:0 evspatk:252 evspd:0 evhp:252 evspdef:4 evdef:0 move1:Roar of Time move2:Flash Cannon move3:Fire Blast move4:Thunder",
-        "Palkia lvl:94 ability:Pressure helditem:Lustrous Orb nature:Timid ivatk:31 ivspatk:31 ivspd:31 ivhp:31 ivspdef:31 ivdef:31 evatk:0 evspatk:252 evspd:252 evhp:0 evspdef:4 evdef:0 move1:Spacial Rend move2:Hydro Pump move3:Thunderbolt move4:Fire Blast",
-        "Giratina lvl:92 ability:Levitate helditem:Griseous Orb nature:Modest ivatk:31 ivspatk:31 ivspd:31 ivhp:31 ivspdef:31 ivdef:31 evatk:0 evspatk:252 evspd:0 evhp:252 evspdef:4 evdef:0 move1:Shadow Force move2:Dragon Pulse move3:Aura Sphere move4:Earth Power"
+        "Zygarde lvl:100 ability:Power Construct helditem:Leftovers nature:Adamant ivhp:31 ivspdef:31 ivdef:31 ivatk:31 ivspatk:31 ivspd:31 evhp:252 evspdef:0 evdef:4 evatk:252 evspatk:0 evspd:0 move1:Thousand Arrows move2:Thousand Waves move3:Core Enforcer move4:Extreme Speed",
+        "Rayquaza lvl:98 ability:Air Lock helditem:Life Orb nature:Jolly ivhp:31 ivspdef:31 ivdef:31 ivatk:31 ivspatk:31 ivspd:31 evhp:0 evspdef:0 evdef:4 evatk:252 evspatk:0 evspd:252 move1:Dragon Ascent move2:Extreme Speed move3:Dragon Dance move4:Earthquake",
+        "Mewtwo lvl:96 ability:Pressure helditem:Mewtwonite X nature:Timid ivhp:31 ivspdef:31 ivdef:31 ivatk:31 ivspatk:31 ivspd:31 evhp:0 evspdef:0 evdef:4 evatk:0 evspatk:252 evspd:252 move1:Psystrike move2:Aura Sphere move3:Ice Beam move4:Recover",
+        "Dialga lvl:95 ability:Pressure helditem:Adamant Orb nature:Modest ivhp:31 ivspdef:31 ivdef:31 ivatk:31 ivspatk:31 ivspd:31 evhp:252 evspdef:4 evdef:0 evatk:0 evspatk:252 evspd:0 move1:Roar of Time move2:Flash Cannon move3:Fire Blast move4:Thunder",
+        "Palkia lvl:94 ability:Pressure helditem:Lustrous Orb nature:Timid ivhp:31 ivspdef:31 ivdef:31 ivatk:31 ivspatk:31 ivspd:31 evhp:0 evspdef:4 evdef:0 evatk:0 evspatk:252 evspd:252 move1:Spacial Rend move2:Hydro Pump move3:Thunderbolt move4:Fire Blast",
+        "Giratina lvl:92 ability:Levitate helditem:Griseous Orb nature:Modest ivhp:31 ivspdef:31 ivdef:31 ivatk:31 ivspatk:31 ivspd:31 evhp:252 evspdef:4 evdef:0 evatk:0 evspatk:252 evspd:0 move1:Shadow Force move2:Dragon Pulse move3:Aura Sphere move4:Earth Power"
       ],
       "type": "pixelmon:spec"
     },

@@ -28,11 +28,11 @@ public class BattleNPCProvider extends PixelmonNPCProvider {
      * 创建馆主：蓝龙（神兽道馆馆主）
      */
     private void createBlueDragonGymLeader() {
-        // 使用直接文本创建标题和消息
-        JsonObject title = PixelmonNPCProvider.createTextTitle("神兽道馆馆主·蓝龙", "#4169E1", true, false, true);
-        JsonObject greeting = PixelmonNPCProvider.createTextMessage("欢迎来到神兽道馆！我是馆主蓝龙。准备好面对传说中的宝可梦了吗？");
-        JsonObject winMessage = PixelmonNPCProvider.createTextMessage("不可思议！你竟然战胜了我的神兽队伍！这是神兽徽章，你值得拥有！");
-        JsonObject loseMessage = PixelmonNPCProvider.createTextMessage("神兽的力量果然不是那么容易挑战的，继续努力吧！");
+        // 使用纯字符串创建标题和消息
+        String title = "神兽道馆馆主·蓝龙";
+        String greeting = "欢迎来到神兽道馆！我是馆主蓝龙。准备好面对传说中的宝可梦了吗？";
+        String winMessage = "不可思议！你竟然战胜了我的神兽队伍！这是神兽徽章，你值得拥有！";
+        String loseMessage = "神兽的力量果然不是那么容易挑战的，继续努力吧！";
 
         List<String> blueDragonTeam = List.of(
                 createPokemonSpecWithIVsEVs("Zygarde", 100, "Power Construct", "Leftovers", "Adamant",
@@ -66,14 +66,14 @@ public class BattleNPCProvider extends PixelmonNPCProvider {
                         Map.of("hp", 252, "atk", 0, "def", 0, "spatk", 252, "spdef", 4, "spd", 0))
         );
 
-        // 使用完整参数版本的馆主NPC
-        addGymLeader(
+        // 使用纯字符串版本的馆主NPC
+        addGymLeaderString(
                 "blue_dragon_leader",          // 文件名
                 "蓝龙",                        // NPC名称
-                title,                         // 标题（直接文本）
-                greeting,                      // 问候语（直接文本）
-                winMessage,                    // 胜利消息（直接文本）
-                loseMessage,                   // 失败消息（直接文本）
+                title,                         // 标题（纯字符串）
+                greeting,                      // 问候语（纯字符串）
+                winMessage,                    // 胜利消息（纯字符串）
+                loseMessage,                   // 失败消息（纯字符串）
                 blueDragonTeam,                // 神兽队伍配置
                 10000.0,                       // 奖励金钱
                 List.of(                       // 奖励物品
@@ -89,10 +89,10 @@ public class BattleNPCProvider extends PixelmonNPCProvider {
      * 创建实习训练家：火焰神兽训练家
      */
     private void createFireLegendaryTrainer() {
-        JsonObject title = PixelmonNPCProvider.createTextTitle("火焰神兽训练家·炎煌", "#FF4500", true, false, false);
-        JsonObject greeting = PixelmonNPCProvider.createTextMessage("我是火焰神兽训练家炎煌！让火焰净化一切吧！");
-        JsonObject winMessage = PixelmonNPCProvider.createTextMessage("你的实力让我印象深刻！继续前进吧！");
-        JsonObject loseMessage = PixelmonNPCProvider.createTextMessage("火焰的力量果然还是最强的！");
+        String title = "火焰神兽训练家·炎煌";
+        String greeting = "我是火焰神兽训练家炎煌！让火焰净化一切吧！";
+        String winMessage = "你的实力让我印象深刻！继续前进吧！";
+        String loseMessage = "火焰的力量果然还是最强的！";
 
         List<String> fireTeam = List.of(
                 createPokemonSpecWithIVsEVs("Groudon", 88, "Drought", "Red Orb", "Adamant",
@@ -126,13 +126,13 @@ public class BattleNPCProvider extends PixelmonNPCProvider {
                         Map.of("hp", 0, "atk", 252, "def", 0, "spatk", 0, "spdef", 4, "spd", 252))
         );
 
-        addGymLeader(
+        addGymLeaderString(
                 "fire_legendary_trainer",      // 文件名
                 "炎煌",                        // NPC名称
-                title,                         // 标题（直接文本）
-                greeting,                      // 问候语（直接文本）
-                winMessage,                    // 胜利消息（直接文本）
-                loseMessage,                   // 失败消息（直接文本）
+                title,                         // 标题（纯字符串）
+                greeting,                      // 问候语（纯字符串）
+                winMessage,                    // 胜利消息（纯字符串）
+                loseMessage,                   // 失败消息（纯字符串）
                 fireTeam,                      // 神兽队伍配置
                 5000.0,                        // 奖励金钱
                 List.of(                       // 奖励物品
@@ -148,10 +148,10 @@ public class BattleNPCProvider extends PixelmonNPCProvider {
      * 创建实习训练家：水系神兽训练家
      */
     private void createWaterLegendaryTrainer() {
-        JsonObject title = PixelmonNPCProvider.createTextTitle("水系神兽训练家·海澜", "#1E90FF", true, false, false);
-        JsonObject greeting = PixelmonNPCProvider.createTextMessage("我是水系神兽训练家海澜！感受大海的力量吧！");
-        JsonObject winMessage = PixelmonNPCProvider.createTextMessage("你的实力如海洋般深不可测！继续前进吧！");
-        JsonObject loseMessage = PixelmonNPCProvider.createTextMessage("大海的力量是无穷无尽的！");
+        String title = "水系神兽训练家·海澜";
+        String greeting = "我是水系神兽训练家海澜！感受大海的力量吧！";
+        String winMessage = "你的实力如海洋般深不可测！继续前进吧！";
+        String loseMessage = "大海的力量是无穷无尽的！";
 
         List<String> waterTeam = List.of(
                 createPokemonSpecWithIVsEVs("Kyogre", 87, "Drizzle", "Blue Orb", "Modest",
@@ -185,13 +185,13 @@ public class BattleNPCProvider extends PixelmonNPCProvider {
                         Map.of("hp", 0, "atk", 252, "def", 0, "spatk", 0, "spdef", 4, "spd", 252))
         );
 
-        addGymLeader(
+        addGymLeaderString(
                 "water_legendary_trainer",     // 文件名
                 "海澜",                        // NPC名称
-                title,                         // 标题（直接文本）
-                greeting,                      // 问候语（直接文本）
-                winMessage,                    // 胜利消息（直接文本）
-                loseMessage,                   // 失败消息（直接文本）
+                title,                         // 标题（纯字符串）
+                greeting,                      // 问候语（纯字符串）
+                winMessage,                    // 胜利消息（纯字符串）
+                loseMessage,                   // 失败消息（纯字符串）
                 waterTeam,                     // 神兽队伍配置
                 5000.0,                        // 奖励金钱
                 List.of(                       // 奖励物品
@@ -207,10 +207,10 @@ public class BattleNPCProvider extends PixelmonNPCProvider {
      * 创建实习训练家：电系神兽训练家
      */
     private void createElectricLegendaryTrainer() {
-        JsonObject title = PixelmonNPCProvider.createTextTitle("电系神兽训练家·雷霆", "#FFD700", true, false, false);
-        JsonObject greeting = PixelmonNPCProvider.createTextMessage("我是电系神兽训练家雷霆！准备好被电击了吗？");
-        JsonObject winMessage = PixelmonNPCProvider.createTextMessage("你的实力如闪电般耀眼！继续前进吧！");
-        JsonObject loseMessage = PixelmonNPCProvider.createTextMessage("电力的力量无人能挡！");
+        String title = "电系神兽训练家·雷霆";
+        String greeting = "我是电系神兽训练家雷霆！准备好被电击了吗？";
+        String winMessage = "你的实力如闪电般耀眼！继续前进吧！";
+        String loseMessage = "电力的力量无人能挡！";
 
         List<String> electricTeam = List.of(
                 createPokemonSpecWithIVsEVs("Raikou", 86, "Pressure", "Assault Vest", "Timid",
@@ -244,13 +244,13 @@ public class BattleNPCProvider extends PixelmonNPCProvider {
                         Map.of("hp", 248, "atk", 0, "def", 0, "spatk", 252, "spdef", 8, "spd", 0))
         );
 
-        addGymLeader(
+        addGymLeaderString(
                 "electric_legendary_trainer",  // 文件名
                 "雷霆",                        // NPC名称
-                title,                         // 标题（直接文本）
-                greeting,                      // 问候语（直接文本）
-                winMessage,                    // 胜利消息（直接文本）
-                loseMessage,                   // 失败消息（直接文本）
+                title,                         // 标题（纯字符串）
+                greeting,                      // 问候语（纯字符串）
+                winMessage,                    // 胜利消息（纯字符串）
+                loseMessage,                   // 失败消息（纯字符串）
                 electricTeam,                  // 神兽队伍配置
                 5000.0,                        // 奖励金钱
                 List.of(                       // 奖励物品
@@ -266,10 +266,10 @@ public class BattleNPCProvider extends PixelmonNPCProvider {
      * 创建实习训练家：龙系神兽训练家
      */
     private void createDragonLegendaryTrainer() {
-        JsonObject title = PixelmonNPCProvider.createTextTitle("龙系神兽训练家·龙啸", "#8A2BE2", true, false, false);
-        JsonObject greeting = PixelmonNPCProvider.createTextMessage("我是龙系神兽训练家龙啸！感受龙之怒吧！");
-        JsonObject winMessage = PixelmonNPCProvider.createTextMessage("你的实力如同传说中的龙骑士！继续前进吧！");
-        JsonObject loseMessage = PixelmonNPCProvider.createTextMessage("龙族的力量永远是最强的！");
+        String title = "龙系神兽训练家·龙啸";
+        String greeting = "我是龙系神兽训练家龙啸！感受龙之怒吧！";
+        String winMessage = "你的实力如同传说中的龙骑士！继续前进吧！";
+        String loseMessage = "龙族的力量永远是最强的！";
 
         List<String> dragonTeam = List.of(
                 createPokemonSpecWithIVsEVs("Kyurem", 89, "Pressure", "Leftovers", "Timid",
@@ -303,13 +303,13 @@ public class BattleNPCProvider extends PixelmonNPCProvider {
                         Map.of("hp", 0, "atk", 252, "def", 0, "spatk", 0, "spdef", 4, "spd", 252))
         );
 
-        addGymLeader(
+        addGymLeaderString(
                 "dragon_legendary_trainer",    // 文件名
                 "龙啸",                        // NPC名称
-                title,                         // 标题（直接文本）
-                greeting,                      // 问候语（直接文本）
-                winMessage,                    // 胜利消息（直接文本）
-                loseMessage,                   // 失败消息（直接文本）
+                title,                         // 标题（纯字符串）
+                greeting,                      // 问候语（纯字符串）
+                winMessage,                    // 胜利消息（纯字符串）
+                loseMessage,                   // 失败消息（纯字符串）
                 dragonTeam,                    // 神兽队伍配置
                 5000.0,                        // 奖励金钱
                 List.of(                       // 奖励物品

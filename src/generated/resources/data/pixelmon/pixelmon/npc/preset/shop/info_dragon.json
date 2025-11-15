@@ -11,16 +11,8 @@
             "results": {
               "value": [
                 {
-                  "title": {
-                    "text": "商店交互",
-                    "color": "#FFD700",
-                    "bold": true,
-                    "italic": false,
-                    "underlined": true
-                  },
-                  "message": {
-                    "text": "欢迎来到毛毛龙商店，这里只有最稀有的商品！"
-                  },
+                  "title": "商店交互",
+                  "message": "欢迎来到毛毛龙商店，这里只有最稀有的商品！",
                   "type": "pixelmon:open_dialogue"
                 }
               ],
@@ -83,16 +75,8 @@
             "results": {
               "value": [
                 {
-                  "title": {
-                    "text": "商店交互",
-                    "color": "#FFD700",
-                    "bold": true,
-                    "italic": false,
-                    "underlined": true
-                  },
-                  "message": {
-                    "text": "感谢您的光临，期待再次为您服务！"
-                  },
+                  "title": "商店交互",
+                  "message": "感谢您的光临，期待再次为您服务！",
                   "fire_close_event": false,
                   "type": "pixelmon:open_dialogue"
                 }
@@ -113,13 +97,7 @@
         "width": 1.0,
         "height": 2.0
       },
-      "title": {
-        "text": "毛毛龙的商店",
-        "color": "#FFD700",
-        "bold": true,
-        "italic": false,
-        "underlined": true
-      },
+      "title": "毛毛龙的商店",
       "pushable": false,
       "child": false,
       "invulnerable": false,

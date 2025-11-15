@@ -10,16 +10,8 @@
           "results": {
             "value": [
               {
-                "title": {
-                  "text": "电系神兽训练家·雷霆",
-                  "color": "#FFD700",
-                  "bold": true,
-                  "italic": false,
-                  "underlined": false
-                },
-                "message": {
-                  "text": "我是电系神兽训练家雷霆！准备好被电击了吗？"
-                },
+                "title": "电系神兽训练家·雷霆",
+                "message": "我是电系神兽训练家雷霆！准备好被电击了吗？",
                 "type": "pixelmon:open_dialogue"
               }
             ],
@@ -48,16 +40,8 @@
           "results": {
             "value": [
               {
-                "title": {
-                  "text": "电系神兽训练家·雷霆",
-                  "color": "#FFD700",
-                  "bold": true,
-                  "italic": false,
-                  "underlined": false
-                },
-                "message": {
-                  "text": "你的实力如闪电般耀眼！继续前进吧！"
-                },
+                "title": "电系神兽训练家·雷霆",
+                "message": "你的实力如闪电般耀眼！继续前进吧！",
                 "fire_close_event": false,
                 "type": "pixelmon:open_dialogue"
               },
@@ -104,16 +88,8 @@
           "results": {
             "value": [
               {
-                "title": {
-                  "text": "电系神兽训练家·雷霆",
-                  "color": "#FFD700",
-                  "bold": true,
-                  "italic": false,
-                  "underlined": false
-                },
-                "message": {
-                  "text": "电力的力量无人能挡！"
-                },
+                "title": "电系神兽训练家·雷霆",
+                "message": "电力的力量无人能挡！",
                 "fire_close_event": false,
                 "type": "pixelmon:open_dialogue"
               },
@@ -143,13 +119,7 @@
         "width": 0.65,
         "height": 2.0
       },
-      "title": {
-        "text": "电系神兽训练家·雷霆",
-        "color": "#FFD700",
-        "bold": true,
-        "italic": false,
-        "underlined": false
-      },
+      "title": "电系神兽训练家·雷霆",
       "pushable": false,
       "child": false,
       "invulnerable": false,
@@ -161,12 +131,12 @@
   "party": {
     "value": {
       "specs": [
-        "Raikou lvl:86 ability:Pressure helditem:Assault Vest nature:Timid ivatk:31 ivspatk:31 ivspd:31 ivhp:31 ivspdef:31 ivdef:31 evatk:0 evspatk:252 evspd:252 evhp:0 evspdef:4 evdef:0 move1:Thunderbolt move2:Volt Switch move3:Shadow Ball move4:Extrasensory",
-        "Zapdos lvl:83 ability:Pressure helditem:Heavy-Duty Boots nature:Timid ivatk:31 ivspatk:31 ivspd:31 ivhp:31 ivspdef:31 ivdef:31 evatk:0 evspatk:252 evspd:252 evhp:0 evspdef:4 evdef:0 move1:Thunderbolt move2:Hurricane move3:Heat Wave move4:Roost",
-        "Thundurus lvl:80 ability:Prankster helditem:Life Orb nature:Timid ivatk:31 ivspatk:31 ivspd:31 ivhp:31 ivspdef:31 ivdef:31 evatk:0 evspatk:252 evspd:252 evhp:0 evspdef:4 evdef:0 move1:Thunderbolt move2:Focus Blast move3:Hidden Power Ice move4:Nasty Plot",
-        "Tapu Koko lvl:78 ability:Electric Surge helditem:Choice Specs nature:Timid ivatk:31 ivspatk:31 ivspd:31 ivhp:31 ivspdef:31 ivdef:31 evatk:0 evspatk:252 evspd:252 evhp:0 evspdef:4 evdef:0 move1:Thunderbolt move2:Dazzling Gleam move3:Volt Switch move4:Grass Knot",
-        "Zeraora lvl:76 ability:Volt Absorb helditem:Expert Belt nature:Jolly ivatk:31 ivspatk:31 ivspd:31 ivhp:31 ivspdef:31 ivdef:31 evatk:252 evspatk:0 evspd:252 evhp:0 evspdef:4 evdef:0 move1:Plasma Fists move2:Close Combat move3:Blaze Kick move4:Volt Switch",
-        "Ampharos lvl:73 ability:Mold Breaker helditem:Ampharosite nature:Modest ivatk:31 ivspatk:31 ivspd:31 ivhp:31 ivspdef:31 ivdef:31 evatk:0 evspatk:252 evspd:0 evhp:248 evspdef:8 evdef:0 move1:Thunderbolt move2:Dragon Pulse move3:Focus Blast move4:Volt Switch"
+        "Raikou lvl:86 ability:Pressure helditem:Assault Vest nature:Timid ivhp:31 ivspdef:31 ivdef:31 ivatk:31 ivspatk:31 ivspd:31 evhp:0 evspdef:4 evdef:0 evatk:0 evspatk:252 evspd:252 move1:Thunderbolt move2:Volt Switch move3:Shadow Ball move4:Extrasensory",
+        "Zapdos lvl:83 ability:Pressure helditem:Heavy-Duty Boots nature:Timid ivhp:31 ivspdef:31 ivdef:31 ivatk:31 ivspatk:31 ivspd:31 evhp:0 evspdef:4 evdef:0 evatk:0 evspatk:252 evspd:252 move1:Thunderbolt move2:Hurricane move3:Heat Wave move4:Roost",
+        "Thundurus lvl:80 ability:Prankster helditem:Life Orb nature:Timid ivhp:31 ivspdef:31 ivdef:31 ivatk:31 ivspatk:31 ivspd:31 evhp:0 evspdef:4 evdef:0 evatk:0 evspatk:252 evspd:252 move1:Thunderbolt move2:Focus Blast move3:Hidden Power Ice move4:Nasty Plot",
+        "Tapu Koko lvl:78 ability:Electric Surge helditem:Choice Specs nature:Timid ivhp:31 ivspdef:31 ivdef:31 ivatk:31 ivspatk:31 ivspd:31 evhp:0 evspdef:4 evdef:0 evatk:0 evspatk:252 evspd:252 move1:Thunderbolt move2:Dazzling Gleam move3:Volt Switch move4:Grass Knot",
+        "Zeraora lvl:76 ability:Volt Absorb helditem:Expert Belt nature:Jolly ivhp:31 ivspdef:31 ivdef:31 ivatk:31 ivspatk:31 ivspd:31 evhp:0 evspdef:4 evdef:0 evatk:252 evspatk:0 evspd:252 move1:Plasma Fists move2:Close Combat move3:Blaze Kick move4:Volt Switch",
+        "Ampharos lvl:73 ability:Mold Breaker helditem:Ampharosite nature:Modest ivhp:31 ivspdef:31 ivdef:31 ivatk:31 ivspatk:31 ivspd:31 evhp:248 evspdef:8 evdef:0 evatk:0 evspatk:252 evspd:0 move1:Thunderbolt move2:Dragon Pulse move3:Focus Blast move4:Volt Switch"
       ],
       "type": "pixelmon:spec"
     },
