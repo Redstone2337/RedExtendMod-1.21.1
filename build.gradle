@@ -22,6 +22,13 @@ repositories {
     maven {url = "https://api.modrinth.com/maven"}
     maven { url = "https://raw.githubusercontent.com/Fuzss/modresources/main/maven/" }
     maven { url = "https://maven.createmod.net" }
+    maven {
+        url "https://maven.latvian.dev/releases"
+        content {
+            includeGroup "dev.latvian.mods"
+            includeGroup "dev.latvian.apps"
+        }
+    }
 }
 
 base {
@@ -152,6 +159,7 @@ dependencies {
 
 
     compileOnly("maven.modrinth:pixelmon:${project.pixelmon_version}")
+    jarJar(implementation("dev.latvian.mods:rhino:$rhino_version"))
 
     compileOnly("dev.engine-room.flywheel:flywheel-neoforge-api-$minecraft_version:$flywheel_version")
     runtimeOnly(jarJar("dev.engine-room.flywheel:flywheel-neoforge-$minecraft_version:$flywheel_version") {
