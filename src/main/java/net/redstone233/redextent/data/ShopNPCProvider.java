@@ -15,9 +15,9 @@ public class ShopNPCProvider extends PixelmonNPCProvider {
     public void registerNPCs() {
         // 创建更多商店物品的示例
         List<JsonObject> premiumItems = List.of(
-                PixelmonNPCProvider.createShopItem("pixelmon:master_ball", 1, 50000.0, 12500.0),
+                PixelmonNPCProvider.createMasterBallShopItem(1, 50000.0, 12500.0),
                 PixelmonNPCProvider.createShopItem("pixelmon:rare_candy", 10, 50000.0, 12500.0),
-                PixelmonNPCProvider.createShopItem("pixelmon:park_ball", 1, 30000.0, 15000.0),
+                PixelmonNPCProvider.createPokeBallShopItem("park_ball", 1, 30000.0, 15000.0),
                 PixelmonNPCProvider.createShopItem("pixelmon:ability_capsule", 1, 10000.0, 2500.0)
         );
 

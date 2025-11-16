@@ -31,8 +31,11 @@
                   "items": [
                     {
                       "item": {
-                        "id": "pixelmon:master_ball",
-                        "count": 1
+                        "id": "pixelmon:poke_ball",
+                        "count": 1,
+                        "components": {
+                          "pixelmon:poke_ball": "master_ball"
+                        }
                       },
                       "buyPrice": 50000.0,
                       "sellPrice": 12500.0
@@ -47,8 +50,11 @@
                     },
                     {
                       "item": {
-                        "id": "pixelmon:park_ball",
-                        "count": 1
+                        "id": "pixelmon:poke_ball",
+                        "count": 1,
+                        "components": {
+                          "pixelmon:poke_ball": "park_ball"
+                        }
                       },
                       "buyPrice": 30000.0,
                       "sellPrice": 15000.0

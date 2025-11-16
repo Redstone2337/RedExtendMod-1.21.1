@@ -321,10 +321,6 @@ public abstract class PixelmonNPCProvider implements DataProvider {
                 greeting, goodbye, shopItems, textureResources, 5.0f, 0.9f);
     }
 
-    // ==================== 其他快速生成方法保持不变 ====================
-
-    // ... 其他原始方法保持不变 ...
-
     // ==================== 辅助类方法 ====================
 
     /**
@@ -444,6 +440,37 @@ public abstract class PixelmonNPCProvider implements DataProvider {
     }
 
     /**
+     * 创建带有自定义组件的商店物品（通用方法）
+     */
+    public static JsonObject createShopItemWithComponents(String itemId, int count, JsonObject components, double buyPrice, double sellPrice) {
+        JsonObject item = new JsonObject();
+
+        JsonObject itemObj = new JsonObject();
+        itemObj.addProperty("id", itemId);
+        itemObj.addProperty("count", count);
+
+        if (components != null && !components.isEmpty()) {
+            itemObj.add("components", components);
+        }
+
+        item.add("item", itemObj);
+        item.addProperty("buyPrice", buyPrice);
+        item.addProperty("sellPrice", sellPrice);
+
+        return item;
+    }
+
+    /**
+     * 创建新版本大师球商店物品
+     */
+    public static JsonObject createMasterBallShopItem(int count, double buyPrice, double sellPrice) {
+        JsonObject components = new JsonObject();
+        components.addProperty("pixelmon:poke_ball", "master_ball");
+
+        return createShopItemWithComponents("pixelmon:poke_ball", count, components, buyPrice, sellPrice);
+    }
+
+    /**
      * 创建进化石商店物品（简化版）
      */
     public static JsonObject createEvolutionStoneItem(String stoneId, double buyPrice, double sellPrice) {
@@ -469,6 +496,99 @@ public abstract class PixelmonNPCProvider implements DataProvider {
         item.addProperty("id", itemId);
         item.addProperty("count", count);
         return item;
+    }
+
+    /**
+     * 创建带有自定义组件的物品奖励（通用方法）
+     */
+    public static JsonObject createItemRewardWithComponents(String itemId, int count, JsonObject components) {
+        JsonObject item = new JsonObject();
+        item.addProperty("id", itemId);
+        item.addProperty("count", count);
+
+        if (components != null && !components.isEmpty()) {
+            item.add("components", components);
+        }
+
+        return item;
+    }
+
+    /**
+     * 创建新版本大师球物品奖励
+     */
+    public static JsonObject createMasterBallReward(int count) {
+        JsonObject components = new JsonObject();
+        components.addProperty("pixelmon:poke_ball", "master_ball");
+
+        return createItemRewardWithComponents("pixelmon:poke_ball", count, components);
+    }
+
+    /**
+     * 创建精灵球组件（通用方法）
+     */
+    public static JsonObject createPokeBallComponent(String ballType) {
+        JsonObject components = new JsonObject();
+        components.addProperty("pixelmon:poke_ball", ballType);
+        return components;
+    }
+
+    /**
+     * 创建多种精灵球的商店物品
+     */
+    public static JsonObject createPokeBallShopItem(String ballType, int count, double buyPrice, double sellPrice) {
+        JsonObject components = createPokeBallComponent(ballType);
+        return createShopItemWithComponents("pixelmon:poke_ball", count, components, buyPrice, sellPrice);
+    }
+
+    /**
+     * 创建多种精灵球的物品奖励
+     */
+    public static JsonObject createPokeBallReward(String ballType, int count) {
+        JsonObject components = createPokeBallComponent(ballType);
+        return createItemRewardWithComponents("pixelmon:poke_ball", count, components);
+    }
+
+    /**
+     * 创建自定义组件（通用构建器方法）
+     */
+    public static ComponentBuilder createComponentBuilder() {
+        return new ComponentBuilder();
+    }
+
+    /**
+     * 组件构建器类，用于方便地创建复杂的组件结构
+     */
+    public static class ComponentBuilder {
+        private final JsonObject components = new JsonObject();
+
+        public ComponentBuilder addComponent(String componentKey, JsonObject componentValue) {
+            components.add(componentKey, componentValue);
+            return this;
+        }
+
+        public ComponentBuilder addPokeBallComponent(String ballType) {
+            components.addProperty("pixelmon:poke_ball", ballType);
+            return this;
+        }
+
+        public ComponentBuilder addSimpleComponent(String componentKey, String value) {
+            components.addProperty(componentKey, value);
+            return this;
+        }
+
+        public ComponentBuilder addSimpleComponent(String componentKey, boolean value) {
+            components.addProperty(componentKey, value);
+            return this;
+        }
+
+        public ComponentBuilder addSimpleComponent(String componentKey, Number value) {
+            components.addProperty(componentKey, value);
+            return this;
+        }
+
+        public JsonObject build() {
+            return components;
+        }
     }
 
     /**
@@ -824,7 +944,6 @@ public abstract class PixelmonNPCProvider implements DataProvider {
 
     private JsonObject createCustomShopInteractions(JsonObject title, JsonObject greeting,
                                                     JsonObject goodbye, List<JsonObject> shopItems) {
-        // ... 原始实现保持不变 ...
         JsonObject interactionsWrapper = new JsonObject();
         JsonArray interactionsArray = new JsonArray();
 
@@ -907,7 +1026,6 @@ public abstract class PixelmonNPCProvider implements DataProvider {
     }
 
     private JsonObject createMultiPageTipInteractions(JsonObject title, List<JsonObject> messagePages) {
-        // ... 原始实现保持不变 ...
         JsonObject interactionsWrapper = new JsonObject();
         JsonArray interactionsArray = new JsonArray();
 
@@ -941,8 +1059,6 @@ public abstract class PixelmonNPCProvider implements DataProvider {
         interactionsWrapper.add("interactions", interactionsArray);
         return interactionsWrapper;
     }
-
-    // ... 其他原始私有方法保持不变 ...
 
     // ==================== JSON保存方法保持不变 ====================
 

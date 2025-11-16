@@ -1,6 +1,6 @@
-// 1.21.1	2025-11-16T09:04:14.0355423	Pixelmon NPC 定义 (UNORDERED_FORMATTED): pixelmon/npc/preset/battle
-1425ff5f data/pixelmon/pixelmon/npc/preset/battle/blue_dragon_leader.json
-1425ff5f data/pixelmon/pixelmon/npc/preset/battle/dragon_legendary_trainer.json
-1425ff5f data/pixelmon/pixelmon/npc/preset/battle/electric_legendary_trainer.json
-1425ff5f data/pixelmon/pixelmon/npc/preset/battle/fire_legendary_trainer.json
-1425ff5f data/pixelmon/pixelmon/npc/preset/battle/water_legendary_trainer.json
+// 1.21.1	2025-11-16T12:46:39.8869832	Pixelmon NPC 定义 (UNORDERED_FORMATTED): pixelmon/npc/preset/battle
+cc53d76b data/pixelmon/pixelmon/npc/preset/battle/blue_dragon_leader.json
+cc53d76b data/pixelmon/pixelmon/npc/preset/battle/dragon_legendary_trainer.json
+cc53d76b data/pixelmon/pixelmon/npc/preset/battle/electric_legendary_trainer.json
+cc53d76b data/pixelmon/pixelmon/npc/preset/battle/fire_legendary_trainer.json
+cc53d76b data/pixelmon/pixelmon/npc/preset/battle/water_legendary_trainer.json

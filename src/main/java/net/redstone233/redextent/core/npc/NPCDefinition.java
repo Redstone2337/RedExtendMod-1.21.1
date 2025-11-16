@@ -316,7 +316,15 @@ public class NPCDefinition {
 
             value.addProperty("slim", slim);
             value.addProperty("type", "pixelmon:player");
-            value.addProperty("texture", textureResource);
+
+            JsonObject texture = new JsonObject();
+            JsonObject resource = new JsonObject();
+            resource.addProperty("resource", textureResource);
+            resource.addProperty("fallback", textureFallback);
+            texture.add("resource", resource);
+            texture.addProperty("type", "pixelmon:fallback");
+
+            value.add("texture", texture);
 
             models.add("value", value);
             models.addProperty("type", "pixelmon:constant");
@@ -325,17 +333,7 @@ public class NPCDefinition {
         }
 
         public Builder withSinglePlayerModel(boolean slim, String textureResource) {
-            JsonObject models = new JsonObject();
-            JsonObject value = new JsonObject();
-
-            value.addProperty("slim", slim);
-            value.addProperty("type", "pixelmon:player");
-            value.addProperty("texture", textureResource);
-
-            models.add("value", value);
-            models.addProperty("type", "pixelmon:constant");
-            definition.models = models;
-            return this;
+            return withSinglePlayerModel(slim, textureResource, textureResource);
         }
 
         // 行为目标配置
