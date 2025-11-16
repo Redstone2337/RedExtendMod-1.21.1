@@ -82,5 +82,8 @@ public class ModEnglishLanguageProvider extends LanguageProvider {
         add("rem.configuration.startAbilityWhitelist","Custom ability whitelist");
         add("rem.configuration.customAbilityWhitelist","Custom ability white lists");
         add("rem.configuration.onGhostPixelmons","Ghost-type pixelmons");
+        add("rem.configuration.ServerItemSettings","Server item settings");
+        add("rem.configuration.ClearClientSettings","Clear client settings");
+        add("rem.configuration.ClientSettings","Client settings");
     }
 }

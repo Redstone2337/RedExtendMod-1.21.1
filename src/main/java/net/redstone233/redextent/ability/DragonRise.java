@@ -140,7 +140,7 @@ public class DragonRise extends AbstractAbility {
             Stats stats = species.getForm(form);
             if (stats != null && stats.getTypes() != null) {
                 // 龙属性宝可梦更可能拥有此特性
-                return stats.getTypes().contains(Type.DRAGON) ? 3.0F : 1.0F;
+                return stats.getTypes().equals(Type.DRAGON) ? 3.0F : 1.0F;
             }
         }
         return 1.0F;
