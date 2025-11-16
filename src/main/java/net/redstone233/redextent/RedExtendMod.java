@@ -1,9 +1,12 @@
 package net.redstone233.redextent;
 
 import com.pixelmonmod.pixelmon.api.pokemon.ability.AbilityRegistry;
+import net.neoforged.neoforge.event.AddReloadListenerEvent;
 import net.neoforged.neoforge.event.server.ServerStoppingEvent;
 import net.redstone233.redextent.ability.*;
 import net.redstone233.redextent.ability.*;
+import net.redstone233.redextent.core.DatapackValidator;
+import net.redstone233.redextent.core.brewing.RhinoBrewingRecipeParser;
 import net.redstone233.redextent.core.mod.SuperFurnaceRegistration;
 import net.redstone233.redextent.manager.ItemClearManager;
 import net.redstone233.redextent.ponder.SuperBlastFurnaceScene;
@@ -116,6 +119,9 @@ public class RedExtendMod {
         SuperFurnaceRegistration.init();
         LOGGER.info("超级熔炼系统注册初始化完成，耗时{}ms", System.currentTimeMillis() - startTime);
 
+//        RhinoBrewingRecipeParser.registerWithNeoForgeToDataPack();
+//        LOGGER.info("犀牛酿造配方解析器注册初始化完成，耗时{}ms", System.currentTimeMillis() - startTime);
+
         LOGGER.info("模组初始化完成，总耗时{}ms", System.currentTimeMillis() - startTime);
 
     }
@@ -209,6 +215,13 @@ public class RedExtendMod {
 
         // 启动掉落物清理任务（如果启用）
         itemClearManager.startClearTask(event.getServer());
+
+        DatapackValidator.validateAndRegisterAllDatapacks(
+                event.getServer().getPackRepository().getAvailablePacks(),
+                8,
+                event.getServer().registryAccess()
+        );
+        LOGGER.info("REM Mod 数据包验证成功!");
 
         // 输出任务状态信息
         itemClearManager.getTaskInfo().ifPresent(LOGGER::info);
