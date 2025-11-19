@@ -29,6 +29,10 @@ public class Config {
             .comment("启用内置思索(默认开启)")
             .define("isOnPonder", true);
 
+    public static final ModConfigSpec.BooleanValue ON_BREWING_RECIPE = BUILDER
+            .comment("启用酿造配方(默认开启)")
+            .define("onBrewingRecipe", true);
+
     // 服务器物品设置子节
     public static final ModConfigSpec.IntValue CLEAR_TIME = BUILDER
             .comment("清理的时间(单位:游戏刻)\n清理时间的范围在180t ~ 36000t以内\n超过范围或者范围，越界则不执行，默认5分钟。")
@@ -113,6 +117,10 @@ public class Config {
 
     public static boolean isOnPonderEnabled() {
         return IS_ON_PONDER.get();
+    }
+
+    public static boolean isOnBrewingRecipeEnabled() {
+        return ON_BREWING_RECIPE.get();
     }
 
     public static int getClearTime() {

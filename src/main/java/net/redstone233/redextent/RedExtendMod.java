@@ -232,7 +232,9 @@ public class RedExtendMod {
     @SubscribeEvent
     public static void onAddReloadListeners(AddReloadListenerEvent event) {
         // 注册你的重载监听器
-        event.addListener(new BrewingRecipeReloadListener());
+        if (Config.isOnBrewingRecipeEnabled()) {
+            event.addListener(new BrewingRecipeReloadListener());
+        }
     }
 
     // 服务器停止事件
