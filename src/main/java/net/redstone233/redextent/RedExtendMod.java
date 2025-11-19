@@ -7,6 +7,7 @@ import net.redstone233.redextent.ability.*;
 import net.redstone233.redextent.ability.*;
 import net.redstone233.redextent.core.DatapackValidator;
 import net.redstone233.redextent.core.brewing.RhinoBrewingRecipeParser;
+import net.redstone233.redextent.core.event.BrewingRecipeReloadListener;
 import net.redstone233.redextent.core.mod.SuperFurnaceRegistration;
 import net.redstone233.redextent.manager.ItemClearManager;
 import net.redstone233.redextent.ponder.SuperBlastFurnaceScene;
@@ -226,6 +227,12 @@ public class RedExtendMod {
         // 输出任务状态信息
         itemClearManager.getTaskInfo().ifPresent(LOGGER::info);
         LOGGER.info("HELLO from server starting");
+    }
+
+    @SubscribeEvent
+    public static void onAddReloadListeners(AddReloadListenerEvent event) {
+        // 注册你的重载监听器
+        event.addListener(new BrewingRecipeReloadListener());
     }
 
     // 服务器停止事件
