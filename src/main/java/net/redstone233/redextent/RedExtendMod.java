@@ -230,7 +230,7 @@ public class RedExtendMod {
     }
 
     @SubscribeEvent
-    public static void onAddReloadListeners(AddReloadListenerEvent event) {
+    public void onAddReloadListeners(AddReloadListenerEvent event) {
         // 注册你的重载监听器
         if (Config.isOnBrewingRecipeEnabled()) {
             event.addListener(new BrewingRecipeReloadListener());

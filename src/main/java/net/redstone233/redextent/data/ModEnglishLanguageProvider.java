@@ -85,5 +85,6 @@ public class ModEnglishLanguageProvider extends LanguageProvider {
         add("rem.configuration.ServerItemSettings","Server item settings");
         add("rem.configuration.ClearClientSettings","Clear client settings");
         add("rem.configuration.ClientSettings","Client settings");
+        add("rem.configuration.onBrewingRecipe","Enable brewing recipe");
     }
 }

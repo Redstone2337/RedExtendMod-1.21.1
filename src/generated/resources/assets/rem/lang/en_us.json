@@ -34,6 +34,7 @@
   "rem.configuration.isItemFilter": "Item filter mode",
   "rem.configuration.isOnPonder": "Enable built-in pondering",
   "rem.configuration.itemWhitelist": "Item white lists",
+  "rem.configuration.onBrewingRecipe": "Enable brewing recipe",
   "rem.configuration.onGhostPixelmons": "Ghost-type pixelmons",
   "rem.configuration.startAbilityWhitelist": "Custom ability whitelist",
   "rem.furnace.tag.description": "Construction guides for high-efficiency smelting setups",
