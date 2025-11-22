@@ -2,36 +2,55 @@ package net.redstone233.redextent.core.packet;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.codec.StreamDecoder;
+import net.minecraft.network.codec.StreamMemberEncoder;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
+import net.redstone233.redextent.RedExtendMod;
 import net.redstone233.redextent.core.proxy.ClientProxy;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
-import static net.minecraft.advancements.critereon.LocationPredicate.Builder.location;
-import static net.redstone233.redextent.RedExtendMod.MOD_ID;
-
+import static net.redstone233.redextent.core.util.PacketUtil.location;
 
 public record S2CDisabledModListPacket(List<String> modids) implements CustomPacketPayload {
-    public static final Type<S2CDisabledModListPacket> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath(MOD_ID, "disabled_mod_list"));
+
+    /* ----------------  类型  ---------------- */
+    public static final Type<S2CDisabledModListPacket> TYPE =
+            new Type<>(location(RedExtendMod.MOD_ID, "dis_list"));
+
+    /* ----------------  编解码：ofMember 写法  ---------------- */
+    private static final StreamMemberEncoder<FriendlyByteBuf, S2CDisabledModListPacket> ENCODER =
+            (buf, pkt) -> encodeStatic(pkt, buf);   // 静态方法，顺序正确
+
+    private static final StreamDecoder<FriendlyByteBuf, S2CDisabledModListPacket> DECODER =
+            S2CDisabledModListPacket::decodeStatic;
 
     public static final StreamCodec<FriendlyByteBuf, S2CDisabledModListPacket> STREAM_CODEC =
-            StreamCodec.ofMember(S2CDisabledModListPacket::encode, S2CDisabledModListPacket::decode);
+            StreamCodec.ofMember(ENCODER, DECODER);
 
-    private static void encode(FriendlyByteBuf buf, S2CDisabledModListPacket pkt) {
-        buf.writeCollection(pkt.modids, FriendlyByteBuf::writeUtf);
-    }
-    private static S2CDisabledModListPacket decode(FriendlyByteBuf buf) {
-        return new S2CDisabledModListPacket(buf.readList(FriendlyByteBuf::readUtf));
+    /* ----------------  序列化实现  ---------------- */
+    private static void encodeStatic(FriendlyByteBuf buf, S2CDisabledModListPacket pkt) {
+        buf.writeVarInt(pkt.modids.size());
+        for (String s : pkt.modids) buf.writeUtf(s);
     }
 
+    private static S2CDisabledModListPacket decodeStatic(FriendlyByteBuf buf) {
+        int size = buf.readVarInt();
+        List<String> list = new ArrayList<>(size);
+        for (int i = 0; i < size; i++) list.add(buf.readUtf());
+        return new S2CDisabledModListPacket(list);
+    }
+
+    /* ----------------  客户端处理  ---------------- */
     public void handle(IPayloadContext ctx) {
         ctx.enqueueWork(() -> ClientProxy.instance().onReceiveDisabledList(modids));
     }
 
     @Override
-    public @NotNull Type<? extends CustomPacketPayload> type() { return TYPE; }
+    public @NotNull Type<? extends CustomPacketPayload> type() {
+        return TYPE;
+    }
 }
