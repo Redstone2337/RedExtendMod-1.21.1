@@ -1,6 +1,7 @@
 package net.redstone233.redextent.core.packet;
 
 import net.minecraft.server.level.ServerPlayer;
+import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 
@@ -22,5 +23,6 @@ public class PacketHandler {
     /* 给外面调用的工具 */
     public static void sendToPlayer(ServerPlayer player, S2CDisabledModListPacket pkt) {
 //        REG.sendToPlayer(player, pkt);
+        PacketDistributor.sendToPlayer(player, pkt);
     }
 }
