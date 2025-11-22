@@ -1,14 +1,20 @@
 package net.redstone233.redextent;
 
 import com.pixelmonmod.pixelmon.api.pokemon.ability.AbilityRegistry;
+import net.minecraft.server.level.ServerPlayer;
+import net.neoforged.fml.event.config.ModConfigEvent;
 import net.neoforged.neoforge.event.AddReloadListenerEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.server.ServerStoppingEvent;
+import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
+import net.neoforged.neoforge.server.ServerLifecycleHooks;
 import net.redstone233.redextent.ability.*;
 import net.redstone233.redextent.ability.*;
 import net.redstone233.redextent.core.DatapackValidator;
-import net.redstone233.redextent.core.brewing.RhinoBrewingRecipeParser;
 import net.redstone233.redextent.core.event.BrewingRecipeReloadListener;
 import net.redstone233.redextent.core.mod.SuperFurnaceRegistration;
+import net.redstone233.redextent.core.packet.PacketHandler;
+import net.redstone233.redextent.core.packet.S2CDisabledModListPacket;
 import net.redstone233.redextent.manager.ItemClearManager;
 import net.redstone233.redextent.ponder.SuperBlastFurnaceScene;
 import net.redstone233.redextent.ponder.SuperFurnaceScene;
@@ -62,6 +68,7 @@ public class RedExtendMod {
         // Register the commonSetup method for modloading
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(this::pixelmonAbilitySetup);
+        modEventBus.addListener(this::onRegisterPayload);
 
         // Register ourselves for server and other game events we are interested in.
         // Note that this is necessary if and only if we want *this* class (RedExtendMod) to respond directly to events.
@@ -208,6 +215,10 @@ public class RedExtendMod {
     private void addCreative(BuildCreativeModeTabContentsEvent event) {
     }
 
+    private void onRegisterPayload(RegisterPayloadHandlersEvent evt) {
+        PacketHandler.init(evt);   // 就是前面写的单文件注册器
+    }
+
     // You can use SubscribeEvent and let the Event Bus discover methods to call
     @SubscribeEvent
     public void onServerStarting(ServerStartingEvent event) {
@@ -236,6 +247,37 @@ public class RedExtendMod {
             event.addListener(new BrewingRecipeReloadListener());
         }
     }
+
+    /* 已经在 RemMain 里，接着写 */
+    @SubscribeEvent
+    public void onConfigReload(ModConfigEvent.Reloading e) {
+        if (e.getConfig().getSpec() == Config.SPEC) {
+            /* 防误触发 + 改名逻辑前面已给，这里只放“发送” */
+            //                    syncDisabledMods();          // 你的改名+重启逻辑
+            // 见下一步
+            if (ServerLifecycleHooks.getCurrentServer() != null)
+                ServerLifecycleHooks.getCurrentServer().execute(this::broadcastDisabledList);
+        }
+    }
+
+    @SubscribeEvent
+    public void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent e) {
+        if (e.getEntity() instanceof ServerPlayer sp) {
+            List<String> list = Config.getDisabledModList();
+            PacketHandler.sendToPlayer(sp, new S2CDisabledModListPacket(list));
+        }
+    }
+
+    private void broadcastDisabledList() {
+        List<String> list = Config.getDisabledModList();
+        S2CDisabledModListPacket pkt = new S2CDisabledModListPacket(list);
+        /* 发给全体在线玩家 */
+        if (ServerLifecycleHooks.getCurrentServer() != null) {
+            ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayers()
+                    .forEach(p -> PacketHandler.sendToPlayer(p, pkt));
+        }
+    }
+
 
     // 服务器停止事件
     @SubscribeEvent

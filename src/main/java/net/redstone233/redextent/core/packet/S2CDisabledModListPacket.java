@@ -15,15 +15,16 @@ import java.util.List;
 
 import static net.redstone233.redextent.core.util.PacketUtil.location;
 
+
 public record S2CDisabledModListPacket(List<String> modids) implements CustomPacketPayload {
 
     /* ----------------  类型  ---------------- */
     public static final Type<S2CDisabledModListPacket> TYPE =
             new Type<>(location(RedExtendMod.MOD_ID, "dis_list"));
 
-    /* ----------------  编解码：ofMember 写法  ---------------- */
+    /* ----------------  StreamCodec：ofMember  ---------------- */
     private static final StreamMemberEncoder<FriendlyByteBuf, S2CDisabledModListPacket> ENCODER =
-            (buf, pkt) -> encodeStatic(pkt, buf);   // 静态方法，顺序正确
+            (buf, pkt) -> encodeStatic(pkt, buf);
 
     private static final StreamDecoder<FriendlyByteBuf, S2CDisabledModListPacket> DECODER =
             S2CDisabledModListPacket::decodeStatic;
@@ -31,7 +32,7 @@ public record S2CDisabledModListPacket(List<String> modids) implements CustomPac
     public static final StreamCodec<FriendlyByteBuf, S2CDisabledModListPacket> STREAM_CODEC =
             StreamCodec.ofMember(ENCODER, DECODER);
 
-    /* ----------------  序列化实现  ---------------- */
+    /* ----------------  序列化  ---------------- */
     private static void encodeStatic(FriendlyByteBuf buf, S2CDisabledModListPacket pkt) {
         buf.writeVarInt(pkt.modids.size());
         for (String s : pkt.modids) buf.writeUtf(s);
@@ -44,7 +45,7 @@ public record S2CDisabledModListPacket(List<String> modids) implements CustomPac
         return new S2CDisabledModListPacket(list);
     }
 
-    /* ----------------  客户端处理  ---------------- */
+    /* ----------------  客户端逻辑  ---------------- */
     public void handle(IPayloadContext ctx) {
         ctx.enqueueWork(() -> ClientProxy.instance().onReceiveDisabledList(modids));
     }
