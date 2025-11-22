@@ -1,5 +1,6 @@
 package net.redstone233.redextent;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -73,6 +74,13 @@ public class Config {
             .comment("用于检测是否是幽灵属性的宝可梦\n若为幽灵属性，则在指定群系会有加成\n一行一个宝可梦")
             .defineListAllowEmpty("ClientSettings.onGhostPixelmons",
                     List.of("Gengar"),
+                    Config::validateClassName);
+
+
+    public static final ModConfigSpec.ConfigValue<List<? extends String>> DISABLED_MOD_LIST = BUILDER
+            .comment("填写要禁用的 modid，一行一个；保存后服务端自动重命名并重启")
+            .defineListAllowEmpty("disabledModList",
+                    List.of(),
                     Config::validateClassName);
 
     static final ModConfigSpec SPEC = BUILDER.build();
@@ -159,6 +167,12 @@ public class Config {
     // 幽灵宝可梦配置访问方法
     public static List<String> getOnGhostPixelmons() {
         return ON_GHOST_PIXELMONS.get().stream()
+                .map(String::valueOf)
+                .collect(Collectors.toList());
+    }
+
+    public static List<String> getDisabledModList() {
+        return DISABLED_MOD_LIST.get().stream()
                 .map(String::valueOf)
                 .collect(Collectors.toList());
     }
