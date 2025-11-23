@@ -7,7 +7,7 @@ import net.minecraft.network.codec.StreamMemberEncoder;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import net.redstone233.redextent.RedExtendMod;
-import net.redstone233.redextent.core.proxy.ClientProxy;
+import net.redstone233.redextent.core.proxy.RedClientProxy;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -47,7 +47,7 @@ public record S2CDisabledModListPacket(List<String> modids) implements CustomPac
 
     /* ----------------  客户端逻辑  ---------------- */
     public void handle(IPayloadContext ctx) {
-        ctx.enqueueWork(() -> ClientProxy.instance().onReceiveDisabledList(modids));
+        ctx.enqueueWork(() -> RedClientProxy.instance().onReceiveDisabledList(modids));
     }
 
     @Override

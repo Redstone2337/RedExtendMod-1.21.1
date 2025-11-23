@@ -4,11 +4,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class ClientProxy extends CommonProxy {
+public class RedClientProxy extends CommonProxy {
 
     /* ================ 单例 ================ */
-    private static final ClientProxy INSTANCE = new ClientProxy();
-    public static ClientProxy instance() { return INSTANCE; }
+    private static final RedClientProxy INSTANCE = new RedClientProxy();
+    public static RedClientProxy instance() { return INSTANCE; }
 
     /* ================ 内部快照 ================ */
     private final Set<String> clientDisabled = new HashSet<>();

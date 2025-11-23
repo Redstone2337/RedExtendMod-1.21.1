@@ -3,6 +3,7 @@ package net.redstone233.redextent.data;
 import net.minecraft.data.PackOutput;
 import net.neoforged.neoforge.common.data.LanguageProvider;
 import net.redstone233.redextent.RedExtendMod;
+import net.redstone233.redextent.item.ModItems;
 
 public class ModEnglishLanguageProvider extends LanguageProvider {
     public ModEnglishLanguageProvider(PackOutput output) {
@@ -86,5 +87,8 @@ public class ModEnglishLanguageProvider extends LanguageProvider {
         add("rem.configuration.ClearClientSettings","Clear client settings");
         add("rem.configuration.ClientSettings","Client settings");
         add("rem.configuration.onBrewingRecipe","Enable brewing recipe");
+
+        add(ModItems.DISCORD_ITEM.get(), "Discord");
+        add(ModItems.GITHUB_ITEM.get(), "GitHub");
     }
 }

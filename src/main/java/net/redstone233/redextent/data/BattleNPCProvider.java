@@ -77,7 +77,7 @@ public class BattleNPCProvider extends PixelmonNPCProvider {
                 blueDragonTeam,                // 神兽队伍配置
                 10000.0,                       // 奖励金钱
                 List.of(                       // 奖励物品
-                        createItemReward("pixelmon:master_ball", 2),
+                        createMasterBallReward(2),
                         createItemReward("pixelmon:rare_candy", 10)
                 ),
                 3,                             // 冷却天数

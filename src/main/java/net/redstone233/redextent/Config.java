@@ -9,6 +9,9 @@ import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.event.config.ModConfigEvent;
 import net.neoforged.neoforge.common.ModConfigSpec;
+import net.neoforged.neoforge.server.ServerLifecycleHooks;
+import net.redstone233.redextent.core.packet.PacketHandler;
+import net.redstone233.redextent.core.packet.S2CDisabledModListPacket;
 
 public class Config {
     private static final ModConfigSpec.Builder BUILDER = new ModConfigSpec.Builder();
@@ -78,7 +81,7 @@ public class Config {
 
 
     public static final ModConfigSpec.ConfigValue<List<? extends String>> DISABLED_MOD_LIST = BUILDER
-            .comment("填写要禁用的 modid，一行一个；保存后服务端自动重命名并重启")
+            .comment("填写要禁用的 modid，一行一个\n保存后服务端自动重命名并重启(目前不稳定)")
             .defineListAllowEmpty("disabledModList",
                     List.of(),
                     Config::validateClassName);

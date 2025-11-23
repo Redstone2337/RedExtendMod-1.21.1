@@ -25,5 +25,6 @@ public class ModDataGenerator {
         generator.addProvider(event.includeClient(), new BattleNPCProvider(packOutput));
         generator.addProvider(event.includeClient(), new ShopNPCProvider(packOutput));
         generator.addProvider(event.includeClient(), new TipsNPCProvider(packOutput));
+        generator.addProvider(event.includeClient(), new ModItemModelsProvider(packOutput, existingFileHelper));
     }
 }

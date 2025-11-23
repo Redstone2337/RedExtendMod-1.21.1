@@ -53,8 +53,11 @@
                 "type": "pixelmon:give_item",
                 "items": [
                   {
-                    "id": "pixelmon:master_ball",
-                    "count": 2
+                    "id": "pixelmon:poke_ball",
+                    "count": 2,
+                    "components": {
+                      "pixelmon:poke_ball": "master_ball"
+                    }
                   },
                   {
                     "id": "pixelmon:rare_candy",

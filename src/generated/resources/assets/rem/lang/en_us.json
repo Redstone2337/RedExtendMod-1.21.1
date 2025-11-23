@@ -9,6 +9,8 @@
   "ability.FastStartReforged.description": "For the first 3 rounds after the Pokémon enters the field, its attack and speed increase by 50%, and the effect ends after 3 rounds.",
   "ability.FightingDivinity": "Fighting Divinity",
   "ability.FightingDivinity.description": "Greatly boosts the power of Fighting-type moves. If the Pokémon is Fighting-type, its Special Attack and Attack damage are increased by 10% when it enters the field.",
+  "item.rem.discord_item": "Discord",
+  "item.rem.github_item": "GitHub",
   "pixelmon.abilities.biome_blessing_swamp.activate": "%s's Biome Blessing: Swamp activated! Special Attack and Attack increased by 5%, Speed by 15%.",
   "pixelmon.abilities.biome_blessing_swamp.ghost_boost": "%s's Biome Blessing: Swamp activated! As a blessed Ghost-type, its Special Attack and Attack increased by 10%, Speed by 15%, and then total Attack and Special Attack increased by 30%.",
   "pixelmon.abilities.dragon_rise.activate": "%s's Dragon Rise activated!",

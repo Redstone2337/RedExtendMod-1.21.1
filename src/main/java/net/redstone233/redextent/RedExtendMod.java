@@ -2,12 +2,10 @@ package net.redstone233.redextent;
 
 import com.pixelmonmod.pixelmon.api.pokemon.ability.AbilityRegistry;
 import net.minecraft.server.level.ServerPlayer;
-import net.neoforged.fml.event.config.ModConfigEvent;
 import net.neoforged.neoforge.event.AddReloadListenerEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.server.ServerStoppingEvent;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
-import net.neoforged.neoforge.server.ServerLifecycleHooks;
 import net.redstone233.redextent.ability.*;
 import net.redstone233.redextent.ability.*;
 import net.redstone233.redextent.core.DatapackValidator;
@@ -16,7 +14,10 @@ import net.redstone233.redextent.core.event.BrewingRecipeReloadListener;
 import net.redstone233.redextent.core.mod.SuperFurnaceRegistration;
 import net.redstone233.redextent.core.packet.PacketHandler;
 import net.redstone233.redextent.core.packet.S2CDisabledModListPacket;
+import net.redstone233.redextent.core.proxy.ServerProxy;
+import net.redstone233.redextent.item.ModItems;
 import net.redstone233.redextent.manager.ItemClearManager;
+import net.redstone233.redextent.manager.ModJarManager;
 import net.redstone233.redextent.ponder.SuperBlastFurnaceScene;
 import net.redstone233.redextent.ponder.SuperFurnaceScene;
 import net.redstone233.redextent.ponder.SuperSmokerScene;
@@ -47,8 +48,11 @@ public class RedExtendMod {
     // Directly reference a slf4j logger
     public static final Logger LOGGER = LogUtils.getLogger();
 
+    private static String MOD_VERSION;
+
     // 掉落物清理管理器
     private final ItemClearManager itemClearManager;
+    private final ServerProxy serverProxy = new ServerProxy();
 
     // 已知的特性类映射
     private static final Set<String> KNOWN_ABILITIES = new HashSet<>();
@@ -75,11 +79,12 @@ public class RedExtendMod {
         // Note that this is necessary if and only if we want *this* class (RedExtendMod) to respond directly to events.
         // Do not add this line if there are no @SubscribeEvent-annotated functions in this class, like onServerStarting() below.
         NeoForge.EVENT_BUS.register(this);
+        ModItems.register(modEventBus);
 
         // Register the item to a creative tab
         modEventBus.addListener(this::addCreative);
 
-        // Register the Pixelmon Ability
+        setModVersion(modContainer.getModInfo().getVersion().toString());
 
         // Register our mod's ModConfigSpec so that FML can create and load the config file for us
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC, "rem-common.toml");
@@ -131,9 +136,20 @@ public class RedExtendMod {
         RhinoBrewingRecipeParser.registerWithNeoForgeToDataPack();
         LOGGER.info("犀牛酿造配方解析器注册初始化完成，耗时{}ms", System.currentTimeMillis() - startTime);
 
+        serverProxy.syncToAll();
+        LOGGER.info("已同步禁用模组列表信息到所有在线玩家，耗时：{}ms", System.currentTimeMillis() - startTime);
+
         LOGGER.info("模组初始化完成，总耗时{}ms", System.currentTimeMillis() - startTime);
 
+        // 3. 在游戏加载的合适时机处理模组禁用
+        event.enqueueWork(() -> {
+            // 从配置中获取需要禁用的模组列表
+            List<String> modIdsToDisable = Config.getDisabledModList();
+            LOGGER.info("配置中已禁用的模组：{}", modIdsToDisable);
+            handleFileBasedModControl(modIdsToDisable, true);
+        });
     }
+
 
     private void pixelmonAbilitySetup(FMLCommonSetupEvent event) {
         // Some Pixelmon Ability setup code
@@ -212,6 +228,24 @@ public class RedExtendMod {
         }
     }
 
+    /**
+     * 文件模式：通过重命名文件禁用模组
+     */
+    private void handleFileBasedModControl(List<String> modIdsToDisable, boolean enableLogging) {
+        if (modIdsToDisable.isEmpty()) {
+            if (enableLogging) {
+                LOGGER.info("没有需要禁用的模组");
+            }
+            return;
+        }
+
+        int successCount = ModJarManager.batchDisableMods(modIdsToDisable, enableLogging);
+
+        if (enableLogging) {
+            LOGGER.info("文件模式操作完成: {}/{} 个模组成功处理", successCount, modIdsToDisable.size());
+        }
+    }
+
     // Add the example block item to the building blocks tab
     private void addCreative(BuildCreativeModeTabContentsEvent event) {
     }
@@ -249,33 +283,11 @@ public class RedExtendMod {
         }
     }
 
-    /* 已经在 RemMain 里，接着写 */
-    @SubscribeEvent
-    public void onConfigReload(ModConfigEvent.Reloading e) {
-        if (e.getConfig().getSpec() == Config.SPEC) {
-            /* 防误触发 + 改名逻辑前面已给，这里只放“发送” */
-            //                    syncDisabledMods();          // 你的改名+重启逻辑
-            // 见下一步
-            if (ServerLifecycleHooks.getCurrentServer() != null)
-                ServerLifecycleHooks.getCurrentServer().execute(this::broadcastDisabledList);
-        }
-    }
-
     @SubscribeEvent
     public void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent e) {
         if (e.getEntity() instanceof ServerPlayer sp) {
             List<String> list = Config.getDisabledModList();
             PacketHandler.sendToPlayer(sp, new S2CDisabledModListPacket(list));
-        }
-    }
-
-    private void broadcastDisabledList() {
-        List<String> list = Config.getDisabledModList();
-        S2CDisabledModListPacket pkt = new S2CDisabledModListPacket(list);
-        /* 发给全体在线玩家 */
-        if (ServerLifecycleHooks.getCurrentServer() != null) {
-            ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayers()
-                    .forEach(p -> PacketHandler.sendToPlayer(p, pkt));
         }
     }
 
@@ -286,6 +298,14 @@ public class RedExtendMod {
         // 停止清理任务
         itemClearManager.stopClearTask();
         LOGGER.info("REM Mod 服务器停止处理完成");
+    }
+
+    public static String getModVersion() {
+        return MOD_VERSION;
+    }
+
+    public static void setModVersion(String modVersion) {
+        MOD_VERSION = modVersion;
     }
 
     /**
