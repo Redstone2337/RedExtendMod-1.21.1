@@ -1,15 +1,14 @@
 package net.redstone233.redextent.core.gui;
 
-import net.minecraft.client.gui.screens.Screen;
-import net.redstone233.redextent.Config;
-import net.redstone233.redextent.core.util.ConfigUtil;
 import net.createmod.catnip.gui.AbstractSimiScreen;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.StringWidget;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
+import net.redstone233.redextent.core.util.ConfigUtil;
 
 import java.util.Arrays;
 import java.util.List;
@@ -34,64 +33,65 @@ public class RemDetailedConfigScreen extends AbstractSimiScreen {
         super.init();
 
         int yPos = guiTop + 20;
+        int fieldWidth = 140;
 
         // 清理时间设置
-        addRenderableWidget(new StringWidget(guiLeft + 10, yPos, 100, 20,
-                Component.literal("清理时间 (ticks):"), font));
+        addRenderableWidget(new StringWidget(guiLeft + 10, yPos, 80, 20,
+                Component.literal("清理时间:"), font));
 
-        clearTimeField = new EditBox(font, guiLeft + 120, yPos, 60, 20, Component.literal(""));
-        clearTimeField.setValue(String.valueOf(Config.getClearTime()));
+        clearTimeField = new EditBox(font, guiLeft + 100, yPos, fieldWidth, 20, Component.literal(""));
+        clearTimeField.setValue(String.valueOf(net.redstone233.redextent.Config.getClearTime()));
         clearTimeField.setFilter(s -> s.matches("\\d*"));
         addRenderableWidget(clearTimeField);
 
-        yPos += 25;
+        yPos += 30;
 
         // 显示文本头设置
-        addRenderableWidget(new StringWidget(guiLeft + 10, yPos, 100, 20,
+        addRenderableWidget(new StringWidget(guiLeft + 10, yPos, 80, 20,
                 Component.literal("显示文本头:"), font));
 
-        displayTextHeadField = new EditBox(font, guiLeft + 120, yPos, 140, 20, Component.literal(""));
-        displayTextHeadField.setValue(Config.getDisplayTextHead());
+        displayTextHeadField = new EditBox(font, guiLeft + 100, yPos, fieldWidth, 20, Component.literal(""));
+        displayTextHeadField.setValue(net.redstone233.redextent.Config.getDisplayTextHead());
         addRenderableWidget(displayTextHeadField);
 
-        yPos += 25;
+        yPos += 30;
 
         // 显示文本体设置
-        addRenderableWidget(new StringWidget(guiLeft + 10, yPos, 100, 20,
+        addRenderableWidget(new StringWidget(guiLeft + 10, yPos, 80, 20,
                 Component.literal("显示文本体:"), font));
 
-        displayTextBodyField = new EditBox(font, guiLeft + 120, yPos, 140, 20, Component.literal(""));
-        displayTextBodyField.setValue(Config.getDisplayTextBody());
+        displayTextBodyField = new EditBox(font, guiLeft + 100, yPos, fieldWidth, 20, Component.literal(""));
+        displayTextBodyField.setValue(net.redstone233.redextent.Config.getDisplayTextBody());
         addRenderableWidget(displayTextBodyField);
 
-        yPos += 25;
+        yPos += 30;
 
         // 物品白名单设置
-        addRenderableWidget(new StringWidget(guiLeft + 10, yPos, 100, 20,
+        addRenderableWidget(new StringWidget(guiLeft + 10, yPos, 80, 20,
                 Component.literal("物品白名单:"), font));
 
-        itemWhitelistField = new EditBox(font, guiLeft + 120, yPos, 140, 20, Component.literal(""));
-        itemWhitelistField.setValue(String.join(", ", Config.getItemWhitelist()));
+        itemWhitelistField = new EditBox(font, guiLeft + 100, yPos, fieldWidth, 20, Component.literal(""));
+        itemWhitelistField.setValue(String.join(", ", net.redstone233.redextent.Config.getItemWhitelist()));
         addRenderableWidget(itemWhitelistField);
 
-        yPos += 25;
+        yPos += 30;
 
         // 自定义特性白名单设置
-        addRenderableWidget(new StringWidget(guiLeft + 10, yPos, 100, 20,
+        addRenderableWidget(new StringWidget(guiLeft + 10, yPos, 80, 20,
                 Component.literal("特性白名单:"), font));
 
-        customAbilityWhitelistField = new EditBox(font, guiLeft + 120, yPos, 140, 20, Component.literal(""));
-        customAbilityWhitelistField.setValue(String.join(", ", Config.getCustomAbilityWhitelist()));
+        customAbilityWhitelistField = new EditBox(font, guiLeft + 100, yPos, fieldWidth, 20, Component.literal(""));
+        customAbilityWhitelistField.setValue(String.join(", ", net.redstone233.redextent.Config.getCustomAbilityWhitelist()));
         addRenderableWidget(customAbilityWhitelistField);
 
-        yPos += 25;
+        yPos += 30;
 
         // 幽灵宝可梦设置
-        addRenderableWidget(new StringWidget(guiLeft + 10, yPos, 100, 20,
+        addRenderableWidget(new StringWidget(guiLeft + 10, yPos, 80, 20,
                 Component.literal("幽灵宝可梦:"), font));
 
-        ghostPixelmonsField = new EditBox(font, guiLeft + 120, yPos, 140, 20, Component.literal(""));
-        ghostPixelmonsField.setValue(String.join(", ", Config.getOnGhostPixelmons()));
+        ghostPixelmonsField = new EditBox(font, guiLeft + 100, yPos, fieldWidth, 20, Component.literal(""));
+        ghostPixelmonsField.setValue(String.join(", ", net.redstone233.redextent.Config.getOnGhostPixelmons()));
         addRenderableWidget(ghostPixelmonsField);
 
         yPos += 40;
@@ -104,7 +104,7 @@ public class RemDetailedConfigScreen extends AbstractSimiScreen {
 
         addRenderableWidget(Button.builder(CommonComponents.GUI_CANCEL, button -> {
             onClose();
-        }).bounds(guiLeft + 150, yPos, 80, 20).build());
+        }).bounds(guiLeft + 170, yPos, 80, 20).build());
     }
 
     @Override
@@ -135,7 +135,7 @@ public class RemDetailedConfigScreen extends AbstractSimiScreen {
             ConfigUtil.setOnGhostPokemons(parseList(ghostPixelmonsField.getValue()));
 
         } catch (NumberFormatException e) {
-            // 处理数字格式错误
+            // 忽略格式错误
         }
     }
 

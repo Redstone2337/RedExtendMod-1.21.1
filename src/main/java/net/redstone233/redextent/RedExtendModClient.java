@@ -11,10 +11,12 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.gui.ConfigurationScreen;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
+import net.redstone233.redextent.core.gui.RemMainMenuScreen;
 import net.redstone233.redextent.core.mod.RedExtendModPonderPlugin;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Supplier;
 
 // This class will not load on dedicated servers. Accessing client side code from here is safe.
 @Mod(value = RedExtendMod.MOD_ID, dist = Dist.CLIENT)
@@ -25,7 +27,14 @@ public class RedExtendModClient {
         // Allows NeoForge to create a config screen for this mod's configs.
         // The config screen is accessed by going to the Mods screen > clicking on your mod > clicking on config.
         // Do not forget to add translations for your config options to the en_us.json file.
-        container.registerExtensionPoint(IConfigScreenFactory.class, ConfigurationScreen::new);
+//        container.registerExtensionPoint(IConfigScreenFactory.class, ConfigurationScreen::new);
+
+        container.registerExtensionPoint(IConfigScreenFactory.class,
+                (Supplier<IConfigScreenFactory>) () -> (minecraft, parent) -> new RemMainMenuScreen(parent)
+        );
+
+
+
     }
 
     @SubscribeEvent

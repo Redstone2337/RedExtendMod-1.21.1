@@ -1,6 +1,7 @@
 package net.redstone233.redextent;
 
 import com.pixelmonmod.pixelmon.api.pokemon.ability.AbilityRegistry;
+import net.createmod.catnip.config.ui.BaseConfigScreen;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.neoforge.event.AddReloadListenerEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
@@ -140,6 +141,15 @@ public class RedExtendMod {
         LOGGER.info("已同步禁用模组列表信息到所有在线玩家，耗时：{}ms", System.currentTimeMillis() - startTime);
 
         LOGGER.info("模组初始化完成，总耗时{}ms", System.currentTimeMillis() - startTime);
+
+        // 为 BaseConfigScreen 设置自定义显示
+        BaseConfigScreen.setDefaultActionFor(MOD_ID, screen ->
+                screen.withButtonLabels(
+                        "客户端配置",
+                        "通用配置",
+                        "服务器配置"
+                )
+        );
 
         // 3. 在游戏加载的合适时机处理模组禁用
         event.enqueueWork(() -> {
