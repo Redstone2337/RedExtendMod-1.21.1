@@ -1,5 +1,6 @@
 package net.redstone233.redextent;
 
+import net.createmod.catnip.config.ui.BaseConfigScreen;
 import net.createmod.ponder.foundation.PonderIndex;
 import net.minecraft.client.Minecraft;
 import net.neoforged.api.distmarker.Dist;
@@ -27,11 +28,11 @@ public class RedExtendModClient {
         // Allows NeoForge to create a config screen for this mod's configs.
         // The config screen is accessed by going to the Mods screen > clicking on your mod > clicking on config.
         // Do not forget to add translations for your config options to the en_us.json file.
-//        container.registerExtensionPoint(IConfigScreenFactory.class, ConfigurationScreen::new);
+        container.registerExtensionPoint(IConfigScreenFactory.class, ConfigurationScreen::new);
 
-        container.registerExtensionPoint(IConfigScreenFactory.class,
-                (Supplier<IConfigScreenFactory>) () -> (minecraft, parent) -> new RemMainMenuScreen(parent)
-        );
+//        container.registerExtensionPoint(IConfigScreenFactory.class,
+//                (Supplier<IConfigScreenFactory>) () -> (minecraft, parent) -> new BaseConfigScreen(parent,RedExtendMod.getModVersion())
+//        );
 
 
 
