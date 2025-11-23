@@ -11,6 +11,7 @@ import net.neoforged.neoforge.server.ServerLifecycleHooks;
 import net.redstone233.redextent.ability.*;
 import net.redstone233.redextent.ability.*;
 import net.redstone233.redextent.core.DatapackValidator;
+import net.redstone233.redextent.core.brewing.RhinoBrewingRecipeParser;
 import net.redstone233.redextent.core.event.BrewingRecipeReloadListener;
 import net.redstone233.redextent.core.mod.SuperFurnaceRegistration;
 import net.redstone233.redextent.core.packet.PacketHandler;
@@ -127,8 +128,8 @@ public class RedExtendMod {
         SuperFurnaceRegistration.init();
         LOGGER.info("超级熔炼系统注册初始化完成，耗时{}ms", System.currentTimeMillis() - startTime);
 
-//        RhinoBrewingRecipeParser.registerWithNeoForgeToDataPack();
-//        LOGGER.info("犀牛酿造配方解析器注册初始化完成，耗时{}ms", System.currentTimeMillis() - startTime);
+        RhinoBrewingRecipeParser.registerWithNeoForgeToDataPack();
+        LOGGER.info("犀牛酿造配方解析器注册初始化完成，耗时{}ms", System.currentTimeMillis() - startTime);
 
         LOGGER.info("模组初始化完成，总耗时{}ms", System.currentTimeMillis() - startTime);
 
