@@ -1,14 +1,13 @@
 package net.redstone233.redextent.core.gui.entries;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import net.createmod.catnip.config.ui.entries.ValueEntry;
-import net.createmod.catnip.config.ui.ConfigScreenList;
 import net.minecraft.client.gui.GuiGraphics;
 import net.neoforged.neoforge.common.ModConfigSpec;
 import net.redstone233.redextent.core.gui.widget.ListStringInput;
 import net.minecraft.network.chat.Component;
+import org.jetbrains.annotations.NotNull;
 
 public class ListStringEntry extends ValueEntry<List<String>> {
 
@@ -28,7 +27,7 @@ public class ListStringEntry extends ValueEntry<List<String>> {
     }
 
     @Override
-    public void render(GuiGraphics graphics, int index, int y, int x, int width, int height, int mouseX, int mouseY, boolean p_230432_9_, float partialTicks) {
+    public void render(@NotNull GuiGraphics graphics, int index, int y, int x, int width, int height, int mouseX, int mouseY, boolean p_230432_9_, float partialTicks) {
         super.render(graphics, index, y, x, width, height, mouseX, mouseY, p_230432_9_, partialTicks);
 
         // 设置列表输入框的位置和大小
@@ -56,6 +55,6 @@ public class ListStringEntry extends ValueEntry<List<String>> {
     @Override
     public void tick() {
         super.tick();
-        // 如果需要，可以在这里添加每帧更新逻辑
+        listInput.tick();
     }
 }

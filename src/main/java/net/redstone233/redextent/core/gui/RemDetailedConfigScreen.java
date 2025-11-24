@@ -8,12 +8,10 @@ import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.redstone233.redextent.Config;
 import net.redstone233.redextent.core.util.ConfigUtil;
-import net.redstone233.redextent.manager.ListConfigManager;
+import net.redstone233.redextent.core.gui.widget.ListStringInput;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class RemDetailedConfigScreen extends AbstractSimiScreen {
     private final Screen parent;
@@ -27,7 +25,7 @@ public class RemDetailedConfigScreen extends AbstractSimiScreen {
 
     // 服务器物品设置
     private EditBox clearTimeEditBox;
-    private EditBox itemWhitelistEditBox;
+    private ListStringInput itemWhitelistInput;
 
     // 清理客户端设置
     private EditBox displayTextHeadEditBox;
@@ -36,11 +34,11 @@ public class RemDetailedConfigScreen extends AbstractSimiScreen {
     // 客户端设置
     private AbstractWidget customAbilityCheckbox;
     private AbstractWidget startAbilityWhitelistCheckbox;
-    private EditBox customAbilityWhitelistEditBox;
-    private EditBox onGhostPixelmonsEditBox;
+    private ListStringInput customAbilityWhitelistInput;
+    private ListStringInput onGhostPixelmonsInput;
 
     // 禁用模组列表
-    private EditBox disabledModListEditBox;
+    private ListStringInput disabledModListInput;
 
     public RemDetailedConfigScreen(Screen parent) {
         super(Component.literal("REM 详细配置"));
@@ -116,15 +114,15 @@ public class RemDetailedConfigScreen extends AbstractSimiScreen {
         addRenderableWidget(clearTimeEditBox);
         yPos += 30;
 
-        // 物品白名单 - 使用配置管理器获取字符串值
+        // 物品白名单 - 使用 ListStringInput
         addRenderableWidget(new StringWidget(guiLeft + 10, yPos, 80, 20,
                 Component.literal("物品白名单:"), font));
-        itemWhitelistEditBox = new EditBox(font, guiLeft + 100, yPos, 250, 20,
-                Component.literal(""));
-        // 使用配置管理器获取字符串值
-        itemWhitelistEditBox.setValue(ListConfigManager.getStringValue("item_whitelist"));
-        itemWhitelistEditBox.setTooltip(Tooltip.create(Component.literal("不会被清理的物品列表\n格式：物品ID1, 物品ID2, ...\n示例：minecraft:diamond, minecraft:emerald")));
-        addRenderableWidget(itemWhitelistEditBox);
+        itemWhitelistInput = new ListStringInput(guiLeft + 100, yPos, 250, 20)
+                .withValues(Config.getItemWhitelist())
+                .titled(Component.literal("物品白名单"))
+                .withHint(Component.literal("不会被清理的物品列表"))
+                .calling(this::onItemWhitelistChanged);
+        addRenderableWidget(itemWhitelistInput);
         yPos += 30;
 
         // 清理客户端设置
@@ -173,37 +171,37 @@ public class RemDetailedConfigScreen extends AbstractSimiScreen {
         addRenderableWidget(startAbilityWhitelistCheckbox);
         yPos += 30;
 
-        // 自定义特性白名单 - 使用配置管理器获取字符串值
+        // 自定义特性白名单 - 使用 ListStringInput
         addRenderableWidget(new StringWidget(guiLeft + 10, yPos, 80, 20,
                 Component.literal("特性白名单:"), font));
-        customAbilityWhitelistEditBox = new EditBox(font, guiLeft + 100, yPos, 250, 20,
-                Component.literal(""));
-        // 使用配置管理器获取字符串值
-        customAbilityWhitelistEditBox.setValue(ListConfigManager.getStringValue("custom_ability_whitelist"));
-        customAbilityWhitelistEditBox.setTooltip(Tooltip.create(Component.literal("允许的自定义特性列表\n格式：特性1, 特性2, ...\n示例：FastStart, SuperJump")));
-        addRenderableWidget(customAbilityWhitelistEditBox);
+        customAbilityWhitelistInput = new ListStringInput(guiLeft + 100, yPos, 250, 20)
+                .withValues(Config.getCustomAbilityWhitelist())
+                .titled(Component.literal("自定义特性白名单"))
+                .withHint(Component.literal("允许的自定义特性列表"))
+                .calling(this::onCustomAbilityWhitelistChanged);
+        addRenderableWidget(customAbilityWhitelistInput);
         yPos += 30;
 
-        // 幽灵宝可梦 - 使用配置管理器获取字符串值
+        // 幽灵宝可梦 - 使用 ListStringInput
         addRenderableWidget(new StringWidget(guiLeft + 10, yPos, 80, 20,
                 Component.literal("幽灵宝可梦:"), font));
-        onGhostPixelmonsEditBox = new EditBox(font, guiLeft + 100, yPos, 250, 20,
-                Component.literal(""));
-        // 使用配置管理器获取字符串值
-        onGhostPixelmonsEditBox.setValue(ListConfigManager.getStringValue("ghost_pixelmons"));
-        onGhostPixelmonsEditBox.setTooltip(Tooltip.create(Component.literal("被视为幽灵宝可梦的列表\n格式：宝可梦1, 宝可梦2, ...\n示例：Gengar, Haunter")));
-        addRenderableWidget(onGhostPixelmonsEditBox);
+        onGhostPixelmonsInput = new ListStringInput(guiLeft + 100, yPos, 250, 20)
+                .withValues(Config.getOnGhostPixelmons())
+                .titled(Component.literal("幽灵宝可梦列表"))
+                .withHint(Component.literal("被视为幽灵宝可梦的列表"))
+                .calling(this::onGhostPixelmonsChanged);
+        addRenderableWidget(onGhostPixelmonsInput);
         yPos += 30;
 
-        // 禁用模组列表 - 使用配置管理器获取字符串值
+        // 禁用模组列表 - 使用 ListStringInput
         addRenderableWidget(new StringWidget(guiLeft + 10, yPos, 80, 20,
                 Component.literal("禁用模组:"), font));
-        disabledModListEditBox = new EditBox(font, guiLeft + 100, yPos, 250, 20,
-                Component.literal(""));
-        // 使用配置管理器获取字符串值
-        disabledModListEditBox.setValue(ListConfigManager.getStringValue("disabled_mods"));
-        disabledModListEditBox.setTooltip(Tooltip.create(Component.literal("禁用的模组ID列表\n格式：modid1, modid2, ...\n示例：jei, journeymap")));
-        addRenderableWidget(disabledModListEditBox);
+        disabledModListInput = new ListStringInput(guiLeft + 100, yPos, 250, 20)
+                .withValues(Config.getDisabledModList())
+                .titled(Component.literal("禁用模组列表"))
+                .withHint(Component.literal("禁用的模组ID列表"))
+                .calling(this::onDisabledModListChanged);
+        addRenderableWidget(disabledModListInput);
 
         // 操作按钮
         int buttonY = guiTop + windowHeight - 30;
@@ -253,9 +251,38 @@ public class RemDetailedConfigScreen extends AbstractSimiScreen {
      */
     private boolean getToggleButtonState(AbstractWidget button) {
         if (button instanceof Button) {
-            return getToggleButtonState(button.getMessage());
+            return getToggleButtonState(((Button) button).getMessage());
         }
         return false;
+    }
+
+    /**
+     * 物品白名单改变时的回调
+     */
+    private void onItemWhitelistChanged(List<String> newList) {
+        // 可以在这里实时保存，或者等到点击保存按钮时统一保存
+        // ConfigUtil.setItemWhitelist(newList);
+    }
+
+    /**
+     * 自定义特性白名单改变时的回调
+     */
+    private void onCustomAbilityWhitelistChanged(List<String> newList) {
+        // ConfigUtil.setCustomAbilityWhitelist(newList);
+    }
+
+    /**
+     * 幽灵宝可梦列表改变时的回调
+     */
+    private void onGhostPixelmonsChanged(List<String> newList) {
+        // ConfigUtil.setOnGhostPokemons(newList);
+    }
+
+    /**
+     * 禁用模组列表改变时的回调
+     */
+    private void onDisabledModListChanged(List<String> newList) {
+        // ConfigUtil.setDisabledModList(newList);
     }
 
     @Override
@@ -265,7 +292,7 @@ public class RemDetailedConfigScreen extends AbstractSimiScreen {
         graphics.drawCenteredString(font, title, width / 2, guiTop - 15, 0xFFFFFF);
 
         // 绘制说明
-        graphics.drawString(font, "使用逗号分隔多个项目，例如：minecraft:diamond, minecraft:emerald",
+        graphics.drawString(font, "列表配置项支持逗号分隔输入",
                 guiLeft + 10, guiTop + windowHeight - 50, 0xAAAAAA, false);
     }
 
@@ -294,11 +321,11 @@ public class RemDetailedConfigScreen extends AbstractSimiScreen {
                 ConfigUtil.setClearTime(clearTime);
             }
 
-            // 保存列表设置 - 使用配置管理器设置字符串值
-            ListConfigManager.setStringValue("item_whitelist", itemWhitelistEditBox.getValue());
-            ListConfigManager.setStringValue("custom_ability_whitelist", customAbilityWhitelistEditBox.getValue());
-            ListConfigManager.setStringValue("ghost_pixelmons", onGhostPixelmonsEditBox.getValue());
-            ListConfigManager.setStringValue("disabled_mods", disabledModListEditBox.getValue());
+            // 保存列表设置 - 从 ListStringInput 获取值
+            ConfigUtil.setItemWhitelist(itemWhitelistInput.getValues());
+            ConfigUtil.setCustomAbilityWhitelist(customAbilityWhitelistInput.getValues());
+            ConfigUtil.setOnGhostPokemons(onGhostPixelmonsInput.getValues());
+            ConfigUtil.setDisabledModList(disabledModListInput.getValues());
 
             // 保存文本设置
             ConfigUtil.setDisplayTextHead(displayTextHeadEditBox.getValue());
@@ -334,11 +361,11 @@ public class RemDetailedConfigScreen extends AbstractSimiScreen {
         displayTextHeadEditBox.setValue("[扫地姬]");
         displayTextBodyEditBox.setValue("本次总共清理了%s种掉落物，距离下次清理还剩%s秒");
 
-        // 重置列表字段
-        itemWhitelistEditBox.setValue("minecraft:command_block");
-        customAbilityWhitelistEditBox.setValue("DragonRise");
-        onGhostPixelmonsEditBox.setValue("Gengar");
-        disabledModListEditBox.setValue("");
+        // 重置列表字段 - 使用 ListStringInput 的 setValues 方法
+        itemWhitelistInput.setValues(List.of("minecraft:command_block"));
+        customAbilityWhitelistInput.setValues(List.of("DragonRise"));
+        onGhostPixelmonsInput.setValues(List.of("Gengar"));
+        disabledModListInput.setValues(new ArrayList<>());
 
         if (minecraft != null && minecraft.player != null) {
             minecraft.player.displayClientMessage(Component.literal("§6已重置为默认值"), true);

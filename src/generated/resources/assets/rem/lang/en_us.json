@@ -29,6 +29,7 @@
   "rem.configuration.clearTime": "Clear time (in ticks)",
   "rem.configuration.customAbility": "Custom ability",
   "rem.configuration.customAbilityWhitelist": "Custom ability white lists",
+  "rem.configuration.disabledModList": "Disabled mod list",
   "rem.configuration.displayTextBody": "Display text body",
   "rem.configuration.displayTextHead": "Display text head",
   "rem.configuration.isClearServerItem": "Clear server item",

@@ -97,17 +97,18 @@ public class ListStringInput extends AbstractSimiWidget {
     private void updateTooltip() {
         toolTip.clear();
         if (title != null) {
-            toolTip.add(title);
+            toolTip.add(title.copy().withStyle(style -> style.withColor(0x5391e1)));
         }
         if (hint != null) {
-            toolTip.add(hint);
+            toolTip.add(hint.copy().withStyle(style -> style.withColor(0x96b7e0)));
         }
         if (!values.isEmpty()) {
-            toolTip.add(Component.literal("当前项目: " + String.join(", ", values)));
+            toolTip.add(Component.literal("当前项目: " + String.join(", ", values))
+                    .withStyle(style -> style.withColor(0xCCCCCC)));
         } else {
-            toolTip.add(Component.literal("暂无项目"));
+            toolTip.add(Component.literal("暂无项目").withStyle(style -> style.withColor(0x888888)));
         }
-        toolTip.add(Component.literal("使用逗号分隔多个项目"));
+        toolTip.add(Component.literal("使用逗号分隔多个项目").withStyle(style -> style.withColor(0x888888).withItalic(true)));
     }
 
     @Override
@@ -145,7 +146,6 @@ public class ListStringInput extends AbstractSimiWidget {
     @Override
     public void tick() {
         // EditBox 不需要 tick 方法，这里保持空实现
-        // 如果需要，可以在这里添加自定义的每帧逻辑
     }
 
     public void setEditable(boolean editable) {
@@ -160,5 +160,10 @@ public class ListStringInput extends AbstractSimiWidget {
 
     public void setFocused(boolean focused) {
         textField.setFocused(focused);
+    }
+
+    @Override
+    public boolean isMouseOver(double mouseX, double mouseY) {
+        return textField.isMouseOver(mouseX, mouseY);
     }
 }
