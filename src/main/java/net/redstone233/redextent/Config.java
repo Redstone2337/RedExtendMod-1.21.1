@@ -1,6 +1,5 @@
 package net.redstone233.redextent;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -9,9 +8,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.event.config.ModConfigEvent;
 import net.neoforged.neoforge.common.ModConfigSpec;
-import net.neoforged.neoforge.server.ServerLifecycleHooks;
-import net.redstone233.redextent.core.packet.PacketHandler;
-import net.redstone233.redextent.core.packet.S2CDisabledModListPacket;
 
 public class Config {
     private static final ModConfigSpec.Builder BUILDER = new ModConfigSpec.Builder();
@@ -46,6 +42,7 @@ public class Config {
             .comment("物品过滤器列表(若物品过滤器模式属于开启状态的话)\n一行一个物品id")
             .defineListAllowEmpty("ServerItemSettings.itemWhitelist",
                     List.of("minecraft:command_block"),
+                    () -> "",
                     Config::validateItemName);
 
     // 客户端清理设置子节
@@ -69,7 +66,8 @@ public class Config {
     public static final ModConfigSpec.ConfigValue<List<? extends String>> CUSTOM_ABILITY_WHITELIST = BUILDER
             .comment("设定白名单列表\n检测整个模组中是否有与其字符串匹配的类名\n一行一个自定义特性\n白名单用于设定哪些加载，哪些不加载。")
             .defineListAllowEmpty("ClientSettings.customAbilityWhitelist",
-                    List.of("FastStart"),
+                    List.of("DragonRise"),
+                    () -> "",
                     Config::validateClassName);
 
     // 幽灵宝可梦配置
@@ -77,6 +75,7 @@ public class Config {
             .comment("用于检测是否是幽灵属性的宝可梦\n若为幽灵属性，则在指定群系会有加成\n一行一个宝可梦")
             .defineListAllowEmpty("ClientSettings.onGhostPixelmons",
                     List.of("Gengar"),
+                    () -> "",
                     Config::validateClassName);
 
 
@@ -84,6 +83,7 @@ public class Config {
             .comment("填写要禁用的 modid，一行一个\n保存后服务端自动重命名并重启(目前不稳定)")
             .defineListAllowEmpty("disabledModList",
                     List.of(),
+                    () -> "",
                     Config::validateClassName);
 
     static final ModConfigSpec SPEC = BUILDER.build();

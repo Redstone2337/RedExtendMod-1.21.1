@@ -16,6 +16,7 @@ import net.redstone233.redextent.core.mod.SuperFurnaceRegistration;
 import net.redstone233.redextent.core.packet.PacketHandler;
 import net.redstone233.redextent.core.packet.S2CDisabledModListPacket;
 import net.redstone233.redextent.core.proxy.ServerProxy;
+import net.redstone233.redextent.functions.ConfigRegistrar;
 import net.redstone233.redextent.item.ModItems;
 import net.redstone233.redextent.manager.ItemClearManager;
 import net.redstone233.redextent.manager.ModJarManager;
@@ -140,16 +141,10 @@ public class RedExtendMod {
         serverProxy.syncToAll();
         LOGGER.info("已同步禁用模组列表信息到所有在线玩家，耗时：{}ms", System.currentTimeMillis() - startTime);
 
-        LOGGER.info("模组初始化完成，总耗时{}ms", System.currentTimeMillis() - startTime);
+        ConfigRegistrar.registerAllConfigs();
+        LOGGER.info("已注册所有配置，耗时{}ms", System.currentTimeMillis() - startTime);
 
-        // 为 BaseConfigScreen 设置自定义显示
-        BaseConfigScreen.setDefaultActionFor(MOD_ID, screen ->
-                screen.withButtonLabels(
-                        "客户端配置",
-                        "通用配置",
-                        "服务器配置"
-                )
-        );
+        LOGGER.info("模组初始化完成，总耗时{}ms", System.currentTimeMillis() - startTime);
 
         // 3. 在游戏加载的合适时机处理模组禁用
         event.enqueueWork(() -> {

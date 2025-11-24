@@ -87,6 +87,7 @@ public class ModEnglishLanguageProvider extends LanguageProvider {
         add("rem.configuration.ClearClientSettings","Clear client settings");
         add("rem.configuration.ClientSettings","Client settings");
         add("rem.configuration.onBrewingRecipe","Enable brewing recipe");
+        add("rem.configuration.disabledModList","Disabled mod list");
 
         add(ModItems.DISCORD_ITEM.get(), "Discord");
         add(ModItems.GITHUB_ITEM.get(), "GitHub");
