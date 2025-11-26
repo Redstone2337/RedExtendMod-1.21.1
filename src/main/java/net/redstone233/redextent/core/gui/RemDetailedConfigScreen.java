@@ -31,6 +31,7 @@ public class RemDetailedConfigScreen extends AbstractSimiScreen {
     // 清理客户端设置
     private EditBox displayTextHeadEditBox;
     private EditBox displayTextBodyEditBox;
+    private EditBox displayTextTailEditBox;
 
     // 客户端设置
     private AbstractWidget customAbilityCheckbox;
@@ -150,6 +151,15 @@ public class RemDetailedConfigScreen extends AbstractSimiScreen {
         displayTextBodyEditBox.setTooltip(Tooltip.create(Component.literal("显示在消息主体的文本\n支持颜色代码：&a&l等\n使用 %s 作为占位符")));
         addRenderableWidget(displayTextBodyEditBox);
         yPos += 35;
+
+        addRenderableWidget(new StringWidget(guiLeft + 10, yPos, 200, 20,
+                        Component.literal("自定义倒计时提示:"), font));
+        displayTextTailEditBox = new EditBox(font, guiLeft + 100, yPos, 250, 20,
+                Component.literal(""));
+        displayTextTailEditBox.setValue(ClientConfig.getClearDownText());
+        displayTextTailEditBox.setTooltip(Tooltip.create(Component.literal("显示自定义倒计时提示的文本\n支持颜色代码：&a&l等\n使用 %s 作为占位符")));
+        addRenderableWidget(displayTextTailEditBox);
+        yPos += 40;
 
         // 客户端设置
         addRenderableWidget(new StringWidget(guiLeft + 10, yPos, 200, 20,
@@ -329,6 +339,7 @@ public class RemDetailedConfigScreen extends AbstractSimiScreen {
             // 保存文本设置
             ConfigUtil.setDisplayTextHead(displayTextHeadEditBox.getValue());
             ConfigUtil.setDisplayTextBody(displayTextBodyEditBox.getValue());
+            ConfigUtil.setDisplayTextTail(displayTextTailEditBox.getValue());
 
             // 保存布尔值设置
             ConfigUtil.setCustomAbility(getToggleButtonState(customAbilityCheckbox));
@@ -359,6 +370,7 @@ public class RemDetailedConfigScreen extends AbstractSimiScreen {
         clearTimeEditBox.setValue("6000");
         displayTextHeadEditBox.setValue("[扫地姬]");
         displayTextBodyEditBox.setValue("本次总共清理了%s种掉落物，距离下次清理还剩%s秒");
+        displayTextTailEditBox.setValue("亲爱的冒险家们，本次清理即将开始，剩余时间%s秒");
 
         // 重置列表字段 - 使用 ListStringInput 的 setValues 方法
         itemWhitelistInput.setValues(List.of("minecraft:command_block"));

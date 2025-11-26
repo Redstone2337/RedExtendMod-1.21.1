@@ -4,9 +4,14 @@
       "interactions": [
         {
           "event": "pixelmon:right_click",
-          "conditions": {
-            "type": "pixelmon:true"
-          },
+          "conditions": [
+            {
+              "type": "pixelmon:interaction_condition",
+              "condition": {
+                "type": "pixelmon:true"
+              }
+            }
+          ],
           "results": {
             "value": [
               {
@@ -189,14 +194,6 @@
                   },
                   {
                     "item": {
-                      "id": "pixelmon:golden_bottle_cap",
-                      "count": 1
-                    },
-                    "buyPrice": 15000.0,
-                    "sellPrice": 3750.0
-                  },
-                  {
-                    "item": {
                       "id": "pixelmon:ability_patch",
                       "count": 1
                     },
@@ -211,9 +208,14 @@
         },
         {
           "event": "pixelmon:close_shop",
-          "conditions": {
-            "type": "pixelmon:true"
-          },
+          "conditions": [
+            {
+              "type": "pixelmon:interaction_condition",
+              "condition": {
+                "type": "pixelmon:true"
+              }
+            }
+          ],
           "results": {
             "value": [
               {

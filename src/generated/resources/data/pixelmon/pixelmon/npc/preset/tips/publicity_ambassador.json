@@ -5,9 +5,14 @@
         "interactions": [
           {
             "event": "pixelmon:right_click",
-            "conditions": {
-              "type": "pixelmon:true"
-            },
+            "conditions": [
+              {
+                "type": "pixelmon:interaction_condition",
+                "condition": {
+                  "type": "pixelmon:true"
+                }
+              }
+            ],
             "results": {
               "value": [
                 {

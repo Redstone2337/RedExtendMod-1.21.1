@@ -39,7 +39,6 @@ public class ShopNPCProvider extends PixelmonNPCProvider {
                 createLuxuryBallShopItem(4, 15000.0, 3750.0),            // 豪华球
                 createPremierBallShopItem(4, 10000.0, 2500.0),           // Premier Ball
                 createShopItem("pixelmon:ability_capsule", 1, 10000.0, 2500.0), // 特性胶囊
-                createShopItem("pixelmon:golden_bottle_cap", 1, 15000.0, 3750.0), // 金色王冠
                 createShopItem("pixelmon:ability_patch", 1, 20000.0, 5000.0) // 特性膏药
         );
 

@@ -20,6 +20,10 @@ public class ClientConfig {
             .comment("清理的时候显示的文本体\n文本格式：文本头+文本体")
             .define("ClearClientSettings.displayTextBody", "本次总共清理了%s种掉落物，距离下次清理还剩%s秒");
 
+    public static final ModConfigSpec.ConfigValue<String> DISPLAY_COUNTDOWN_TEXT = BUILDER
+            .comment("清理的时候显示的文本体\n文本格式：文本头+倒计时提醒")
+            .define("ClearClientSettings.displayCountdownText", "亲爱的冒险家们，本次清理即将开始，剩余时间%s秒");
+
     // 客户端设置子节
     public static final ModConfigSpec.BooleanValue CUSTOM_ABILITY = BUILDER
             .comment("是否开启自定义特性(如：快启动)")
@@ -128,6 +132,10 @@ public class ClientConfig {
 
     public static String getDisplayTextBody() {
         return DISPLAY_TEXT_BODY.get();
+    }
+
+    public static String getClearDownText() {
+        return DISPLAY_COUNTDOWN_TEXT.get();
     }
 
     public static boolean isCustomAbilityEnabled() {

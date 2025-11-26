@@ -549,10 +549,12 @@ public abstract class PixelmonNPCProvider implements DataProvider {
         return interaction;
     }
 
+    // 在 createRightClickCooldownInteraction 和 createRightClickUnableToBattleInteraction 中修复条件格式
     private static JsonObject createRightClickCooldownInteraction(String titleKey, int cooldownDays) {
         JsonObject interaction = new JsonObject();
         interaction.addProperty("event", "pixelmon:right_click");
 
+        // 修复：使用数组格式（这个是正确的，需要保持数组）
         JsonArray conditions = new JsonArray();
         conditions.add(createMainHandCondition());
         conditions.add(createOnCooldownCondition(cooldownDays));
@@ -605,13 +607,21 @@ public abstract class PixelmonNPCProvider implements DataProvider {
         return interaction;
     }
 
+    // 在 createCloseDialogueInteraction 方法中修复条件格式
     private static JsonObject createCloseDialogueInteraction() {
         JsonObject interaction = new JsonObject();
         interaction.addProperty("event", "pixelmon:close_dialogue");
 
-        JsonObject conditions = new JsonObject();
-        conditions.addProperty("type", "pixelmon:constant_boolean");
-        conditions.addProperty("value", true);
+        // 修复：使用数组格式，并且使用正确的条件类型
+        JsonArray conditions = new JsonArray();
+        JsonObject condition = new JsonObject();
+        condition.addProperty("type", "pixelmon:interaction_condition");
+
+        JsonObject conditionValue = new JsonObject();
+        conditionValue.addProperty("type", "pixelmon:true");
+        condition.add("condition", conditionValue);
+
+        conditions.add(condition);
         interaction.add("conditions", conditions);
 
         JsonObject results = new JsonObject();
@@ -628,14 +638,32 @@ public abstract class PixelmonNPCProvider implements DataProvider {
         return interaction;
     }
 
+    // 在 createLoseBattleInteraction 和 createWinBattleInteraction 中修复条件格式
     private static JsonObject createLoseBattleInteraction(String titleKey, String loseMessage) {
         JsonObject interaction = new JsonObject();
         interaction.addProperty("event", "pixelmon:lose_battle");
 
-        JsonObject conditions = new JsonObject();
-        conditions.addProperty("type", "pixelmon:true");
+        // 修复：使用数组格式，并且使用正确的条件类型
+        JsonArray conditions = new JsonArray();
+        JsonObject condition = new JsonObject();
+        condition.addProperty("type", "pixelmon:interaction_condition");
+
+        JsonObject conditionValue = new JsonObject();
+        conditionValue.addProperty("type", "pixelmon:true");
+        condition.add("condition", conditionValue);
+
+        conditions.add(condition);
         interaction.add("conditions", conditions);
 
+        JsonObject results = getJsonObject(titleKey, loseMessage);
+        results.addProperty("type", "pixelmon:constant");
+        interaction.add("results", results);
+
+        return interaction;
+    }
+
+
+    private static @NotNull JsonObject getJsonObject(String titleKey, String loseMessage) {
         JsonObject results = new JsonObject();
         JsonArray resultsArray = new JsonArray();
 
@@ -658,10 +686,7 @@ public abstract class PixelmonNPCProvider implements DataProvider {
         resultsArray.add(trigger);
 
         results.add("value", resultsArray);
-        results.addProperty("type", "pixelmon:constant");
-        interaction.add("results", results);
-
-        return interaction;
+        return results;
     }
 
     private static JsonObject createWinBattleInteraction(String titleKey, String winMessage,
@@ -670,8 +695,16 @@ public abstract class PixelmonNPCProvider implements DataProvider {
         JsonObject interaction = new JsonObject();
         interaction.addProperty("event", "pixelmon:win_battle");
 
-        JsonObject conditions = new JsonObject();
-        conditions.addProperty("type", "pixelmon:true");
+        // 修复：使用数组格式，并且使用正确的条件类型
+        JsonArray conditions = new JsonArray();
+        JsonObject condition = new JsonObject();
+        condition.addProperty("type", "pixelmon:interaction_condition");
+
+        JsonObject conditionValue = new JsonObject();
+        conditionValue.addProperty("type", "pixelmon:true");
+        condition.add("condition", conditionValue);
+
+        conditions.add(condition);
         interaction.add("conditions", conditions);
 
         JsonObject results = new JsonObject();
@@ -836,6 +869,7 @@ public abstract class PixelmonNPCProvider implements DataProvider {
     /**
      * 创建多页对话交互
      */
+    // 在 createMultiPageDialogueInteraction 方法中修复条件格式
     public static JsonObject createMultiPageDialogueInteraction(String title, List<String> pages) {
         JsonObject interactionsWrapper = new JsonObject();
         JsonArray interactionsArray = new JsonArray();
@@ -843,8 +877,16 @@ public abstract class PixelmonNPCProvider implements DataProvider {
         JsonObject interaction = new JsonObject();
         interaction.addProperty("event", "pixelmon:right_click");
 
-        JsonObject conditions = new JsonObject();
-        conditions.addProperty("type", "pixelmon:true");
+        // 修复：使用数组格式，并且使用正确的条件类型
+        JsonArray conditions = new JsonArray();
+        JsonObject condition = new JsonObject();
+        condition.addProperty("type", "pixelmon:interaction_condition");
+
+        JsonObject conditionValue = new JsonObject();
+        conditionValue.addProperty("type", "pixelmon:true");
+        condition.add("condition", conditionValue);
+
+        conditions.add(condition);
         interaction.add("conditions", conditions);
 
         JsonObject results = new JsonObject();
@@ -880,25 +922,7 @@ public abstract class PixelmonNPCProvider implements DataProvider {
         JsonArray interactionsArray = new JsonArray();
 
         // 右键点击交互
-        JsonObject rightClickInteraction = new JsonObject();
-        rightClickInteraction.addProperty("event", "pixelmon:right_click");
-
-        JsonObject rightClickConditions = new JsonObject();
-        rightClickConditions.addProperty("type", "pixelmon:true");
-        rightClickInteraction.add("conditions", rightClickConditions);
-
-        JsonObject rightClickResults = new JsonObject();
-        JsonArray rightClickResultsArray = new JsonArray();
-
-        JsonObject dialogue = new JsonObject();
-        dialogue.addProperty("title", greetingTitle);
-        dialogue.addProperty("message", greetingMessage);
-        dialogue.addProperty("type", "pixelmon:open_dialogue");
-        rightClickResultsArray.add(dialogue);
-
-        rightClickResults.add("value", rightClickResultsArray);
-        rightClickResults.addProperty("type", "pixelmon:constant");
-        rightClickInteraction.add("results", rightClickResults);
+        JsonObject rightClickInteraction = getRightClickInteraction(greetingTitle, greetingMessage);
 
         interactionsArray.add(rightClickInteraction);
 
@@ -930,12 +954,61 @@ public abstract class PixelmonNPCProvider implements DataProvider {
         interactionsArray.add(closeDialogueInteraction);
 
         // 关闭商店显示告别语交互
+        JsonObject closeShopInteraction = getCloseShopInteraction(goodbyeTitle, goodbyeMessage);
+
+        interactionsArray.add(closeShopInteraction);
+
+        interactionsWrapper.add("interactions", interactionsArray);
+        return interactionsWrapper;
+    }
+
+    // 在 createShopInteraction 方法中修复条件格式
+    private static @NotNull JsonObject getRightClickInteraction(String greetingTitle, String greetingMessage) {
+        JsonObject rightClickInteraction = new JsonObject();
+        rightClickInteraction.addProperty("event", "pixelmon:right_click");
+
+        // 修复：使用数组格式，并且使用正确的条件类型
+        JsonArray conditions = new JsonArray();
+        JsonObject condition = new JsonObject();
+        condition.addProperty("type", "pixelmon:interaction_condition");
+
+        JsonObject conditionValue = new JsonObject();
+        conditionValue.addProperty("type", "pixelmon:true");
+        condition.add("condition", conditionValue);
+
+        conditions.add(condition);
+        rightClickInteraction.add("conditions", conditions);
+
+        JsonObject rightClickResults = new JsonObject();
+        JsonArray rightClickResultsArray = new JsonArray();
+
+        JsonObject dialogue = new JsonObject();
+        dialogue.addProperty("title", greetingTitle);
+        dialogue.addProperty("message", greetingMessage);
+        dialogue.addProperty("type", "pixelmon:open_dialogue");
+        rightClickResultsArray.add(dialogue);
+
+        rightClickResults.add("value", rightClickResultsArray);
+        rightClickResults.addProperty("type", "pixelmon:constant");
+        rightClickInteraction.add("results", rightClickResults);
+        return rightClickInteraction;
+    }
+
+    private static @NotNull JsonObject getCloseShopInteraction(String goodbyeTitle, String goodbyeMessage) {
         JsonObject closeShopInteraction = new JsonObject();
         closeShopInteraction.addProperty("event", "pixelmon:close_shop");
 
-        JsonObject closeShopConditions = new JsonObject();
-        closeShopConditions.addProperty("type", "pixelmon:true");
-        closeShopInteraction.add("conditions", closeShopConditions);
+        // 修复：使用数组格式，并且使用正确的条件类型
+        JsonArray conditions = new JsonArray();
+        JsonObject condition = new JsonObject();
+        condition.addProperty("type", "pixelmon:interaction_condition");
+
+        JsonObject conditionValue = new JsonObject();
+        conditionValue.addProperty("type", "pixelmon:true");
+        condition.add("condition", conditionValue);
+
+        conditions.add(condition);
+        closeShopInteraction.add("conditions", conditions);
 
         JsonObject closeShopResults = new JsonObject();
         JsonArray closeShopResultsArray = new JsonArray();
@@ -950,16 +1023,13 @@ public abstract class PixelmonNPCProvider implements DataProvider {
         closeShopResults.add("value", closeShopResultsArray);
         closeShopResults.addProperty("type", "pixelmon:constant");
         closeShopInteraction.add("results", closeShopResults);
-
-        interactionsArray.add(closeShopInteraction);
-
-        interactionsWrapper.add("interactions", interactionsArray);
-        return interactionsWrapper;
+        return closeShopInteraction;
     }
 
     /**
      * 创建技能教学交互
      */
+    // 在 createMoveTutorInteraction 方法中修复条件格式
     public static JsonObject createMoveTutorInteraction(List<JsonObject> learnableMoves) {
         JsonObject interactionsWrapper = new JsonObject();
         JsonArray interactionsArray = new JsonArray();
@@ -967,8 +1037,16 @@ public abstract class PixelmonNPCProvider implements DataProvider {
         JsonObject interaction = new JsonObject();
         interaction.addProperty("event", "pixelmon:right_click");
 
-        JsonObject conditions = new JsonObject();
-        conditions.addProperty("type", "pixelmon:true");
+        // 修复：使用数组格式，并且使用正确的条件类型
+        JsonArray conditions = new JsonArray();
+        JsonObject condition = new JsonObject();
+        condition.addProperty("type", "pixelmon:interaction_condition");
+
+        JsonObject conditionValue = new JsonObject();
+        conditionValue.addProperty("type", "pixelmon:true");
+        condition.add("condition", conditionValue);
+
+        conditions.add(condition);
         interaction.add("conditions", conditions);
 
         JsonObject results = new JsonObject();

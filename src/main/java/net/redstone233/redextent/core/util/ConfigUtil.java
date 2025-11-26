@@ -58,6 +58,10 @@ public class ConfigUtil {
         ClientConfig.setDisplayTextBody(displayTextBody);
     }
 
+    public static void setDisplayTextTail(String displayCountdownText) {
+        ClientConfig.DISPLAY_COUNTDOWN_TEXT.set(displayCountdownText);
+    }
+
     public static void setCustomAbility(boolean customAbility) {
         ClientConfig.setCustomAbility(customAbility);
     }

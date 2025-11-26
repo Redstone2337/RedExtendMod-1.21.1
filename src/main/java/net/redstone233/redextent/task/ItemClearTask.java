@@ -23,11 +23,17 @@ public class ItemClearTask {
     private final MinecraftServer server;
     private ScheduledExecutorService scheduler;
     private ScheduledFuture<?> scheduledTask;
+    private ScheduledFuture<?> countdownTask;
     private int nextClearCountdown;
+    private boolean isCountdownRunning = false;
 
     /* 配置常量 */
     private static final int CHECK_INTERVAL = 20; // 1 秒 = 20 tick
     private int maxLifeTick; // 最大存活时间（tick）
+
+    /* 倒计时相关 */
+    private static final int COUNTDOWN_THRESHOLD = 3; // 倒计时阈值（秒）
+    private int currentCountdown = 0;
 
     /* 记录掉落物 -> 生成时的 server tick */
     private final WeakHashMap<ItemEntity, Integer> spawnTickMap = new WeakHashMap<>();
@@ -48,7 +54,7 @@ public class ItemClearTask {
             return;
         }
 
-        this.scheduler = Executors.newScheduledThreadPool(1);
+        this.scheduler = Executors.newScheduledThreadPool(2);
 
         // 使用游戏刻作为清理间隔，但转换为秒用于调度
         int clearIntervalSeconds = maxLifeTick / 20;
@@ -61,7 +67,7 @@ public class ItemClearTask {
         }, clearIntervalSeconds, clearIntervalSeconds, TimeUnit.SECONDS);
 
         // 启动倒计时更新任务（每秒更新一次）
-        scheduler.scheduleAtFixedRate(this::updateCountdown, 1, 1, TimeUnit.SECONDS);
+        this.countdownTask = scheduler.scheduleAtFixedRate(this::updateCountdown, 1, 1, TimeUnit.SECONDS);
 
         if (CommonConfig.isDebugModeEnabled()) {
             RedExtendMod.LOGGER.info("清理任务已启动，间隔: {}秒 ({} tick)", clearIntervalSeconds, maxLifeTick);
@@ -75,6 +81,11 @@ public class ItemClearTask {
         if (scheduledTask != null) {
             scheduledTask.cancel(true);
             scheduledTask = null;
+        }
+
+        if (countdownTask != null) {
+            countdownTask.cancel(true);
+            countdownTask = null;
         }
 
         if (scheduler != null) {
@@ -94,6 +105,8 @@ public class ItemClearTask {
         spawnTickMap.clear();
         this.maxLifeTick = CommonConfig.getClearTime();
         this.nextClearCountdown = maxLifeTick / 20;
+        this.isCountdownRunning = false;
+        this.currentCountdown = 0;
     }
 
     /**
@@ -102,8 +115,53 @@ public class ItemClearTask {
     private void updateCountdown() {
         if (nextClearCountdown > 1) {
             nextClearCountdown--;
+
+            // 检查是否需要开始倒计时提醒
+            if (nextClearCountdown <= COUNTDOWN_THRESHOLD && !isCountdownRunning) {
+                startCountdown();
+            }
         } else {
             nextClearCountdown = maxLifeTick / 20;
+            // 重置倒计时状态
+            isCountdownRunning = false;
+            currentCountdown = 0;
+        }
+    }
+
+    /**
+     * 开始倒计时提醒
+     */
+    private void startCountdown() {
+        isCountdownRunning = true;
+        currentCountdown = COUNTDOWN_THRESHOLD;
+
+        // 启动倒计时提醒任务
+        scheduler.scheduleAtFixedRate(() -> {
+            if (currentCountdown > 0 && server.isRunning()) {
+                broadcastCountdownMessage(currentCountdown);
+                currentCountdown--;
+            } else {
+                // 倒计时结束，取消这个任务
+                isCountdownRunning = false;
+                throw new RuntimeException("Countdown finished"); // 这会终止这个定时任务
+            }
+        }, 0, 1, TimeUnit.SECONDS);
+    }
+
+    /**
+     * 广播倒计时消息
+     * @param countdown 当前倒计时秒数
+     */
+    private void broadcastCountdownMessage(int countdown) {
+        String textHead = ClientConfig.getDisplayTextHead();
+        String countdownMessage = textHead + ClientConfig.getClearDownText();
+
+        server.getPlayerList().getPlayers().forEach(player -> {
+            player.sendSystemMessage(Component.literal(countdownMessage));
+        });
+
+        if (CommonConfig.isDebugModeEnabled()) {
+            RedExtendMod.LOGGER.info("倒计时提醒: {}", countdownMessage);
         }
     }
 
@@ -133,6 +191,9 @@ public class ItemClearTask {
                 }
             });
 
+            // 保存清理统计
+            /* 清理统计 */
+
             // 如果没有清理任何物品，则返回
             if (stats.getTotalEntities() == 0) {
                 if (CommonConfig.isDebugModeEnabled()) {
@@ -146,6 +207,9 @@ public class ItemClearTask {
 
             // 记录调试信息
             logClearStatistics(stats);
+
+            // 广播清理总结和下次清理信息
+            broadcastClearSummary(stats);
 
         } catch (Exception e) {
             RedExtendMod.LOGGER.error("执行掉落物清理时发生错误", e);
@@ -213,6 +277,27 @@ public class ItemClearTask {
 
         if (CommonConfig.isDebugModeEnabled()) {
             RedExtendMod.LOGGER.info("广播清理消息: {}", fullMessage);
+        }
+    }
+
+    /**
+     * 广播清理总结和下次清理信息
+     */
+    private void broadcastClearSummary(ClearStatistics stats) {
+        String textHead = ClientConfig.getDisplayTextHead();
+
+        // 计算下次清理的分钟数
+        int nextClearMinutes = nextClearCountdown / 60;
+
+        // 使用文本头加上固定的总结文本
+        String summaryMessage = textHead + "本次总共清理了 " + stats.getTypeCount() + " 种物品，距离下次清理还剩 " + nextClearMinutes + " 分钟";
+
+        server.getPlayerList().getPlayers().forEach(player -> {
+            player.sendSystemMessage(Component.literal(summaryMessage));
+        });
+
+        if (CommonConfig.isDebugModeEnabled()) {
+            RedExtendMod.LOGGER.info("清理总结: {}", summaryMessage);
         }
     }
 
