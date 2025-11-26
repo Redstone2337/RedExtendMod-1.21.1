@@ -31,15 +31,27 @@ public class ConfigUtil {
     }
 
     public static void setItemWhitelist(List<String> itemWhitelist) {
-        Config.ITEM_WHITELIST.set(itemWhitelist);
+        Config.setItemWhitelist(itemWhitelist);
+    }
+
+    public static void setItemWhitelistString(String itemWhitelist) {
+        Config.setItemWhitelistString(itemWhitelist);
     }
 
     public static void setOnGhostPokemons(List<String> onGhostPokemons) {
-        Config.ON_GHOST_PIXELMONS.set(onGhostPokemons);
+        Config.setOnGhostPixelmons(onGhostPokemons);
+    }
+
+    public static void setOnGhostPokemonsString(String onGhostPokemons) {
+        Config.setOnGhostPixelmonsString(onGhostPokemons);
     }
 
     public static void setDisabledModList(List<String> disabledModList) {
-        Config.DISABLED_MOD_LIST.set(disabledModList);
+        Config.setDisabledModList(disabledModList);
+    }
+
+    public static void setDisabledModListString(String disabledModList) {
+        Config.setDisabledModListString(disabledModList);
     }
 
     public static void setDisplayTextHead(String displayTextHead) {
@@ -59,6 +71,10 @@ public class ConfigUtil {
     }
 
     public static void setCustomAbilityWhitelist(List<String> customAbilityWhitelist) {
-        Config.CUSTOM_ABILITY_WHITELIST.set(customAbilityWhitelist);
+        Config.setCustomAbilityWhitelist(customAbilityWhitelist);
+    }
+
+    public static void setCustomAbilityWhitelistString(String customAbilityWhitelist) {
+        Config.setCustomAbilityWhitelistString(customAbilityWhitelist);
     }
 }

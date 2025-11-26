@@ -58,7 +58,7 @@ public class OpenRemMenuButton extends Button {
 
     private void renderIcon(GuiGraphics graphics) {
         // 使用书与笔作为配置图标，更符合主题
-        ItemStack icon = new ItemStack(Items.WRITABLE_BOOK);
+        ItemStack icon = new ItemStack(Items.RED_DYE);
 
         BakedModel bakedmodel = Minecraft.getInstance()
                 .getItemRenderer()

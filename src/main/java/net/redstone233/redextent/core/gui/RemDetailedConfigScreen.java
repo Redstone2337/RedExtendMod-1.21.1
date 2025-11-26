@@ -120,7 +120,7 @@ public class RemDetailedConfigScreen extends AbstractSimiScreen {
         itemWhitelistInput = new ListStringInput(guiLeft + 100, yPos, 250, 20)
                 .withValues(Config.getItemWhitelist())
                 .titled(Component.literal("物品白名单"))
-                .withHint(Component.literal("不会被清理的物品列表"))
+                .withHint(Component.literal("不会被清理的物品列表\n存储格式: [\"item1\",\"item2\",\"item3\"]"))
                 .calling(this::onItemWhitelistChanged);
         addRenderableWidget(itemWhitelistInput);
         yPos += 30;
@@ -177,7 +177,7 @@ public class RemDetailedConfigScreen extends AbstractSimiScreen {
         customAbilityWhitelistInput = new ListStringInput(guiLeft + 100, yPos, 250, 20)
                 .withValues(Config.getCustomAbilityWhitelist())
                 .titled(Component.literal("自定义特性白名单"))
-                .withHint(Component.literal("允许的自定义特性列表"))
+                .withHint(Component.literal("允许的自定义特性列表\n存储格式: [\"ability1\",\"ability2\"]"))
                 .calling(this::onCustomAbilityWhitelistChanged);
         addRenderableWidget(customAbilityWhitelistInput);
         yPos += 30;
@@ -188,7 +188,7 @@ public class RemDetailedConfigScreen extends AbstractSimiScreen {
         onGhostPixelmonsInput = new ListStringInput(guiLeft + 100, yPos, 250, 20)
                 .withValues(Config.getOnGhostPixelmons())
                 .titled(Component.literal("幽灵宝可梦列表"))
-                .withHint(Component.literal("被视为幽灵宝可梦的列表"))
+                .withHint(Component.literal("被视为幽灵宝可梦的列表\n存储格式: [\"pokemon1\",\"pokemon2\"]"))
                 .calling(this::onGhostPixelmonsChanged);
         addRenderableWidget(onGhostPixelmonsInput);
         yPos += 30;
@@ -199,7 +199,7 @@ public class RemDetailedConfigScreen extends AbstractSimiScreen {
         disabledModListInput = new ListStringInput(guiLeft + 100, yPos, 250, 20)
                 .withValues(Config.getDisabledModList())
                 .titled(Component.literal("禁用模组列表"))
-                .withHint(Component.literal("禁用的模组ID列表"))
+                .withHint(Component.literal("禁用的模组ID列表\n存储格式: [\"modid1\",\"modid2\"]"))
                 .calling(this::onDisabledModListChanged);
         addRenderableWidget(disabledModListInput);
 
@@ -251,7 +251,7 @@ public class RemDetailedConfigScreen extends AbstractSimiScreen {
      */
     private boolean getToggleButtonState(AbstractWidget button) {
         if (button instanceof Button) {
-            return getToggleButtonState(((Button) button).getMessage());
+            return getToggleButtonState(button.getMessage());
         }
         return false;
     }
@@ -261,28 +261,24 @@ public class RemDetailedConfigScreen extends AbstractSimiScreen {
      */
     private void onItemWhitelistChanged(List<String> newList) {
         // 可以在这里实时保存，或者等到点击保存按钮时统一保存
-        // ConfigUtil.setItemWhitelist(newList);
     }
 
     /**
      * 自定义特性白名单改变时的回调
      */
     private void onCustomAbilityWhitelistChanged(List<String> newList) {
-        // ConfigUtil.setCustomAbilityWhitelist(newList);
     }
 
     /**
      * 幽灵宝可梦列表改变时的回调
      */
     private void onGhostPixelmonsChanged(List<String> newList) {
-        // ConfigUtil.setOnGhostPokemons(newList);
     }
 
     /**
      * 禁用模组列表改变时的回调
      */
     private void onDisabledModListChanged(List<String> newList) {
-        // ConfigUtil.setDisabledModList(newList);
     }
 
     @Override
@@ -292,8 +288,10 @@ public class RemDetailedConfigScreen extends AbstractSimiScreen {
         graphics.drawCenteredString(font, title, width / 2, guiTop - 15, 0xFFFFFF);
 
         // 绘制说明
-        graphics.drawString(font, "列表配置项支持逗号分隔输入",
+        graphics.drawString(font, "列表配置项使用JSON数组格式: [\"item1\",\"item2\",\"item3\"]",
                 guiLeft + 10, guiTop + windowHeight - 50, 0xAAAAAA, false);
+        graphics.drawString(font, "同时兼容裸逗号格式: [item1,item2,item3]",
+                guiLeft + 10, guiTop + windowHeight - 35, 0xAAAAAA, false);
     }
 
     @Override
@@ -321,7 +319,7 @@ public class RemDetailedConfigScreen extends AbstractSimiScreen {
                 ConfigUtil.setClearTime(clearTime);
             }
 
-            // 保存列表设置 - 从 ListStringInput 获取值
+            // 保存列表设置 - 从 ListStringInput 获取值并转换为JSON数组格式存储
             ConfigUtil.setItemWhitelist(itemWhitelistInput.getValues());
             ConfigUtil.setCustomAbilityWhitelist(customAbilityWhitelistInput.getValues());
             ConfigUtil.setOnGhostPokemons(onGhostPixelmonsInput.getValues());
