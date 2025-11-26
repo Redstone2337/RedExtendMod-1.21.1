@@ -58,7 +58,7 @@ public class OpenRemMenuButton extends Button {
 
     private void renderIcon(GuiGraphics graphics) {
         // 使用书与笔作为配置图标，更符合主题
-        ItemStack icon = new ItemStack(Items.RED_DYE);
+        ItemStack icon = new ItemStack(Items.WRITABLE_BOOK);
 
         BakedModel bakedmodel = Minecraft.getInstance()
                 .getItemRenderer()
@@ -66,9 +66,10 @@ public class OpenRemMenuButton extends Button {
         if (bakedmodel == null)
             return;
 
-        // 在按钮中心渲染图标，稍微缩小一点以留出边距
-        int iconX = this.getX() + (this.width - 12) / 2;
-        int iconY = this.getY() + (this.height - 12) / 2;
+        // 修复图标位置：在按钮中心渲染图标
+        // 物品渲染默认是16x16，但按钮是20x20，所以需要计算居中位置
+        int iconX = this.getX() + (this.width - 16) / 2;
+        int iconY = this.getY() + (this.height - 16) / 2;
 
         // 根据按钮状态调整透明度
         float alpha = this.active ? 1.0F : 0.5F;
@@ -155,8 +156,15 @@ public class OpenRemMenuButton extends Button {
                             .getString()
                             .equals(targetMessage))
                     .findFirst()
-                    .ifPresent(w -> toAdd
-                            .setValue(new OpenRemMenuButton(w.getX() + offsetX_ + (onLeft ? -20 : w.getWidth()), w.getY())));
+                    .ifPresent(w -> {
+                        // 修复按钮位置：使用更小的偏移量，让按钮紧贴原版控件
+                        // 原版20×20按钮之间的标准间距是2像素
+                        int buttonOffset = onLeft ? -24 : 2;
+                        toAdd.setValue(new OpenRemMenuButton(
+                                w.getX() + buttonOffset,
+                                w.getY()
+                        ));
+                    });
 
             if (toAdd.getValue() != null) {
                 event.addListener(toAdd.getValue());
