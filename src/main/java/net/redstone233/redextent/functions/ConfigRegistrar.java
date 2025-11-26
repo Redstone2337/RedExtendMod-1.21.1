@@ -1,6 +1,7 @@
 package net.redstone233.redextent.functions;
 
-import net.redstone233.redextent.Config;
+import net.redstone233.redextent.config.ClientConfig;
+import net.redstone233.redextent.config.CommonConfig;
 import net.redstone233.redextent.core.util.ConfigUtil;
 import net.redstone233.redextent.manager.ListConfigManager;
 
@@ -10,31 +11,31 @@ import net.redstone233.redextent.manager.ListConfigManager;
 public class ConfigRegistrar {
 
     public static void registerAllConfigs() {
-        // 注册物品白名单配置
+        // 注册物品白名单配置 (通用配置)
         ListConfigManager.registerListConfig(
                 "item_whitelist",
-                Config::getItemWhitelist,
+                CommonConfig::getItemWhitelist,
                 ConfigUtil::setItemWhitelist
         );
 
-        // 注册自定义特性白名单配置
+        // 注册自定义特性白名单配置 (客户端配置)
         ListConfigManager.registerListConfig(
                 "custom_ability_whitelist",
-                Config::getCustomAbilityWhitelist,
+                ClientConfig::getCustomAbilityWhitelist,
                 ConfigUtil::setCustomAbilityWhitelist
         );
 
-        // 注册幽灵宝可梦配置
+        // 注册幽灵宝可梦配置 (客户端配置)
         ListConfigManager.registerListConfig(
                 "ghost_pixelmons",
-                Config::getOnGhostPixelmons,
+                ClientConfig::getOnGhostPixelmons,
                 ConfigUtil::setOnGhostPokemons
         );
 
-        // 注册禁用模组列表配置
+        // 注册禁用模组列表配置 (通用配置)
         ListConfigManager.registerListConfig(
                 "disabled_mods",
-                Config::getDisabledModList,
+                CommonConfig::getDisabledModList,
                 ConfigUtil::setDisabledModList
         );
     }

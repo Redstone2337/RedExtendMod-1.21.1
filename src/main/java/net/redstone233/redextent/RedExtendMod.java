@@ -1,14 +1,14 @@
 package net.redstone233.redextent;
 
 import com.pixelmonmod.pixelmon.api.pokemon.ability.AbilityRegistry;
-import net.createmod.catnip.config.ui.BaseConfigScreen;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.neoforge.event.AddReloadListenerEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.server.ServerStoppingEvent;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.redstone233.redextent.ability.*;
-import net.redstone233.redextent.ability.*;
+import net.redstone233.redextent.config.ClientConfig;
+import net.redstone233.redextent.config.CommonConfig;
 import net.redstone233.redextent.core.DatapackValidator;
 import net.redstone233.redextent.core.brewing.RhinoBrewingRecipeParser;
 import net.redstone233.redextent.core.event.BrewingRecipeReloadListener;
@@ -89,7 +89,9 @@ public class RedExtendMod {
         setModVersion(modContainer.getModInfo().getVersion().toString());
 
         // Register our mod's ModConfigSpec so that FML can create and load the config file for us
-        modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC, "rem-common.toml");
+        // 注册通用配置和客户端配置
+        modContainer.registerConfig(ModConfig.Type.COMMON, CommonConfig.SPEC, "rem-common.toml");
+        modContainer.registerConfig(ModConfig.Type.CLIENT, ClientConfig.SPEC, "rem-client.toml");
 
         // 初始化清理管理器
         this.itemClearManager = new ItemClearManager();
@@ -102,16 +104,16 @@ public class RedExtendMod {
         LOGGER.info("HELLO FROM COMMON SETUP");
 
         // 调试信息
-        if (Config.isDebugModeEnabled()) {
+        if (CommonConfig.isDebugModeEnabled()) {
             LOGGER.info("=== REM Mod 调试信息 ===");
-            LOGGER.info("服务器清理功能: {}", Config.isClearServerItemEnabled());
-            LOGGER.info("物品过滤模式: {}", Config.isItemFilterEnabled());
-            LOGGER.info("清理时间间隔: {}t ({}秒)", Config.getClearTime(), Config.getClearTime() / 20);
-            LOGGER.info("白名单物品数量: {}", Config.getItemWhitelist().size());
-            LOGGER.info("自定义特性: {}", Config.isCustomAbilityEnabled());
-            LOGGER.info("自定义特性白名单: {}", Config.isStartAbilityWhitelistEnabled());
+            LOGGER.info("服务器清理功能: {}", CommonConfig.isClearServerItemEnabled());
+            LOGGER.info("物品过滤模式: {}", CommonConfig.isItemFilterEnabled());
+            LOGGER.info("清理时间间隔: {}t ({}秒)", CommonConfig.getClearTime(), CommonConfig.getClearTime() / 20);
+            LOGGER.info("白名单物品数量: {}", CommonConfig.getItemWhitelist().size());
+            LOGGER.info("自定义特性: {}", ClientConfig.isCustomAbilityEnabled());
+            LOGGER.info("自定义特性白名单: {}", ClientConfig.isStartAbilityWhitelistEnabled());
 
-            List<String> abilityWhitelist = Config.getCustomAbilityWhitelist();
+            List<String> abilityWhitelist = ClientConfig.getCustomAbilityWhitelist();
             LOGGER.info("白名单类数量: {}", abilityWhitelist.size());
             if (!abilityWhitelist.isEmpty()) {
                 LOGGER.info("白名单类: {}", String.join(", ", abilityWhitelist));
@@ -149,7 +151,7 @@ public class RedExtendMod {
         // 3. 在游戏加载的合适时机处理模组禁用
         event.enqueueWork(() -> {
             // 从配置中获取需要禁用的模组列表
-            List<String> modIdsToDisable = Config.getDisabledModList();
+            List<String> modIdsToDisable = CommonConfig.getDisabledModList();
             LOGGER.info("配置中已禁用的模组：{}", modIdsToDisable);
             handleFileBasedModControl(modIdsToDisable, true);
         });
@@ -159,11 +161,11 @@ public class RedExtendMod {
     private void pixelmonAbilitySetup(FMLCommonSetupEvent event) {
         // Some Pixelmon Ability setup code
         // 注册宝可梦特性
-        if (Config.isCustomAbilityEnabled()) {
-            List<String> whitelist = Config.getCustomAbilityWhitelist();
+        if (ClientConfig.isCustomAbilityEnabled()) {
+            List<String> whitelist = ClientConfig.getCustomAbilityWhitelist();
 
             // 检查白名单设置
-            if (Config.isStartAbilityWhitelistEnabled()) {
+            if (ClientConfig.isStartAbilityWhitelistEnabled()) {
                 // 启用白名单模式，只注册白名单中的特性
                 if (whitelist.isEmpty()) {
                     LOGGER.warn("自定义特性白名单已启用但为空，不会注册任何特性");
@@ -208,10 +210,10 @@ public class RedExtendMod {
                     LOGGER.info("注册自定义特性: Fast Start");
                     return true;
                 // 未来可以在这里添加更多特性
-                 case "DragonRise":
-                     AbilityRegistry.register(DragonRise.class.getName());
-                     LOGGER.info("注册自定义特性: Dragon Rise");
-                     return true;
+                case "DragonRise":
+                    AbilityRegistry.register(DragonRise.class.getName());
+                    LOGGER.info("注册自定义特性: Dragon Rise");
+                    return true;
                 case "FightingDivinity":
                     AbilityRegistry.register(FightingDivinity.class.getName());
                     LOGGER.info("注册自定义特性: Fighting Divinity");
@@ -283,7 +285,7 @@ public class RedExtendMod {
     @SubscribeEvent
     public void onAddReloadListeners(AddReloadListenerEvent event) {
         // 注册你的重载监听器
-        if (Config.isOnBrewingRecipeEnabled()) {
+        if (CommonConfig.isOnBrewingRecipeEnabled()) {
             event.addListener(new BrewingRecipeReloadListener());
         }
     }
@@ -291,7 +293,7 @@ public class RedExtendMod {
     @SubscribeEvent
     public void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent e) {
         if (e.getEntity() instanceof ServerPlayer sp) {
-            List<String> list = Config.getDisabledModList();
+            List<String> list = CommonConfig.getDisabledModList();
             PacketHandler.sendToPlayer(sp, new S2CDisabledModListPacket(list));
         }
     }

@@ -1,6 +1,6 @@
 package net.redstone233.redextent.manager;
 
-import net.redstone233.redextent.Config;
+import net.redstone233.redextent.config.CommonConfig;
 import net.redstone233.redextent.RedExtendMod;
 import net.redstone233.redextent.task.ItemClearTask;
 
@@ -27,7 +27,7 @@ public class ItemClearManager {
             return;
         }
 
-        if (!Config.isClearServerItemEnabled()) {
+        if (!CommonConfig.isClearServerItemEnabled()) {
             RedExtendMod.LOGGER.info("掉落物清理功能未启用，跳过任务启动");
             return;
         }
@@ -36,7 +36,7 @@ public class ItemClearManager {
         this.clearTask.start();
         this.isRunning = true;
 
-        int clearTimeTicks = Config.getClearTime();
+        int clearTimeTicks = CommonConfig.getClearTime();
         int clearTimeSeconds = clearTimeTicks / 20;
         RedExtendMod.LOGGER.info("掉落物清理任务已启动，清理间隔: {}秒 ({} tick)", clearTimeSeconds, clearTimeTicks);
     }
@@ -65,7 +65,7 @@ public class ItemClearManager {
             RedExtendMod.LOGGER.info("重新加载掉落物清理配置");
             stopClearTask();
 
-            if (Config.isClearServerItemEnabled()) {
+            if (CommonConfig.isClearServerItemEnabled()) {
                 startClearTask(server);
             }
         }
@@ -89,8 +89,8 @@ public class ItemClearManager {
         }
 
         String filterInfo;
-        if (Config.isItemFilterEnabled()) {
-            List<String> whitelist = Config.getItemWhitelist();
+        if (CommonConfig.isItemFilterEnabled()) {
+            List<String> whitelist = CommonConfig.getItemWhitelist();
             if (whitelist.isEmpty()) {
                 filterInfo = "过滤器: 启用 (白名单为空，清理所有物品)";
             } else {
@@ -100,14 +100,14 @@ public class ItemClearManager {
             filterInfo = "过滤器: 禁用";
         }
 
-        int clearTimeTicks = Config.getClearTime();
+        int clearTimeTicks = CommonConfig.getClearTime();
         int clearTimeSeconds = clearTimeTicks / 20;
 
         return Optional.of(String.format(
                 "掉落物清理任务运行中 - 间隔: %d秒 (%dt), %s, 调试模式: %s",
                 clearTimeSeconds, clearTimeTicks,
                 filterInfo,
-                Config.isDebugModeEnabled() ? "启用" : "禁用"
+                CommonConfig.isDebugModeEnabled() ? "启用" : "禁用"
         ));
     }
 }

@@ -4,7 +4,7 @@ import com.pixelmonmod.pixelmon.api.pokemon.ability.AbstractAbility;
 import com.pixelmonmod.pixelmon.api.pokemon.stats.BattleStatsType;
 import com.pixelmonmod.pixelmon.api.pokemon.type.Type;
 import com.pixelmonmod.pixelmon.battles.controller.participants.PixelmonWrapper;
-import net.redstone233.redextent.Config;
+import net.redstone233.redextent.config.ClientConfig;
 
 import java.util.List;
 
@@ -26,7 +26,7 @@ public class BiomeBlessingSwamp extends AbstractAbility {
             boolean isGhostType = newPokemon.isType(Type.GHOST);
 
             // 获取配置中的幽灵宝可梦名单
-            List<String> ghostPokemonNames = Config.getOnGhostPixelmons();
+            List<String> ghostPokemonNames = ClientConfig.getOnGhostPixelmons();
             String currentPokemonName = newPokemon.getSpecies().getName();
 
             // 检查当前宝可梦是否在配置列表中

@@ -1,6 +1,7 @@
 package net.redstone233.redextent.task;
 
-import net.redstone233.redextent.Config;
+import net.redstone233.redextent.config.ClientConfig;
+import net.redstone233.redextent.config.CommonConfig;
 import net.redstone233.redextent.RedExtendMod;
 
 import net.minecraft.server.MinecraftServer;
@@ -33,7 +34,7 @@ public class ItemClearTask {
 
     public ItemClearTask(MinecraftServer server) {
         this.server = server;
-        this.maxLifeTick = Config.getClearTime(); // 直接使用游戏刻
+        this.maxLifeTick = CommonConfig.getClearTime(); // 直接使用游戏刻
         // 倒计时显示为秒，所以需要将游戏刻转换为秒
         this.nextClearCountdown = maxLifeTick / 20;
     }
@@ -62,7 +63,7 @@ public class ItemClearTask {
         // 启动倒计时更新任务（每秒更新一次）
         scheduler.scheduleAtFixedRate(this::updateCountdown, 1, 1, TimeUnit.SECONDS);
 
-        if (Config.isDebugModeEnabled()) {
+        if (CommonConfig.isDebugModeEnabled()) {
             RedExtendMod.LOGGER.info("清理任务已启动，间隔: {}秒 ({} tick)", clearIntervalSeconds, maxLifeTick);
         }
     }
@@ -91,7 +92,7 @@ public class ItemClearTask {
 
         // 清空记录
         spawnTickMap.clear();
-        this.maxLifeTick = Config.getClearTime();
+        this.maxLifeTick = CommonConfig.getClearTime();
         this.nextClearCountdown = maxLifeTick / 20;
     }
 
@@ -134,7 +135,7 @@ public class ItemClearTask {
 
             // 如果没有清理任何物品，则返回
             if (stats.getTotalEntities() == 0) {
-                if (Config.isDebugModeEnabled()) {
+                if (CommonConfig.isDebugModeEnabled()) {
                     RedExtendMod.LOGGER.debug("没有发现需要清理的掉落物");
                 }
                 return;
@@ -167,7 +168,7 @@ public class ItemClearTask {
         }
 
         // 如果开启了物品过滤器，检查物品是否在白名单外
-        if (Config.isItemFilterEnabled()) {
+        if (CommonConfig.isItemFilterEnabled()) {
             return !isInWhitelist(item);
         }
 
@@ -181,7 +182,7 @@ public class ItemClearTask {
      * @return 是否在白名单中
      */
     private boolean isInWhitelist(ItemEntity item) {
-        List<String> whitelist = Config.getItemWhitelist();
+        List<String> whitelist = CommonConfig.getItemWhitelist();
 
         // 如果白名单为空，则默认所有物品都不在白名单中（即全部清理）
         if (whitelist.isEmpty()) {
@@ -198,8 +199,8 @@ public class ItemClearTask {
      * @param stats 清理统计信息
      */
     private void broadcastClearMessage(ClearStatistics stats) {
-        String textHead = Config.getDisplayTextHead();
-        String textBody = Config.getDisplayTextBody();
+        String textHead = ClientConfig.getDisplayTextHead();
+        String textBody = ClientConfig.getDisplayTextBody();
 
         // 格式化消息（支持两个 %s 占位符）
         String formattedMessage = String.format(textBody, stats.getTypeCount(), nextClearCountdown);
@@ -210,7 +211,7 @@ public class ItemClearTask {
             player.sendSystemMessage(Component.literal(fullMessage));
         });
 
-        if (Config.isDebugModeEnabled()) {
+        if (CommonConfig.isDebugModeEnabled()) {
             RedExtendMod.LOGGER.info("广播清理消息: {}", fullMessage);
         }
     }
@@ -220,7 +221,7 @@ public class ItemClearTask {
      * @param stats 统计信息
      */
     private void logClearStatistics(ClearStatistics stats) {
-        if (Config.isDebugModeEnabled()) {
+        if (CommonConfig.isDebugModeEnabled()) {
             RedExtendMod.LOGGER.info("清理了 {} 个掉落物实体，涉及 {} 种物品",
                     stats.getTotalEntities(), stats.getTypeCount());
 

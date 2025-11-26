@@ -10,9 +10,8 @@ import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
-import net.neoforged.neoforge.client.gui.ConfigurationScreen;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
-import net.redstone233.redextent.core.gui.RemMainMenuScreen;
+import net.redstone233.redextent.config.CommonConfig;
 import net.redstone233.redextent.core.mod.RedExtendModPonderPlugin;
 
 import java.util.List;
@@ -33,16 +32,14 @@ public class RedExtendModClient {
         Supplier<IConfigScreenFactory> configScreen = () ->
                 (mc, previousScreen) -> new BaseConfigScreen(previousScreen, RedExtendMod.MOD_ID);
         container.registerExtensionPoint(IConfigScreenFactory.class, configScreen);
-
-
     }
 
     @SubscribeEvent
     static void onClientSetup(FMLClientSetupEvent event) {
-        if (Config.isOnPonderEnabled()) {
+        if (CommonConfig.isOnPonderEnabled()) {
             PonderIndex.addPlugin(new RedExtendModPonderPlugin());
         }
-        List<String> softList = Config.getDisabledModList();
+        List<String> softList = CommonConfig.getDisabledModList();
         if (softList.isEmpty()) return;
 
         //1. 跳过 Mod 容器初始化（防止注册方块/物品/渲染）

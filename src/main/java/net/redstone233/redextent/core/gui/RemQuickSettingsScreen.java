@@ -8,6 +8,7 @@ import net.minecraft.client.gui.components.StringWidget;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
+import net.redstone233.redextent.config.CommonConfig;
 import net.redstone233.redextent.core.util.ConfigUtil;
 
 public class RemQuickSettingsScreen extends AbstractSimiScreen {
@@ -31,7 +32,7 @@ public class RemQuickSettingsScreen extends AbstractSimiScreen {
                 Component.literal("清理时间:"), font));
 
         EditBox clearTimeField = new EditBox(font, guiLeft + 100, yPos, fieldWidth, 20, Component.literal(""));
-        clearTimeField.setValue(String.valueOf(net.redstone233.redextent.Config.getClearTime()));
+        clearTimeField.setValue(String.valueOf(CommonConfig.getClearTime()));
         clearTimeField.setFilter(s -> s.matches("\\d*"));
         addRenderableWidget(clearTimeField);
 

@@ -6,7 +6,8 @@ import net.minecraft.client.gui.components.*;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
-import net.redstone233.redextent.Config;
+import net.redstone233.redextent.config.ClientConfig;
+import net.redstone233.redextent.config.CommonConfig;
 import net.redstone233.redextent.core.util.ConfigUtil;
 import net.redstone233.redextent.core.gui.widget.ListStringInput;
 
@@ -61,7 +62,7 @@ public class RemDetailedConfigScreen extends AbstractSimiScreen {
         isClearServerItemCheckbox = createToggleButton(
                 guiLeft + 10, yPos, 200, 20,
                 Component.literal("开启服务器掉落物清理功能"),
-                Config.isClearServerItemEnabled()
+                CommonConfig.isClearServerItemEnabled()
         );
         addRenderableWidget(isClearServerItemCheckbox);
         yPos += 25;
@@ -69,7 +70,7 @@ public class RemDetailedConfigScreen extends AbstractSimiScreen {
         isItemFilterCheckbox = createToggleButton(
                 guiLeft + 10, yPos, 200, 20,
                 Component.literal("物品过滤器模式"),
-                Config.isItemFilterEnabled()
+                CommonConfig.isItemFilterEnabled()
         );
         addRenderableWidget(isItemFilterCheckbox);
         yPos += 25;
@@ -77,7 +78,7 @@ public class RemDetailedConfigScreen extends AbstractSimiScreen {
         isDebugModeCheckbox = createToggleButton(
                 guiLeft + 10, yPos, 200, 20,
                 Component.literal("调试模式"),
-                Config.isDebugModeEnabled()
+                CommonConfig.isDebugModeEnabled()
         );
         addRenderableWidget(isDebugModeCheckbox);
         yPos += 25;
@@ -85,7 +86,7 @@ public class RemDetailedConfigScreen extends AbstractSimiScreen {
         isOnPonderCheckbox = createToggleButton(
                 guiLeft + 10, yPos, 200, 20,
                 Component.literal("启用内置思索"),
-                Config.isOnPonderEnabled()
+                CommonConfig.isOnPonderEnabled()
         );
         addRenderableWidget(isOnPonderCheckbox);
         yPos += 25;
@@ -93,7 +94,7 @@ public class RemDetailedConfigScreen extends AbstractSimiScreen {
         onBrewingRecipeCheckbox = createToggleButton(
                 guiLeft + 10, yPos, 200, 20,
                 Component.literal("启用酿造配方"),
-                Config.isOnBrewingRecipeEnabled()
+                CommonConfig.isOnBrewingRecipeEnabled()
         );
         addRenderableWidget(onBrewingRecipeCheckbox);
         yPos += 35;
@@ -108,7 +109,7 @@ public class RemDetailedConfigScreen extends AbstractSimiScreen {
                 Component.literal("清理时间:"), font));
         clearTimeEditBox = new EditBox(font, guiLeft + 100, yPos, 160, 20,
                 Component.literal(""));
-        clearTimeEditBox.setValue(String.valueOf(Config.getClearTime()));
+        clearTimeEditBox.setValue(String.valueOf(CommonConfig.getClearTime()));
         clearTimeEditBox.setFilter(s -> s.matches("\\d*"));
         clearTimeEditBox.setTooltip(Tooltip.create(Component.literal("物品清理时间（游戏刻）\n范围：180 ~ 36000\n默认：6000")));
         addRenderableWidget(clearTimeEditBox);
@@ -118,7 +119,7 @@ public class RemDetailedConfigScreen extends AbstractSimiScreen {
         addRenderableWidget(new StringWidget(guiLeft + 10, yPos, 80, 20,
                 Component.literal("物品白名单:"), font));
         itemWhitelistInput = new ListStringInput(guiLeft + 100, yPos, 250, 20)
-                .withValues(Config.getItemWhitelist())
+                .withValues(CommonConfig.getItemWhitelist())
                 .titled(Component.literal("物品白名单"))
                 .withHint(Component.literal("不会被清理的物品列表\n存储格式: [\"item1\",\"item2\",\"item3\"]"))
                 .calling(this::onItemWhitelistChanged);
@@ -135,7 +136,7 @@ public class RemDetailedConfigScreen extends AbstractSimiScreen {
                 Component.literal("显示文本头:"), font));
         displayTextHeadEditBox = new EditBox(font, guiLeft + 100, yPos, 250, 20,
                 Component.literal(""));
-        displayTextHeadEditBox.setValue(Config.getDisplayTextHead());
+        displayTextHeadEditBox.setValue(ClientConfig.getDisplayTextHead());
         displayTextHeadEditBox.setTooltip(Tooltip.create(Component.literal("显示在消息开头的文本\n支持颜色代码：&a&l等")));
         addRenderableWidget(displayTextHeadEditBox);
         yPos += 30;
@@ -145,7 +146,7 @@ public class RemDetailedConfigScreen extends AbstractSimiScreen {
                 Component.literal("显示文本体:"), font));
         displayTextBodyEditBox = new EditBox(font, guiLeft + 100, yPos, 250, 20,
                 Component.literal(""));
-        displayTextBodyEditBox.setValue(Config.getDisplayTextBody());
+        displayTextBodyEditBox.setValue(ClientConfig.getDisplayTextBody());
         displayTextBodyEditBox.setTooltip(Tooltip.create(Component.literal("显示在消息主体的文本\n支持颜色代码：&a&l等\n使用 %s 作为占位符")));
         addRenderableWidget(displayTextBodyEditBox);
         yPos += 35;
@@ -158,7 +159,7 @@ public class RemDetailedConfigScreen extends AbstractSimiScreen {
         customAbilityCheckbox = createToggleButton(
                 guiLeft + 10, yPos, 200, 20,
                 Component.literal("是否开启自定义特性"),
-                Config.isCustomAbilityEnabled()
+                ClientConfig.isCustomAbilityEnabled()
         );
         addRenderableWidget(customAbilityCheckbox);
         yPos += 25;
@@ -166,7 +167,7 @@ public class RemDetailedConfigScreen extends AbstractSimiScreen {
         startAbilityWhitelistCheckbox = createToggleButton(
                 guiLeft + 10, yPos, 200, 20,
                 Component.literal("是否开启自定义特性白名单"),
-                Config.isStartAbilityWhitelistEnabled()
+                ClientConfig.isStartAbilityWhitelistEnabled()
         );
         addRenderableWidget(startAbilityWhitelistCheckbox);
         yPos += 30;
@@ -175,7 +176,7 @@ public class RemDetailedConfigScreen extends AbstractSimiScreen {
         addRenderableWidget(new StringWidget(guiLeft + 10, yPos, 80, 20,
                 Component.literal("特性白名单:"), font));
         customAbilityWhitelistInput = new ListStringInput(guiLeft + 100, yPos, 250, 20)
-                .withValues(Config.getCustomAbilityWhitelist())
+                .withValues(ClientConfig.getCustomAbilityWhitelist())
                 .titled(Component.literal("自定义特性白名单"))
                 .withHint(Component.literal("允许的自定义特性列表\n存储格式: [\"ability1\",\"ability2\"]"))
                 .calling(this::onCustomAbilityWhitelistChanged);
@@ -186,7 +187,7 @@ public class RemDetailedConfigScreen extends AbstractSimiScreen {
         addRenderableWidget(new StringWidget(guiLeft + 10, yPos, 80, 20,
                 Component.literal("幽灵宝可梦:"), font));
         onGhostPixelmonsInput = new ListStringInput(guiLeft + 100, yPos, 250, 20)
-                .withValues(Config.getOnGhostPixelmons())
+                .withValues(ClientConfig.getOnGhostPixelmons())
                 .titled(Component.literal("幽灵宝可梦列表"))
                 .withHint(Component.literal("被视为幽灵宝可梦的列表\n存储格式: [\"pokemon1\",\"pokemon2\"]"))
                 .calling(this::onGhostPixelmonsChanged);
@@ -197,7 +198,7 @@ public class RemDetailedConfigScreen extends AbstractSimiScreen {
         addRenderableWidget(new StringWidget(guiLeft + 10, yPos, 80, 20,
                 Component.literal("禁用模组:"), font));
         disabledModListInput = new ListStringInput(guiLeft + 100, yPos, 250, 20)
-                .withValues(Config.getDisabledModList())
+                .withValues(CommonConfig.getDisabledModList())
                 .titled(Component.literal("禁用模组列表"))
                 .withHint(Component.literal("禁用的模组ID列表\n存储格式: [\"modid1\",\"modid2\"]"))
                 .calling(this::onDisabledModListChanged);

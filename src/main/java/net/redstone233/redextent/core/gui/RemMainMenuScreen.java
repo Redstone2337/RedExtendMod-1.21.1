@@ -5,8 +5,9 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.createmod.catnip.config.ui.BaseConfigScreen;
 import net.createmod.catnip.data.Iterate;
-import net.redstone233.redextent.Config;
 import net.redstone233.redextent.RedExtendMod;
+import net.redstone233.redextent.config.ClientConfig;
+import net.redstone233.redextent.config.CommonConfig;
 import net.redstone233.redextent.core.util.ConfigUtil;
 
 import dev.engine_room.flywheel.lib.transform.TransformStack;
@@ -177,34 +178,34 @@ public class RemMainMenuScreen extends AbstractSimiScreen {
 
         // 服务器物品清理配置
         Button itemClearButton = Button.builder(
-                Component.literal("物品清理: " + (Config.isClearServerItemEnabled() ? "开启" : "关闭")),
+                Component.literal("物品清理: " + (CommonConfig.isClearServerItemEnabled() ? "开启" : "关闭")),
                 $ -> toggleItemClear()
         ).bounds(center - 100, rightColumnY + buttonSpacing, bLongWidth, bHeight).build();
         addRenderableWidget(itemClearButton);
 
         // 物品过滤器配置
         addRenderableWidget(Button.builder(
-                Component.literal("物品过滤器: " + (Config.isItemFilterEnabled() ? "开启" : "关闭")),
+                Component.literal("物品过滤器: " + (CommonConfig.isItemFilterEnabled() ? "开启" : "关闭")),
                 $ -> toggleItemFilter()
         ).bounds(center - 100, rightColumnY + buttonSpacing * 2, bLongWidth, bHeight).build());
 
         // 酿造配方配置
         brewingRecipeButton = Button.builder(
-                Component.literal("酿造配方: " + (Config.isOnBrewingRecipeEnabled() ? "开启" : "关闭")),
+                Component.literal("酿造配方: " + (CommonConfig.isOnBrewingRecipeEnabled() ? "开启" : "关闭")),
                 $ -> toggleBrewingRecipe()
         ).bounds(center - 100, rightColumnY + buttonSpacing * 3, bLongWidth, bHeight).build();
         addRenderableWidget(brewingRecipeButton);
 
         // 调试模式配置
         debugModeButton = Button.builder(
-                Component.literal("调试模式: " + (Config.isDebugModeEnabled() ? "开启" : "关闭")),
+                Component.literal("调试模式: " + (CommonConfig.isDebugModeEnabled() ? "开启" : "关闭")),
                 $ -> toggleDebugMode()
         ).bounds(center - 100, rightColumnY + buttonSpacing * 4, bLongWidth, bHeight).build();
         addRenderableWidget(debugModeButton);
 
         // 自定义特性配置
         customAbilityButton = Button.builder(
-                Component.literal("自定义特性: " + (Config.isCustomAbilityEnabled() ? "开启" : "关闭")),
+                Component.literal("自定义特性: " + (ClientConfig.isCustomAbilityEnabled() ? "开启" : "关闭")),
                 $ -> toggleCustomAbility()
         ).bounds(center - 100, rightColumnY + buttonSpacing * 5, bLongWidth, bHeight).build();
         addRenderableWidget(customAbilityButton);
@@ -265,7 +266,7 @@ public class RemMainMenuScreen extends AbstractSimiScreen {
         if (brewingRecipeButton != null && brewingRecipeButton.isMouseOver(mouseX, mouseY)) {
             graphics.renderComponentTooltip(font,
                     FontHelper.cutTextComponent(
-                            Component.literal("当前清理时间: " + Config.getClearTime() + " ticks (" + (Config.getClearTime() / 20) + "秒)"),
+                            Component.literal("当前清理时间: " + CommonConfig.getClearTime() + " ticks (" + (CommonConfig.getClearTime() / 20) + "秒)"),
                             FontHelper.Palette.ALL_GRAY), mouseX, mouseY);
         }
 
@@ -280,7 +281,7 @@ public class RemMainMenuScreen extends AbstractSimiScreen {
 
     // 配置切换方法 - 使用 ConfigUtil
     private void toggleItemClear() {
-        boolean current = Config.isClearServerItemEnabled();
+        boolean current = CommonConfig.isClearServerItemEnabled();
         ConfigUtil.setClearServerItem(!current);
 
         // 更新按钮文本
@@ -289,7 +290,7 @@ public class RemMainMenuScreen extends AbstractSimiScreen {
     }
 
     private void toggleItemFilter() {
-        boolean current = Config.isItemFilterEnabled();
+        boolean current = CommonConfig.isItemFilterEnabled();
         ConfigUtil.setItemFilter(!current);
 
         updateButtonText("物品过滤器:", !current);
@@ -297,7 +298,7 @@ public class RemMainMenuScreen extends AbstractSimiScreen {
     }
 
     private void toggleBrewingRecipe() {
-        boolean current = Config.isOnBrewingRecipeEnabled();
+        boolean current = CommonConfig.isOnBrewingRecipeEnabled();
         ConfigUtil.setOnBrewingRecipe(!current);
 
         if (brewingRecipeButton != null) {
@@ -307,7 +308,7 @@ public class RemMainMenuScreen extends AbstractSimiScreen {
     }
 
     private void toggleDebugMode() {
-        boolean current = Config.isDebugModeEnabled();
+        boolean current = CommonConfig.isDebugModeEnabled();
         ConfigUtil.setDebugMode(!current);
 
         if (debugModeButton != null) {
@@ -317,7 +318,7 @@ public class RemMainMenuScreen extends AbstractSimiScreen {
     }
 
     private void toggleCustomAbility() {
-        boolean current = Config.isCustomAbilityEnabled();
+        boolean current = ClientConfig.isCustomAbilityEnabled();
         ConfigUtil.setCustomAbility(!current);
 
         if (customAbilityButton != null) {
