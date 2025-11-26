@@ -147,7 +147,7 @@ public class OpenRemMenuButton extends Button {
             int offsetX_ = offsetX;
             MutableObject<GuiEventListener> toAdd = new MutableObject<>(null);
 
-            // 找到目标按钮并在其旁边放置我们的按钮
+            // 找到目标按钮并在其旁边放置我们的按钮 - 调整偏移量避免重合
             event.getListenersList()
                     .stream()
                     .filter(w -> w instanceof AbstractWidget)
@@ -157,9 +157,16 @@ public class OpenRemMenuButton extends Button {
                             .equals(targetMessage))
                     .findFirst()
                     .ifPresent(w -> {
-                        // 修复按钮位置：使用更小的偏移量，让按钮紧贴原版控件
-                        // 原版20×20按钮之间的标准间距是2像素
-                        int buttonOffset = onLeft ? -24 : 2;
+                        // 调整偏移量，避免与"模组(Mods)"按钮重合
+                        // 根据按钮在左侧还是右侧使用不同的偏移量
+                        int buttonOffset;// 使用目标按钮宽度+小偏移
+                        if (onLeft) {
+                            // 左侧按钮：放在目标按钮的左侧，但要确保不与其他按钮重合
+                            buttonOffset = -24;
+                        } else {
+                            // 右侧按钮：放在目标按钮的右侧，但要确保不与其他按钮重合
+                            buttonOffset = w.getWidth() + 4;
+                        }
                         toAdd.setValue(new OpenRemMenuButton(
                                 w.getX() + buttonOffset,
                                 w.getY()
