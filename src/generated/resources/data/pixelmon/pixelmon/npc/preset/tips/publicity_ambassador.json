@@ -11,14 +11,14 @@
             "results": {
               "value": [
                 {
-                  "title": "游戏提示",
+                  "title": "模组介绍",
                   "type": "pixelmon:open_paged_dialogue",
                   "pages": [
-                    "欢迎来到我们的像素精灵世界！",
-                    "探索、战斗、培育，体验前所未有的冒险！",
-                    "记得定期检查我们的更新，获取最新内容和活动信息！",
-                    "与朋友组队挑战道馆，获得稀有奖励！",
-                    "野外探险时注意稀有宝可梦的出现时机！"
+                    "欢迎来到 RedExtent 模组！",
+                    "这个模组添加了许多新的NPC和功能，",
+                    "包括道馆挑战、商店系统和各种互动。",
+                    "探索世界，挑战强大的训练家，",
+                    "收集稀有物品，享受宝可梦冒险！"
                   ]
                 }
               ],
@@ -38,7 +38,6 @@
         "width": 1.0,
         "height": 2.0
       },
-      "title": "模组宣传",
       "pushable": false,
       "child": false,
       "invulnerable": false,
@@ -66,51 +65,26 @@
       {
         "slim": false,
         "type": "pixelmon:player",
-        "texture": {
-          "resource": {
-            "resource": "rem:textures/steve/fire_dragon.png",
-            "fallback": "rem:textures/steve/fire_dragon.png"
-          },
-          "type": "pixelmon:fallback"
-        }
+        "texture": "rem:textures/steve/fire_dragon.png"
       },
       {
         "slim": false,
         "type": "pixelmon:player",
-        "texture": {
-          "resource": {
-            "resource": "rem:textures/steve/gwenthe_dragon.png",
-            "fallback": "rem:textures/steve/gwenthe_dragon.png"
-          },
-          "type": "pixelmon:fallback"
-        }
+        "texture": "rem:textures/steve/gwenthe_dragon.png"
       },
       {
         "slim": false,
         "type": "pixelmon:player",
-        "texture": {
-          "resource": {
-            "resource": "rem:textures/steve/magic_dragon_electricity.png",
-            "fallback": "rem:textures/steve/magic_dragon_electricity.png"
-          },
-          "type": "pixelmon:fallback"
-        }
+        "texture": "rem:textures/steve/magic_dragon_electricity.png"
       }
     ],
     "type": "pixelmon:uniformly_random"
   },
-  "goals": {
+  "ai_provider": {
     "value": {
-      "goals": [
-        {
-          "provider": {
-            "type": "pixelmon:look_at_nearby",
-            "look_distance": 4.0,
-            "probability": 0.9
-          },
-          "priority": 1
-        }
-      ]
+      "type": "pixelmon:stand_and_look",
+      "look_distance": 4.0,
+      "swim": false
     },
     "type": "pixelmon:constant"
   }

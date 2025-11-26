@@ -42,50 +42,18 @@ public abstract class PixelmonNPCProvider implements DataProvider {
 
     private final Map<String, JsonObject> npcs = new LinkedHashMap<>();
 
-    /**
-     * 创建此数据提供者的新实例。
-     *
-     * @param output 数据生成器提供的 {@linkplain PackOutput} 实例。
-     * @param modId  当前模组的模组ID。
-     * @param subDirectory 在 data/modid/pixelmon/npc/preset/ 中放置文件的子目录。
-     */
     protected PixelmonNPCProvider(final PackOutput output, final String modId, final String subDirectory) {
         this(output, modId, subDirectory, null, NPCDefinition.SaveMode.UNORDERED_FORMATTED);
     }
 
-    /**
-     * 创建此数据提供者的新实例，支持自定义输出路径。
-     *
-     * @param output 数据生成器提供的 {@linkplain PackOutput} 实例。
-     * @param modId  当前模组的模组ID。
-     * @param subDirectory 放置文件的子目录。
-     * @param customOutputPath 自定义输出路径，如果为null则使用默认路径 data/modid/pixelmon/npc/preset/。
-     */
     protected PixelmonNPCProvider(final PackOutput output, final String modId, final String subDirectory, final String customOutputPath) {
         this(output, modId, subDirectory, customOutputPath, NPCDefinition.SaveMode.UNORDERED_FORMATTED);
     }
 
-    /**
-     * 创建此数据提供者的新实例，支持自定义保存模式。
-     *
-     * @param output 数据生成器提供的 {@linkplain PackOutput} 实例。
-     * @param modId  当前模组的模组ID。
-     * @param subDirectory 放置文件的子目录。
-     * @param saveMode JSON保存模式。
-     */
     protected PixelmonNPCProvider(final PackOutput output, final String modId, final String subDirectory, final NPCDefinition.SaveMode saveMode) {
         this(output, modId, subDirectory, null, saveMode);
     }
 
-    /**
-     * 创建此数据提供者的新实例，支持自定义输出路径和保存模式。
-     *
-     * @param output 数据生成器提供的 {@linkplain PackOutput} 实例。
-     * @param modId  当前模组的模组ID。
-     * @param subDirectory 放置文件的子目录。
-     * @param customOutputPath 自定义输出路径，如果为null则使用默认路径 data/modid/pixelmon/npc/preset/。
-     * @param saveMode JSON保存模式。
-     */
     protected PixelmonNPCProvider(final PackOutput output, final String modId, final String subDirectory,
                                   final String customOutputPath, final NPCDefinition.SaveMode saveMode) {
         this.output = output;
@@ -175,129 +143,57 @@ public abstract class PixelmonNPCProvider implements DataProvider {
         return NPCDefinition.builder();
     }
 
-    // ==================== 纯字符串方法 - 针对宝可梦NPC兼容性 ====================
+    // ==================== NPC生成方法（带类型支持） ====================
 
     /**
-     * 生成自定义商店NPC（纯字符串版本，适用于宝可梦NPC）
+     * 生成对战馆主NPC（严格匹配 dragon_1.json 格式）
      */
-    protected void addCustomShopNPCString(String fileName, List<String> npcNames,
-                                          String propertyTitle, String interactionTitle,
-                                          String greeting, String goodbye,
-                                          List<JsonObject> shopItems, List<String> textureResources,
-                                          float lookDistance, float lookProbability) {
-
-        List<NPCDefinition.PlayerModel> models = textureResources.stream()
-                .map(texture -> createPlayerModelWithFallback(false, texture, texture))
-                .toList();
+    protected void addBattleLeaderNPC(String fileName, String npcName, JsonObject title,
+                                      List<String> pokemonSpecs, String texturePath,
+                                      JsonObject interactions) {
 
         JsonObject npcDefinition = definition()
-                .withUniformInteractions(List.of(createCustomShopInteractionsString(interactionTitle, greeting, goodbye, shopItems)))
-                .withStringTitleProperties(20.0f, 1.0f, 1.0f, 2.0f, propertyTitle, false, false, false, false, true)
-                .withEmptyParty()
-                .withRandomNames(npcNames)
-                .withRandomPlayerModels(models)
-                .withLookAtNearbyGoal(lookDistance, lookProbability, 1)
-                .build()
-                .serialize();
-
-        this.add(fileName, npcDefinition);
-    }
-
-    /**
-     * 快速生成多页提示NPC（纯字符串版本）
-     */
-    protected void addMultiPageTipNPCString(String fileName, List<String> npcNames,
-                                            String propertyTitle, String interactionTitle,
-                                            List<String> messagePages, List<String> textureResources,
-                                            float lookDistance, float lookProbability) {
-
-        List<NPCDefinition.PlayerModel> models = textureResources.stream()
-                .map(texture -> createPlayerModelWithFallback(false, texture, texture))
-                .toList();
-
-        JsonObject npcDefinition = definition()
-                .withUniformInteractions(List.of(createMultiPageTipInteractionsString(interactionTitle, messagePages)))
-                .withStringTitleProperties(20.0f, 1.0f, 1.0f, 2.0f, propertyTitle, false, false, false, false, true)
-                .withEmptyParty()
-                .withRandomNames(npcNames)
-                .withRandomPlayerModels(models)
-                .withLookAtNearbyGoal(lookDistance, lookProbability, 1)
-                .build()
-                .serialize();
-
-        this.add(fileName, npcDefinition);
-    }
-
-    /**
-     * 快速生成进化石商店NPC（纯字符串版本）
-     */
-    protected void addEvolutionStoneShopString(String fileName, List<String> npcNames,
-                                               String propertyTitle, String interactionTitle,
-                                               String greeting, String goodbye,
-                                               List<JsonObject> shopItems, List<String> textureResources,
-                                               float lookDistance, float lookProbability) {
-
-        List<NPCDefinition.PlayerModel> models = textureResources.stream()
-                .map(texture -> createPlayerModelWithFallback(false, texture, texture))
-                .toList();
-
-        JsonObject npcDefinition = definition()
-                .withUniformInteractions(List.of(createCustomShopInteractionsString(interactionTitle, greeting, goodbye, shopItems)))
-                .withStringTitleProperties(20.0f, 1.0f, 1.0f, 2.0f, propertyTitle, false, false, false, false, true)
-                .withEmptyParty()
-                .withRandomNames(npcNames)
-                .withRandomPlayerModels(models)
-                .withLookAtNearbyGoal(lookDistance, lookProbability, 1)
-                .build()
-                .serialize();
-
-        this.add(fileName, npcDefinition);
-    }
-
-    /**
-     * 快速生成馆主NPC（纯字符串版本）
-     */
-    protected void addGymLeaderString(String fileName, String npcName, String title,
-                                      String greeting, String winMessage, String loseMessage,
-                                      List<String> pokemonSpecs, double rewardMoney,
-                                      List<JsonObject> rewardItems, int cooldownDays, String texture) {
-
-        JsonObject npcDefinition = definition()
-                .withConstantInteractions(createGymLeaderInteractionsString(title, greeting, winMessage,
-                        loseMessage, rewardMoney, rewardItems, cooldownDays))
-                .withStringTitleProperties(20.0f, 1.9f, 0.65f, 2.0f, title, false, false, false, false, true)
-                .withSpecParty(pokemonSpecs)
+                .withType(NPCDefinition.NPCType.GYM_LEADER)
+                .withProperties(createBattleLeaderProperties(title))
                 .withSingleName(npcName)
-                .withSinglePlayerModel(false, texture)
-                .withLookAtNearbyGoal(8.0f, 0.9f, 1)
+                .withSpecParty(pokemonSpecs)
+                .withSinglePlayerModel(true, texturePath)
+                .withStandAndLookAI(10.0f, false)
+                .withConstantInteractions(interactions)
                 .build()
                 .serialize();
 
         this.add(fileName, npcDefinition);
     }
 
-    // ==================== 原始方法保持不变 ====================
+    /**
+     * 生成简化版对战馆主NPC
+     */
+    protected void addSimpleBattleLeaderNPC(String fileName, String npcName, String titleTranslate,
+                                            List<String> pokemonSpecs, String texturePath) {
+
+        JsonObject title = createTranslateTitle(titleTranslate, "#8E44AD", true, false, false);
+        JsonObject interactions = createBattleLeaderInteractions();
+
+        addBattleLeaderNPC(fileName, npcName, title, pokemonSpecs, texturePath, interactions);
+    }
 
     /**
-     * 生成自定义商店NPC，结构与evostones_1.json完全一致
+     * 生成聊天NPC（严格匹配 aquaboss.json 格式）
      */
-    protected void addCustomShopNPC(String fileName, List<String> npcNames,
-                                    JsonObject propertyTitle, JsonObject interactionTitle,
-                                    JsonObject greeting, JsonObject goodbye,
-                                    List<JsonObject> shopItems, List<String> textureResources,
-                                    float lookDistance, float lookProbability) {
-
-        List<NPCDefinition.PlayerModel> models = textureResources.stream()
-                .map(texture -> createPlayerModelWithFallback(false, texture, texture))
-                .toList();
+    protected void addChattingNPC(String fileName, List<String> npcNames,
+                                  List<NPCDefinition.PlayerModel> models,
+                                  JsonObject properties, JsonObject aiProvider,
+                                  List<JsonObject> chatInteractions) {
 
         JsonObject npcDefinition = definition()
-                .withUniformInteractions(List.of(createCustomShopInteractions(interactionTitle, greeting, goodbye, shopItems)))
-                .withTitleProperties(20.0f, 1.0f, 1.0f, 2.0f, propertyTitle, false, false, false, false, true)
-                .withEmptyParty()
+                .withType(NPCDefinition.NPCType.CHAT)
+                .withProperties(properties)
                 .withRandomNames(npcNames)
+                .withEmptyParty()
                 .withRandomPlayerModels(models)
-                .withLookAtNearbyGoal(lookDistance, lookProbability, 1)
+                .withAIProvider(aiProvider)
+                .withUniformInteractions(chatInteractions)
                 .build()
                 .serialize();
 
@@ -305,23 +201,999 @@ public abstract class PixelmonNPCProvider implements DataProvider {
     }
 
     /**
-     * 生成自定义商店NPC（简化版，使用翻译键）
+     * 生成教程NPC
      */
-    protected void addCustomShopNPC(String fileName, List<String> npcNames,
-                                    String propertyTitleTranslate, String interactionTitleTranslate,
-                                    String greetingTranslate, String goodbyeTranslate,
-                                    List<JsonObject> shopItems, List<String> textureResources) {
+    protected void addTutorialNPC(String fileName, List<String> npcNames, JsonObject title,
+                                  List<NPCDefinition.PlayerModel> models, JsonObject aiProvider,
+                                  List<JsonObject> tutorialInteractions) {
 
-        JsonObject propertyTitle = createTranslateTitle(propertyTitleTranslate, "#2176FF", true, false, false);
-        JsonObject interactionTitle = createTranslateTitle(interactionTitleTranslate, "#2176FF", true, false, false);
-        JsonObject greeting = createTranslateMessage(greetingTranslate);
-        JsonObject goodbye = createTranslateMessage(goodbyeTranslate);
+        JsonObject npcDefinition = definition()
+                .withType(NPCDefinition.NPCType.CHAT)
+                .withTitledProperties(20.0f, 1.0f, 1.0f, 2.0f,
+                        title.get("translate").getAsString(),
+                        title.get("color").getAsString(),
+                        title.get("bold").getAsBoolean(),
+                        title.get("italic").getAsBoolean(),
+                        title.get("underlined").getAsBoolean(),
+                        false, false, false, false, true)
+                .withRandomNames(npcNames)
+                .withEmptyParty()
+                .withRandomPlayerModels(models)
+                .withAIProvider(aiProvider)
+                .withUniformInteractions(tutorialInteractions)
+                .build()
+                .serialize();
 
-        addCustomShopNPC(fileName, npcNames, propertyTitle, interactionTitle,
-                greeting, goodbye, shopItems, textureResources, 5.0f, 0.9f);
+        this.add(fileName, npcDefinition);
     }
 
-    // ==================== 辅助类方法 ====================
+    /**
+     * 生成商店NPC（严格匹配 general_1.json 格式）
+     */
+    protected void addShopkeeperNPC(String fileName, List<String> npcNames, JsonObject title,
+                                    List<NPCDefinition.PlayerModel> models, JsonObject aiProvider,
+                                    List<JsonObject> shopInteractions) {
+
+        JsonObject npcDefinition = definition()
+                .withType(NPCDefinition.NPCType.SHOP)
+                .withTitledProperties(20.0f, 1.0f, 1.0f, 2.0f,
+                        title.get("translate").getAsString(),
+                        title.get("color").getAsString(),
+                        title.get("bold").getAsBoolean(),
+                        title.get("italic").getAsBoolean(),
+                        title.get("underlined").getAsBoolean(),
+                        false, false, false, false, true)
+                .withRandomNames(npcNames)
+                .withEmptyParty()
+                .withRandomPlayerModels(models)
+                .withAIProvider(aiProvider)
+                .withUniformInteractions(shopInteractions)
+                .build()
+                .serialize();
+
+        this.add(fileName, npcDefinition);
+    }
+
+    /**
+     * 生成技能教学NPC
+     */
+    protected void addMoveTutorNPC(String fileName, String npcName,
+                                   List<NPCDefinition.PlayerModel> models, JsonObject aiProvider,
+                                   JsonObject tutorInteractions) {
+
+        JsonObject npcDefinition = definition()
+                .withType(NPCDefinition.NPCType.CHAT)
+                .withBasicProperties(20.0f, 1.9f, 0.65f, 2.0f, false, false, false, false, true)
+                .withSingleName(npcName)
+                .withEmptyParty()
+                .withRandomPlayerModels(models)
+                .withAIProvider(aiProvider)
+                .withConstantInteractions(tutorInteractions)
+                .build()
+                .serialize();
+
+        this.add(fileName, npcDefinition);
+    }
+
+    /**
+     * 生成通用NPC（支持自定义类型）
+     */
+    protected void addCustomNPC(String fileName, NPCDefinition.Builder definitionBuilder) {
+        JsonObject npcDefinition = definitionBuilder.build().serialize();
+        this.add(fileName, npcDefinition);
+    }
+
+    // ==================== 高级NPC生成方法 ====================
+
+    /**
+     * 生成道馆馆主NPC（完整配置）
+     */
+    protected void addGymLeaderNPC(String fileName, String npcName, String titleText, String titleColor,
+                                   List<String> pokemonSpecs, String texturePath,
+                                   double rewardMoney, List<JsonObject> rewardItems, int cooldownDays) {
+
+        JsonObject title = createTextTitle(titleText, titleColor, true, false, false);
+        JsonObject interactions = createCustomBattleLeaderInteractions(
+                titleText,
+                "准备好挑战道馆了吗？",
+                "恭喜你战胜了道馆！",
+                "还需要更多训练才能战胜我。",
+                rewardMoney,
+                rewardItems,
+                cooldownDays
+        );
+
+        addBattleLeaderNPC(fileName, npcName, title, pokemonSpecs, texturePath, interactions);
+    }
+
+    /**
+     * 生成商店NPC（完整配置）
+     */
+    protected void addShopkeeperNPC(String fileName, List<String> npcNames, String titleText, String titleColor,
+                                    List<NPCDefinition.PlayerModel> models, String profession,
+                                    List<JsonObject> shopItems) {
+
+        JsonObject title = createTextTitle(titleText, titleColor, true, false, false);
+        JsonObject aiProvider = createStandardNPC(profession);
+        List<JsonObject> shopInteractions = List.of(
+                createShopInteraction("商店", "欢迎光临！", "商店", "谢谢惠顾！", shopItems)
+        );
+
+        addShopkeeperNPC(fileName, npcNames, title, models, aiProvider, shopInteractions);
+    }
+
+    /**
+     * 生成聊天NPC（完整配置）
+     */
+    protected void addChatNPC(String fileName, List<String> npcNames,
+                              List<NPCDefinition.PlayerModel> models, String profession,
+                              List<List<String>> chatPages) {
+
+        JsonObject properties = createBasicProperties(20.0f, 1.0f, 1.0f, 2.0f, false, false, false, false, true);
+        JsonObject aiProvider = createStandardNPC(profession);
+
+        List<JsonObject> chatInteractions = chatPages.stream()
+                .map(pages -> createMultiPageDialogueInteraction("对话", pages))
+                .toList();
+
+        addChattingNPC(fileName, npcNames, models, properties, aiProvider, chatInteractions);
+    }
+
+    // ==================== 属性创建方法 ====================
+
+    /**
+     * 创建对战馆主属性（严格匹配 dragon_1.json 格式）
+     */
+    protected static JsonObject createBattleLeaderProperties(JsonObject title) {
+        JsonObject properties = new JsonObject();
+        JsonObject value = new JsonObject();
+
+        // 严格按照 dragon_1.json 中 properties.value 的顺序
+        value.addProperty("health", 20.0f);
+        value.addProperty("eyeHeight", 1.9f);
+
+        JsonObject dimensions = new JsonObject();
+        dimensions.addProperty("width", 0.65f);
+        dimensions.addProperty("height", 2.0f);
+        value.add("dimensions", dimensions);
+
+        value.add("title", title);
+
+        value.addProperty("pushable", false);
+        value.addProperty("child", false);
+        value.addProperty("invulnerable", false);
+        value.addProperty("immovable", false);
+        value.addProperty("nameplate", true);
+
+        properties.add("value", value);
+        properties.addProperty("type", "pixelmon:constant");
+        return properties;
+    }
+
+    /**
+     * 创建基础NPC属性
+     */
+    public static JsonObject createBasicProperties(float health, float eyeHeight, float width, float height,
+                                                   boolean pushable, boolean child, boolean invulnerable,
+                                                   boolean immovable, boolean nameplate) {
+        JsonObject properties = new JsonObject();
+        JsonObject value = new JsonObject();
+
+        value.addProperty("health", health);
+        value.addProperty("eyeHeight", eyeHeight);
+
+        JsonObject dimensions = new JsonObject();
+        dimensions.addProperty("width", width);
+        dimensions.addProperty("height", height);
+        value.add("dimensions", dimensions);
+
+        value.addProperty("pushable", pushable);
+        value.addProperty("child", child);
+        value.addProperty("invulnerable", invulnerable);
+        value.addProperty("immovable", immovable);
+        value.addProperty("nameplate", nameplate);
+
+        properties.add("value", value);
+        properties.addProperty("type", "pixelmon:constant");
+        return properties;
+    }
+
+    // ==================== AI提供者创建方法 ====================
+
+    /**
+     * 创建站立并看向附近的AI（严格匹配 dragon_1.json 格式）
+     */
+    public static JsonObject createStandAndLookAI(float lookDistance, boolean swim) {
+        JsonObject aiProvider = new JsonObject();
+        JsonObject value = new JsonObject();
+
+        // 严格按照 dragon_1.json 中 ai_provider.value 的顺序
+        value.addProperty("type", "pixelmon:stand_and_look");
+        value.addProperty("look_distance", lookDistance);
+        value.addProperty("swim", swim);
+
+        aiProvider.add("value", value);
+        aiProvider.addProperty("type", "pixelmon:constant");
+        return aiProvider;
+    }
+
+    /**
+     * 创建标准NPC AI
+     */
+    public static JsonObject createStandardNPC(String profession) {
+        JsonObject aiProvider = new JsonObject();
+        JsonObject value = new JsonObject();
+
+        value.addProperty("type", "pixelmon:standard_npc");
+        value.addProperty("profession", profession);
+
+        aiProvider.add("value", value);
+        aiProvider.addProperty("type", "pixelmon:constant");
+        return aiProvider;
+    }
+
+    /**
+     * 创建游荡并看向附近的AI
+     */
+    public static JsonObject createWanderAndLookAI(float lookDistance, float speed, boolean swim) {
+        JsonObject aiProvider = new JsonObject();
+        JsonObject value = new JsonObject();
+
+        value.addProperty("type", "pixelmon:wander_and_look");
+        value.addProperty("look_distance", lookDistance);
+        value.addProperty("speed", speed);
+        value.addProperty("swim", swim);
+
+        aiProvider.add("value", value);
+        aiProvider.addProperty("type", "pixelmon:constant");
+        return aiProvider;
+    }
+
+    // ==================== 交互创建方法 ====================
+
+    /**
+     * 创建对战馆主交互（严格匹配 dragon_1.json 格式）
+     */
+    public static JsonObject createBattleLeaderInteractions() {
+        return createCustomBattleLeaderInteractions(
+                "pixelmon.npc.dialogue.battle.leader.gym.dragon.1.title",
+                "pixelmon.npc.dialogue.battle.leader.gym.dragon.1.initiate",
+                "pixelmon.npc.dialogue.battle.leader.gym.dragon.1.win",
+                "pixelmon.npc.dialogue.battle.leader.gym.dragon.1.lose",
+                500.0,
+                List.of(createBadgeReward("pixelmon:legend_badge", 1)),
+                1
+        );
+    }
+
+    /**
+     * 创建自定义对战馆主交互
+     */
+    public static JsonObject createCustomBattleLeaderInteractions(String titleKey, String initiateMessage,
+                                                                  String winMessage, String loseMessage,
+                                                                  double rewardMoney, List<JsonObject> rewardItems,
+                                                                  int cooldownDays) {
+        JsonObject interactionsWrapper = new JsonObject();
+        JsonArray interactionsArray = new JsonArray();
+
+        // 第一个交互：右键点击（可以战斗且不在冷却中）
+        JsonObject interaction1 = createRightClickInteraction(
+                titleKey,
+                initiateMessage,
+                true, true, false
+        );
+        interactionsArray.add(interaction1);
+
+        // 第二个交互：右键点击（在冷却中）
+        JsonObject interaction2 = createRightClickCooldownInteraction(titleKey, cooldownDays);
+        interactionsArray.add(interaction2);
+
+        // 第三个交互：右键点击（不能战斗）
+        JsonObject interaction3 = createRightClickUnableToBattleInteraction(titleKey);
+        interactionsArray.add(interaction3);
+
+        // 第四个交互：关闭对话
+        JsonObject interaction4 = createCloseDialogueInteraction();
+        interactionsArray.add(interaction4);
+
+        // 第五个交互：战斗失败
+        JsonObject interaction5 = createLoseBattleInteraction(titleKey, loseMessage);
+        interactionsArray.add(interaction5);
+
+        // 第六个交互：战斗胜利
+        JsonObject interaction6 = createWinBattleInteraction(titleKey, winMessage, rewardMoney, rewardItems, cooldownDays);
+        interactionsArray.add(interaction6);
+
+        interactionsWrapper.add("interactions", interactionsArray);
+        return interactionsWrapper;
+    }
+
+    private static JsonObject createRightClickInteraction(String title, String message,
+                                                          boolean canBattle, boolean notOnCooldown,
+                                                          boolean unableToBattle) {
+        JsonObject interaction = new JsonObject();
+        interaction.addProperty("event", "pixelmon:right_click");
+
+        JsonArray conditions = new JsonArray();
+
+        // 条件1：使用主手
+        conditions.add(createMainHandCondition());
+
+        if (canBattle) {
+            conditions.add(createCanBattleCondition());
+        }
+
+        if (notOnCooldown) {
+            conditions.add(createNotOnCooldownCondition());
+        }
+
+        if (unableToBattle) {
+            conditions.add(createUnableToBattleCondition());
+        }
+
+        interaction.add("conditions", conditions);
+
+        JsonObject results = new JsonObject();
+        JsonArray resultsArray = new JsonArray();
+
+        JsonObject dialogue = new JsonObject();
+        dialogue.addProperty("type", "pixelmon:open_dialogue");
+        dialogue.addProperty("title", title);
+        dialogue.addProperty("message", message);
+
+        resultsArray.add(dialogue);
+        results.add("value", resultsArray);
+        results.addProperty("type", "pixelmon:constant");
+        interaction.add("results", results);
+
+        return interaction;
+    }
+
+    private static JsonObject createRightClickCooldownInteraction(String titleKey, int cooldownDays) {
+        JsonObject interaction = new JsonObject();
+        interaction.addProperty("event", "pixelmon:right_click");
+
+        JsonArray conditions = new JsonArray();
+        conditions.add(createMainHandCondition());
+        conditions.add(createOnCooldownCondition(cooldownDays));
+        interaction.add("conditions", conditions);
+
+        JsonObject results = new JsonObject();
+        JsonArray resultsArray = new JsonArray();
+
+        JsonObject message = new JsonObject();
+        message.addProperty("type", "pixelmon:message_player");
+        JsonArray messages = new JsonArray();
+        JsonObject messageObj = new JsonObject();
+        messageObj.addProperty("translate", "pixelmon.npc.dialogue.battle.leader.gym.dragon.1.cooldown");
+        messages.add(messageObj);
+        message.add("messages", messages);
+
+        resultsArray.add(message);
+        results.add("value", resultsArray);
+        results.addProperty("type", "pixelmon:constant");
+        interaction.add("results", results);
+
+        return interaction;
+    }
+
+    private static JsonObject createRightClickUnableToBattleInteraction(String titleKey) {
+        JsonObject interaction = new JsonObject();
+        interaction.addProperty("event", "pixelmon:right_click");
+
+        JsonArray conditions = new JsonArray();
+        conditions.add(createMainHandCondition());
+        conditions.add(createUnableToBattleCondition());
+        interaction.add("conditions", conditions);
+
+        JsonObject results = new JsonObject();
+        JsonArray resultsArray = new JsonArray();
+
+        JsonObject message = new JsonObject();
+        message.addProperty("type", "pixelmon:message_player");
+        JsonArray messages = new JsonArray();
+        JsonObject messageObj = new JsonObject();
+        messageObj.addProperty("translate", "pixelmon.npc.dialogue.battle.leader.gym.dragon.1.unable_to_battle");
+        messages.add(messageObj);
+        message.add("messages", messages);
+
+        resultsArray.add(message);
+        results.add("value", resultsArray);
+        results.addProperty("type", "pixelmon:constant");
+        interaction.add("results", results);
+
+        return interaction;
+    }
+
+    private static JsonObject createCloseDialogueInteraction() {
+        JsonObject interaction = new JsonObject();
+        interaction.addProperty("event", "pixelmon:close_dialogue");
+
+        JsonObject conditions = new JsonObject();
+        conditions.addProperty("type", "pixelmon:constant_boolean");
+        conditions.addProperty("value", true);
+        interaction.add("conditions", conditions);
+
+        JsonObject results = new JsonObject();
+        JsonArray resultsArray = new JsonArray();
+
+        JsonObject battle = new JsonObject();
+        battle.addProperty("type", "pixelmon:player_start_npc_battle");
+        resultsArray.add(battle);
+
+        results.add("value", resultsArray);
+        results.addProperty("type", "pixelmon:constant");
+        interaction.add("results", results);
+
+        return interaction;
+    }
+
+    private static JsonObject createLoseBattleInteraction(String titleKey, String loseMessage) {
+        JsonObject interaction = new JsonObject();
+        interaction.addProperty("event", "pixelmon:lose_battle");
+
+        JsonObject conditions = new JsonObject();
+        conditions.addProperty("type", "pixelmon:true");
+        interaction.add("conditions", conditions);
+
+        JsonObject results = new JsonObject();
+        JsonArray resultsArray = new JsonArray();
+
+        JsonObject dialogue = new JsonObject();
+        dialogue.addProperty("type", "pixelmon:open_dialogue");
+        dialogue.addProperty("title", titleKey);
+        dialogue.addProperty("message", loseMessage);
+        dialogue.addProperty("fire_close_event", false);
+        resultsArray.add(dialogue);
+
+        JsonObject context = new JsonObject();
+        context.addProperty("type", "pixelmon:set_string_context");
+        context.addProperty("key", "pixelmon:leader");
+        context.addProperty("value", "leader_gym_dragon_1");
+        resultsArray.add(context);
+
+        JsonObject trigger = new JsonObject();
+        trigger.addProperty("type", "pixelmon:trigger_interaction_event");
+        trigger.addProperty("event", "pixelmon:lose_to_leader");
+        resultsArray.add(trigger);
+
+        results.add("value", resultsArray);
+        results.addProperty("type", "pixelmon:constant");
+        interaction.add("results", results);
+
+        return interaction;
+    }
+
+    private static JsonObject createWinBattleInteraction(String titleKey, String winMessage,
+                                                         double rewardMoney, List<JsonObject> rewardItems,
+                                                         int cooldownDays) {
+        JsonObject interaction = new JsonObject();
+        interaction.addProperty("event", "pixelmon:win_battle");
+
+        JsonObject conditions = new JsonObject();
+        conditions.addProperty("type", "pixelmon:true");
+        interaction.add("conditions", conditions);
+
+        JsonObject results = new JsonObject();
+        JsonArray resultsArray = new JsonArray();
+
+        JsonObject dialogue = new JsonObject();
+        dialogue.addProperty("type", "pixelmon:open_dialogue");
+        dialogue.addProperty("title", titleKey);
+        dialogue.addProperty("message", winMessage);
+        dialogue.addProperty("fire_close_event", false);
+        resultsArray.add(dialogue);
+
+        if (rewardMoney > 0) {
+            JsonObject money = new JsonObject();
+            money.addProperty("type", "pixelmon:give_money");
+            money.addProperty("money", rewardMoney);
+            resultsArray.add(money);
+        }
+
+        if (!rewardItems.isEmpty()) {
+            JsonObject item = new JsonObject();
+            item.addProperty("type", "pixelmon:give_item");
+            JsonArray items = new JsonArray();
+            for (JsonObject rewardItem : rewardItems) {
+                items.add(rewardItem);
+            }
+            item.add("items", items);
+            resultsArray.add(item);
+        }
+
+        JsonObject cooldown = new JsonObject();
+        cooldown.addProperty("type", "pixelmon:set_cooldown");
+        JsonObject player = new JsonObject();
+        player.addProperty("key", "pixelmon:player");
+        player.addProperty("type", "pixelmon:context_player");
+        cooldown.add("player", player);
+        cooldown.addProperty("key", "pixelmon:leader_gym_dragon_1");
+        cooldown.addProperty("cooldown", cooldownDays);
+        cooldown.addProperty("unit", "DAYS");
+        resultsArray.add(cooldown);
+
+        JsonObject context = new JsonObject();
+        context.addProperty("type", "pixelmon:set_string_context");
+        context.addProperty("key", "pixelmon:leader");
+        context.addProperty("value", "leader_gym_dragon_1");
+        resultsArray.add(context);
+
+        JsonObject trigger = new JsonObject();
+        trigger.addProperty("type", "pixelmon:trigger_interaction_event");
+        trigger.addProperty("event", "pixelmon:defeat_leader");
+        resultsArray.add(trigger);
+
+        results.add("value", resultsArray);
+        results.addProperty("type", "pixelmon:constant");
+        interaction.add("results", results);
+
+        return interaction;
+    }
+
+    // ==================== 条件创建辅助方法 ====================
+
+    private static JsonObject createMainHandCondition() {
+        JsonObject condition = new JsonObject();
+        condition.addProperty("type", "pixelmon:interaction_condition");
+        JsonObject conditionValue = new JsonObject();
+        conditionValue.addProperty("type", "pixelmon:string_compare");
+
+        JsonObject first = new JsonObject();
+        first.addProperty("value", "MAIN_HAND");
+        first.addProperty("type", "pixelmon:constant_string");
+
+        JsonObject second = new JsonObject();
+        second.addProperty("type", "pixelmon:hand_used");
+
+        conditionValue.add("first", first);
+        conditionValue.add("second", second);
+        condition.add("condition", conditionValue);
+        return condition;
+    }
+
+    private static JsonObject createCanBattleCondition() {
+        JsonObject condition = new JsonObject();
+        condition.addProperty("type", "pixelmon:interaction_condition");
+        JsonObject conditionValue = new JsonObject();
+        conditionValue.addProperty("type", "pixelmon:can_battle");
+
+        JsonObject player = new JsonObject();
+        player.addProperty("key", "pixelmon:player");
+        player.addProperty("type", "pixelmon:context_player");
+        conditionValue.add("player", player);
+
+        condition.add("condition", conditionValue);
+        return condition;
+    }
+
+    private static JsonObject createNotOnCooldownCondition() {
+        JsonObject condition = new JsonObject();
+        condition.addProperty("type", "pixelmon:interaction_condition");
+        JsonObject conditionValue = new JsonObject();
+        conditionValue.addProperty("type", "pixelmon:logical_not");
+
+        JsonObject notCondition = new JsonObject();
+        notCondition.addProperty("type", "pixelmon:interaction_condition");
+        notCondition.add("condition", createOnCooldownConditionValue(1));
+        conditionValue.add("condition", notCondition);
+
+        condition.add("condition", conditionValue);
+        return condition;
+    }
+
+    private static JsonObject createOnCooldownCondition(int cooldownDays) {
+        JsonObject condition = new JsonObject();
+        condition.addProperty("type", "pixelmon:interaction_condition");
+        condition.add("condition", createOnCooldownConditionValue(cooldownDays));
+        return condition;
+    }
+
+    private static JsonObject createOnCooldownConditionValue(int cooldownDays) {
+        JsonObject conditionValue = new JsonObject();
+        conditionValue.addProperty("type", "pixelmon:on_cooldown");
+
+        JsonObject player = new JsonObject();
+        player.addProperty("key", "pixelmon:player");
+        player.addProperty("type", "pixelmon:context_player");
+        conditionValue.add("player", player);
+
+        conditionValue.addProperty("cooldown_key", "pixelmon:leader_gym_dragon_1");
+        conditionValue.addProperty("cooldown", cooldownDays);
+        conditionValue.addProperty("unit", "DAYS");
+        return conditionValue;
+    }
+
+    private static JsonObject createUnableToBattleCondition() {
+        JsonObject condition = new JsonObject();
+        condition.addProperty("type", "pixelmon:interaction_condition");
+        JsonObject conditionValue = new JsonObject();
+        conditionValue.addProperty("type", "pixelmon:logical_not");
+
+        JsonObject notCondition = new JsonObject();
+        notCondition.addProperty("type", "pixelmon:interaction_condition");
+        notCondition.add("condition", createCanBattleConditionValue());
+        conditionValue.add("condition", notCondition);
+
+        condition.add("condition", conditionValue);
+        return condition;
+    }
+
+    private static JsonObject createCanBattleConditionValue() {
+        JsonObject conditionValue = new JsonObject();
+        conditionValue.addProperty("type", "pixelmon:can_battle");
+
+        JsonObject player = new JsonObject();
+        player.addProperty("key", "pixelmon:player");
+        player.addProperty("type", "pixelmon:context_player");
+        conditionValue.add("player", player);
+
+        return conditionValue;
+    }
+
+    // ==================== 其他交互创建方法 ====================
+
+    /**
+     * 创建多页对话交互
+     */
+    public static JsonObject createMultiPageDialogueInteraction(String title, List<String> pages) {
+        JsonObject interactionsWrapper = new JsonObject();
+        JsonArray interactionsArray = new JsonArray();
+
+        JsonObject interaction = new JsonObject();
+        interaction.addProperty("event", "pixelmon:right_click");
+
+        JsonObject conditions = new JsonObject();
+        conditions.addProperty("type", "pixelmon:true");
+        interaction.add("conditions", conditions);
+
+        JsonObject results = new JsonObject();
+        JsonArray resultsArray = new JsonArray();
+
+        JsonObject dialogue = new JsonObject();
+        dialogue.addProperty("title", title);
+        dialogue.addProperty("type", "pixelmon:open_paged_dialogue");
+
+        JsonArray pagesArray = new JsonArray();
+        for (String page : pages) {
+            pagesArray.add(page);
+        }
+        dialogue.add("pages", pagesArray);
+
+        resultsArray.add(dialogue);
+        results.add("value", resultsArray);
+        results.addProperty("type", "pixelmon:constant");
+        interaction.add("results", results);
+
+        interactionsArray.add(interaction);
+        interactionsWrapper.add("interactions", interactionsArray);
+        return interactionsWrapper;
+    }
+
+    /**
+     * 创建商店交互
+     */
+    public static JsonObject createShopInteraction(String greetingTitle, String greetingMessage,
+                                                   String goodbyeTitle, String goodbyeMessage,
+                                                   List<JsonObject> shopItems) {
+        JsonObject interactionsWrapper = new JsonObject();
+        JsonArray interactionsArray = new JsonArray();
+
+        // 右键点击交互
+        JsonObject rightClickInteraction = new JsonObject();
+        rightClickInteraction.addProperty("event", "pixelmon:right_click");
+
+        JsonObject rightClickConditions = new JsonObject();
+        rightClickConditions.addProperty("type", "pixelmon:true");
+        rightClickInteraction.add("conditions", rightClickConditions);
+
+        JsonObject rightClickResults = new JsonObject();
+        JsonArray rightClickResultsArray = new JsonArray();
+
+        JsonObject dialogue = new JsonObject();
+        dialogue.addProperty("title", greetingTitle);
+        dialogue.addProperty("message", greetingMessage);
+        dialogue.addProperty("type", "pixelmon:open_dialogue");
+        rightClickResultsArray.add(dialogue);
+
+        rightClickResults.add("value", rightClickResultsArray);
+        rightClickResults.addProperty("type", "pixelmon:constant");
+        rightClickInteraction.add("results", rightClickResults);
+
+        interactionsArray.add(rightClickInteraction);
+
+        // 关闭对话打开商店交互
+        JsonObject closeDialogueInteraction = new JsonObject();
+        closeDialogueInteraction.addProperty("event", "pixelmon:close_dialogue");
+
+        JsonObject closeDialogueConditions = new JsonObject();
+        closeDialogueConditions.addProperty("type", "pixelmon:true");
+        closeDialogueInteraction.add("conditions", closeDialogueConditions);
+
+        JsonObject closeDialogueResults = new JsonObject();
+        JsonArray closeDialogueResultsArray = new JsonArray();
+
+        JsonObject shop = new JsonObject();
+        shop.addProperty("type", "pixelmon:open_shop");
+
+        JsonArray itemsArray = new JsonArray();
+        for (JsonObject item : shopItems) {
+            itemsArray.add(item);
+        }
+        shop.add("items", itemsArray);
+
+        closeDialogueResultsArray.add(shop);
+        closeDialogueResults.add("value", closeDialogueResultsArray);
+        closeDialogueResults.addProperty("type", "pixelmon:constant");
+        closeDialogueInteraction.add("results", closeDialogueResults);
+
+        interactionsArray.add(closeDialogueInteraction);
+
+        // 关闭商店显示告别语交互
+        JsonObject closeShopInteraction = new JsonObject();
+        closeShopInteraction.addProperty("event", "pixelmon:close_shop");
+
+        JsonObject closeShopConditions = new JsonObject();
+        closeShopConditions.addProperty("type", "pixelmon:true");
+        closeShopInteraction.add("conditions", closeShopConditions);
+
+        JsonObject closeShopResults = new JsonObject();
+        JsonArray closeShopResultsArray = new JsonArray();
+
+        JsonObject goodbyeDialogue = new JsonObject();
+        goodbyeDialogue.addProperty("title", goodbyeTitle);
+        goodbyeDialogue.addProperty("message", goodbyeMessage);
+        goodbyeDialogue.addProperty("fire_close_event", false);
+        goodbyeDialogue.addProperty("type", "pixelmon:open_dialogue");
+        closeShopResultsArray.add(goodbyeDialogue);
+
+        closeShopResults.add("value", closeShopResultsArray);
+        closeShopResults.addProperty("type", "pixelmon:constant");
+        closeShopInteraction.add("results", closeShopResults);
+
+        interactionsArray.add(closeShopInteraction);
+
+        interactionsWrapper.add("interactions", interactionsArray);
+        return interactionsWrapper;
+    }
+
+    /**
+     * 创建技能教学交互
+     */
+    public static JsonObject createMoveTutorInteraction(List<JsonObject> learnableMoves) {
+        JsonObject interactionsWrapper = new JsonObject();
+        JsonArray interactionsArray = new JsonArray();
+
+        JsonObject interaction = new JsonObject();
+        interaction.addProperty("event", "pixelmon:right_click");
+
+        JsonObject conditions = new JsonObject();
+        conditions.addProperty("type", "pixelmon:true");
+        interaction.add("conditions", conditions);
+
+        JsonObject results = new JsonObject();
+        JsonArray resultsArray = new JsonArray();
+
+        JsonObject tutor = new JsonObject();
+        tutor.addProperty("type", "pixelmon:tutor_move");
+
+        JsonArray movesArray = new JsonArray();
+        for (JsonObject move : learnableMoves) {
+            movesArray.add(move);
+        }
+        tutor.add("learnable_moves", movesArray);
+
+        resultsArray.add(tutor);
+        results.add("value", resultsArray);
+        results.addProperty("type", "pixelmon:constant");
+        interaction.add("results", results);
+
+        interactionsArray.add(interaction);
+        interactionsWrapper.add("interactions", interactionsArray);
+        return interactionsWrapper;
+    }
+
+    // ==================== 辅助创建方法 ====================
+
+    /**
+     * 创建可学习技能
+     */
+    public static JsonObject createLearnableMove(String attack, List<JsonObject> costs, boolean learnable) {
+        JsonObject move = new JsonObject();
+        move.addProperty("attack", attack);
+
+        JsonArray costsArray = new JsonArray();
+        for (JsonObject cost : costs) {
+            costsArray.add(cost);
+        }
+        move.add("costs", costsArray);
+
+        move.addProperty("learnable", learnable);
+        return move;
+    }
+
+    /**
+     * 创建技能学习成本
+     */
+    public static JsonObject createMoveCost(String itemId, int count) {
+        JsonObject cost = new JsonObject();
+        cost.addProperty("id", itemId);
+        cost.addProperty("count", count);
+        return cost;
+    }
+
+    /**
+     * 创建徽章奖励
+     */
+    public static JsonObject createBadgeReward(String badgeId, int count) {
+        JsonObject badge = new JsonObject();
+        badge.addProperty("id", badgeId);
+        badge.addProperty("count", count);
+        return badge;
+    }
+
+    /**
+     * 创建物品奖励
+     */
+    public static JsonObject createItemReward(String itemId, int count) {
+        JsonObject item = new JsonObject();
+        item.addProperty("id", itemId);
+        item.addProperty("count", count);
+        return item;
+    }
+
+    /**
+     * 创建大师球奖励
+     */
+    public static JsonObject createMasterBallReward(int count) {
+        return createItemReward("pixelmon:master_ball", count);
+    }
+
+    // ==================== 宝可梦队伍配置方法 ====================
+
+    /**
+     * 创建宝可梦队伍配置
+     */
+    public static String createPokemonSpec(String pokemon, int level, String ability, String heldItem,
+                                           String nature, int ivHp, int ivAtk, int ivDef, int ivSpAtk,
+                                           int ivSpDef, int ivSpd, int evHp, int evAtk, int evDef,
+                                           int evSpAtk, int evSpDef, int evSpd, List<String> moves) {
+        StringBuilder spec = new StringBuilder(pokemon);
+        spec.append(" lvl:").append(level);
+
+        if (ability != null && !ability.isEmpty()) {
+            spec.append(" ability:").append(ability);
+        }
+
+        if (heldItem != null && !heldItem.isEmpty()) {
+            spec.append(" helditem:").append(heldItem);
+        }
+
+        if (nature != null && !nature.isEmpty()) {
+            spec.append(" nature:").append(nature);
+        }
+
+        // 添加个体值
+        spec.append(" ivhp:").append(ivHp)
+                .append(" ivatk:").append(ivAtk)
+                .append(" ivdef:").append(ivDef)
+                .append(" ivspatk:").append(ivSpAtk)
+                .append(" ivspdef:").append(ivSpDef)
+                .append(" ivspd:").append(ivSpd);
+
+        // 添加努力值
+        if (evHp > 0) spec.append(" evhp:").append(evHp);
+        if (evAtk > 0) spec.append(" evatk:").append(evAtk);
+        if (evDef > 0) spec.append(" evdef:").append(evDef);
+        if (evSpAtk > 0) spec.append(" evspatk:").append(evSpAtk);
+        if (evSpDef > 0) spec.append(" evspdef:").append(evSpDef);
+        if (evSpd > 0) spec.append(" evspd:").append(evSpd);
+
+        // 添加技能
+        for (int i = 0; i < moves.size() && i < 4; i++) {
+            spec.append(" move").append(i + 1).append(":").append(moves.get(i));
+        }
+
+        return spec.toString();
+    }
+
+    /**
+     * 创建简化版宝可梦队伍配置
+     */
+    public static String createSimplePokemonSpec(String pokemon, int level, String ability,
+                                                 String heldItem, String nature, List<String> moves) {
+        return createPokemonSpec(pokemon, level, ability, heldItem, nature,
+                31, 31, 31, 0, 31, 31, 0, 0, 0, 0, 0, 0, moves);
+    }
+
+    // ==================== 玩家模型创建方法 ====================
+
+    /**
+     * 创建玩家模型配置
+     */
+    public static NPCDefinition.PlayerModel createPlayerModel(boolean slim, String textureResource) {
+        return NPCDefinition.PlayerModel.of(slim, textureResource);
+    }
+
+    /**
+     * 创建玩家模型配置（带后备纹理）
+     */
+    public static NPCDefinition.PlayerModel createPlayerModel(boolean slim, String textureResource, String textureFallback) {
+        return new NPCDefinition.PlayerModel(slim, textureResource, textureFallback);
+    }
+
+    // ==================== 物品创建方法 ====================
+
+    /**
+     * 创建商店物品（基础方法）
+     */
+    public static JsonObject createShopItem(String itemId, int count, double buyPrice, double sellPrice) {
+        JsonObject item = new JsonObject();
+
+        JsonObject itemObj = new JsonObject();
+        itemObj.addProperty("id", itemId);
+        itemObj.addProperty("count", count);
+
+        item.add("item", itemObj);
+        item.addProperty("buyPrice", buyPrice);
+        item.addProperty("sellPrice", sellPrice);
+
+        return item;
+    }
+
+    /**
+     * 创建带有自定义组件的商店物品
+     */
+    public static JsonObject createShopItemWithComponents(String itemId, int count, JsonObject components, double buyPrice, double sellPrice) {
+        JsonObject item = new JsonObject();
+
+        JsonObject itemObj = new JsonObject();
+        itemObj.addProperty("id", itemId);
+        itemObj.addProperty("count", count);
+
+        if (components != null && !components.isEmpty()) {
+            itemObj.add("components", components);
+        }
+
+        item.add("item", itemObj);
+        item.addProperty("buyPrice", buyPrice);
+        item.addProperty("sellPrice", sellPrice);
+
+        return item;
+    }
+
+    /**
+     * 创建精灵球商店物品（新版本组件系统）
+     */
+    public static JsonObject createPokeBallShopItem(String ballType, int count, double buyPrice, double sellPrice) {
+        JsonObject components = new JsonObject();
+        components.addProperty("pixelmon:poke_ball", ballType);
+
+        return createShopItemWithComponents("pixelmon:poke_ball", count, components, buyPrice, sellPrice);
+    }
+
+    /**
+     * 创建大师球商店物品
+     */
+    public static JsonObject createMasterBallShopItem(int count, double buyPrice, double sellPrice) {
+        return createPokeBallShopItem("master_ball", count, buyPrice, sellPrice);
+    }
+
+    /**
+     * 创建高级球商店物品
+     */
+    public static JsonObject createUltraBallShopItem(int count, double buyPrice, double sellPrice) {
+        return createPokeBallShopItem("ultra_ball", count, buyPrice, sellPrice);
+    }
+
+    /**
+     * 创建超级球商店物品
+     */
+    public static JsonObject createGreatBallShopItem(int count, double buyPrice, double sellPrice) {
+        return createPokeBallShopItem("great_ball", count, buyPrice, sellPrice);
+    }
+
+    // ==================== 标题创建方法 ====================
 
     /**
      * 创建使用翻译键的标题
@@ -364,703 +1236,39 @@ public abstract class PixelmonNPCProvider implements DataProvider {
     }
 
     /**
-     * 创建使用翻译键的消息
+     * 精灵球类型常量
      */
-    public static JsonObject createTranslateMessage(String translate) {
-        JsonObject message = new JsonObject();
-        message.addProperty("translate", translate);
-        return message;
+    public static class PokeBallTypes {
+        public static final String POKE_BALL = "poke_ball";
+        public static final String GREAT_BALL = "great_ball";
+        public static final String ULTRA_BALL = "ultra_ball";
+        public static final String MASTER_BALL = "master_ball";
+        public static final String SAFARI_BALL = "safari_ball";
+        public static final String LEVEL_BALL = "level_ball";
+        public static final String LURE_BALL = "lure_ball";
+        public static final String MOON_BALL = "moon_ball";
+        public static final String FRIEND_BALL = "friend_ball";
+        public static final String LOVE_BALL = "love_ball";
+        public static final String HEAVY_BALL = "heavy_ball";
+        public static final String FAST_BALL = "fast_ball";
+        public static final String SPORT_BALL = "sport_ball";
+        public static final String PREMIER_BALL = "premier_ball";
+        public static final String REPEAT_BALL = "repeat_ball";
+        public static final String TIMER_BALL = "timer_ball";
+        public static final String NEST_BALL = "nest_ball";
+        public static final String NET_BALL = "net_ball";
+        public static final String DIVE_BALL = "dive_ball";
+        public static final String LUXURY_BALL = "luxury_ball";
+        public static final String HEAL_BALL = "heal_ball";
+        public static final String DUSK_BALL = "dusk_ball";
+        public static final String QUICK_BALL = "quick_ball";
+        public static final String CHERISH_BALL = "cherish_ball";
+        public static final String PARK_BALL = "park_ball";
+        public static final String DREAM_BALL = "dream_ball";
+        public static final String BEAST_BALL = "beast_ball";
     }
 
-    /**
-     * 创建使用直接文本的消息
-     */
-    public static JsonObject createTextMessage(String text) {
-        JsonObject message = new JsonObject();
-        message.addProperty("text", text);
-        return message;
-    }
-
-    /**
-     * 创建简单的文本消息
-     */
-    public static JsonObject createSimpleTextMessage(String text) {
-        return createTextMessage(text);
-    }
-
-    /**
-     * 创建简单的翻译消息
-     */
-    public static JsonObject createSimpleTranslateMessage(String translate) {
-        return createTranslateMessage(translate);
-    }
-
-    // ==================== 纯字符串辅助方法 ====================
-
-    /**
-     * 创建纯字符串标题（宝可梦NPC兼容）
-     */
-    public static String createStringTitle(String text) {
-        return text;
-    }
-
-    /**
-     * 创建纯字符串消息（宝可梦NPC兼容）
-     */
-    public static String createStringMessage(String text) {
-        return text;
-    }
-
-    /**
-     * 创建商店物品（使用Item对象）
-     */
-    public static JsonObject createShopItem(Item item, int count, double buyPrice, double sellPrice) {
-        ResourceLocation itemId = BuiltInRegistries.ITEM.getKey(item);
-        if (itemId == null) {
-            throw new IllegalArgumentException("物品未注册: " + item);
-        }
-        return createShopItem(itemId.toString(), count, buyPrice, sellPrice);
-    }
-
-    /**
-     * 创建商店物品（使用物品ID字符串）
-     */
-    public static JsonObject createShopItem(String itemId, int count, double buyPrice, double sellPrice) {
-        JsonObject item = new JsonObject();
-
-        JsonObject itemObj = new JsonObject();
-        itemObj.addProperty("id", itemId);
-        itemObj.addProperty("count", count);
-
-        item.add("item", itemObj);
-        item.addProperty("buyPrice", buyPrice);
-        item.addProperty("sellPrice", sellPrice);
-
-        return item;
-    }
-
-    /**
-     * 创建带有自定义组件的商店物品（通用方法）
-     */
-    public static JsonObject createShopItemWithComponents(String itemId, int count, JsonObject components, double buyPrice, double sellPrice) {
-        JsonObject item = new JsonObject();
-
-        JsonObject itemObj = new JsonObject();
-        itemObj.addProperty("id", itemId);
-        itemObj.addProperty("count", count);
-
-        if (components != null && !components.isEmpty()) {
-            itemObj.add("components", components);
-        }
-
-        item.add("item", itemObj);
-        item.addProperty("buyPrice", buyPrice);
-        item.addProperty("sellPrice", sellPrice);
-
-        return item;
-    }
-
-    /**
-     * 创建新版本大师球商店物品
-     */
-    public static JsonObject createMasterBallShopItem(int count, double buyPrice, double sellPrice) {
-        JsonObject components = new JsonObject();
-        components.addProperty("pixelmon:poke_ball", "master_ball");
-
-        return createShopItemWithComponents("pixelmon:poke_ball", count, components, buyPrice, sellPrice);
-    }
-
-    /**
-     * 创建进化石商店物品（简化版）
-     */
-    public static JsonObject createEvolutionStoneItem(String stoneId, double buyPrice, double sellPrice) {
-        return createShopItem(stoneId, 1, buyPrice, sellPrice);
-    }
-
-    /**
-     * 创建物品奖励（使用Item对象）
-     */
-    public static JsonObject createItemReward(Item item, int count) {
-        ResourceLocation itemId = BuiltInRegistries.ITEM.getKey(item);
-        if (itemId == null) {
-            throw new IllegalArgumentException("物品未注册: " + item);
-        }
-        return createItemReward(itemId.toString(), count);
-    }
-
-    /**
-     * 创建物品奖励（使用物品ID字符串）
-     */
-    public static JsonObject createItemReward(String itemId, int count) {
-        JsonObject item = new JsonObject();
-        item.addProperty("id", itemId);
-        item.addProperty("count", count);
-        return item;
-    }
-
-    /**
-     * 创建带有自定义组件的物品奖励（通用方法）
-     */
-    public static JsonObject createItemRewardWithComponents(String itemId, int count, JsonObject components) {
-        JsonObject item = new JsonObject();
-        item.addProperty("id", itemId);
-        item.addProperty("count", count);
-
-        if (components != null && !components.isEmpty()) {
-            item.add("components", components);
-        }
-
-        return item;
-    }
-
-    /**
-     * 创建新版本大师球物品奖励
-     */
-    public static JsonObject createMasterBallReward(int count) {
-        JsonObject components = new JsonObject();
-        components.addProperty("pixelmon:poke_ball", "master_ball");
-
-        return createItemRewardWithComponents("pixelmon:poke_ball", count, components);
-    }
-
-    /**
-     * 创建精灵球组件（通用方法）
-     */
-    public static JsonObject createPokeBallComponent(String ballType) {
-        JsonObject components = new JsonObject();
-        components.addProperty("pixelmon:poke_ball", ballType);
-        return components;
-    }
-
-    /**
-     * 创建多种精灵球的商店物品
-     */
-    public static JsonObject createPokeBallShopItem(String ballType, int count, double buyPrice, double sellPrice) {
-        JsonObject components = createPokeBallComponent(ballType);
-        return createShopItemWithComponents("pixelmon:poke_ball", count, components, buyPrice, sellPrice);
-    }
-
-    /**
-     * 创建多种精灵球的物品奖励
-     */
-    public static JsonObject createPokeBallReward(String ballType, int count) {
-        JsonObject components = createPokeBallComponent(ballType);
-        return createItemRewardWithComponents("pixelmon:poke_ball", count, components);
-    }
-
-    /**
-     * 创建自定义组件（通用构建器方法）
-     */
-    public static ComponentBuilder createComponentBuilder() {
-        return new ComponentBuilder();
-    }
-
-    /**
-     * 组件构建器类，用于方便地创建复杂的组件结构
-     */
-    public static class ComponentBuilder {
-        private final JsonObject components = new JsonObject();
-
-        public ComponentBuilder addComponent(String componentKey, JsonObject componentValue) {
-            components.add(componentKey, componentValue);
-            return this;
-        }
-
-        public ComponentBuilder addPokeBallComponent(String ballType) {
-            components.addProperty("pixelmon:poke_ball", ballType);
-            return this;
-        }
-
-        public ComponentBuilder addSimpleComponent(String componentKey, String value) {
-            components.addProperty(componentKey, value);
-            return this;
-        }
-
-        public ComponentBuilder addSimpleComponent(String componentKey, boolean value) {
-            components.addProperty(componentKey, value);
-            return this;
-        }
-
-        public ComponentBuilder addSimpleComponent(String componentKey, Number value) {
-            components.addProperty(componentKey, value);
-            return this;
-        }
-
-        public JsonObject build() {
-            return components;
-        }
-    }
-
-    /**
-     * 创建宝可梦队伍配置
-     */
-    public static String createPokemonSpec(String pokemon, int level, String ability, String heldItem,
-                                           String nature, List<String> moves) {
-        StringBuilder spec = new StringBuilder(pokemon);
-        spec.append(" lvl:").append(level);
-
-        if (ability != null && !ability.isEmpty()) {
-            spec.append(" ability:").append(ability);
-        }
-
-        if (heldItem != null && !heldItem.isEmpty()) {
-            spec.append(" helditem:").append(heldItem);
-        }
-
-        if (nature != null && !nature.isEmpty()) {
-            spec.append(" nature:").append(nature);
-        }
-
-        for (int i = 0; i < moves.size() && i < 4; i++) {
-            spec.append(" move").append(i + 1).append(":").append(moves.get(i));
-        }
-
-        return spec.toString();
-    }
-
-    /**
-     * 创建玩家模型配置
-     */
-    public static NPCDefinition.PlayerModel createPlayerModel(boolean slim, String textureResource) {
-        return NPCDefinition.PlayerModel.of(slim, textureResource);
-    }
-
-    /**
-     * 创建玩家模型配置（带后备纹理）
-     */
-    public static NPCDefinition.PlayerModel createPlayerModel(boolean slim, String textureResource, String textureFallback) {
-        return new NPCDefinition.PlayerModel(slim, textureResource, textureFallback);
-    }
-
-    /**
-     * 创建玩家模型配置（带完整的fallback结构，与evostones_1.json一致）
-     */
-    public static NPCDefinition.PlayerModel createPlayerModelWithFallback(boolean slim, String textureResource, String textureFallback) {
-        return new NPCDefinition.PlayerModel(slim, textureResource, textureFallback);
-    }
-
-    // ==================== 私有辅助方法 - 纯字符串版本 ====================
-
-    /**
-     * 创建自定义商店交互（纯字符串版本，宝可梦NPC兼容）
-     */
-    private JsonObject createCustomShopInteractionsString(String title, String greeting,
-                                                          String goodbye, List<JsonObject> shopItems) {
-        JsonObject interactionsWrapper = new JsonObject();
-        JsonArray interactionsArray = new JsonArray();
-
-        // 右键点击交互
-        JsonObject rightClickInteraction = new JsonObject();
-        rightClickInteraction.addProperty("event", "pixelmon:right_click");
-
-        JsonObject rightClickConditions = new JsonObject();
-        rightClickConditions.addProperty("type", "pixelmon:true");
-        rightClickInteraction.add("conditions", rightClickConditions);
-
-        JsonObject rightClickResults = new JsonObject();
-        JsonArray rightClickResultsArray = new JsonArray();
-
-        JsonObject dialogue = new JsonObject();
-        dialogue.addProperty("title", title); // 使用纯字符串
-        dialogue.addProperty("message", greeting); // 使用纯字符串
-        dialogue.addProperty("type", "pixelmon:open_dialogue");
-        rightClickResultsArray.add(dialogue);
-
-        rightClickResults.add("value", rightClickResultsArray);
-        rightClickResults.addProperty("type", "pixelmon:constant");
-        rightClickInteraction.add("results", rightClickResults);
-
-        interactionsArray.add(rightClickInteraction);
-
-        // 关闭对话打开商店交互
-        JsonObject closeDialogueInteraction = new JsonObject();
-        closeDialogueInteraction.addProperty("event", "pixelmon:close_dialogue");
-
-        JsonObject closeDialogueConditions = new JsonObject();
-        closeDialogueConditions.addProperty("type", "pixelmon:true");
-        closeDialogueInteraction.add("conditions", closeDialogueConditions);
-
-        JsonObject closeDialogueResults = new JsonObject();
-        JsonArray closeDialogueResultsArray = new JsonArray();
-
-        JsonObject shop = new JsonObject();
-        shop.addProperty("type", "pixelmon:open_shop");
-
-        JsonArray itemsArray = new JsonArray();
-        for (JsonObject item : shopItems) {
-            itemsArray.add(item);
-        }
-        shop.add("items", itemsArray);
-
-        closeDialogueResultsArray.add(shop);
-        closeDialogueResults.add("value", closeDialogueResultsArray);
-        closeDialogueResults.addProperty("type", "pixelmon:constant");
-        closeDialogueInteraction.add("results", closeDialogueResults);
-
-        interactionsArray.add(closeDialogueInteraction);
-
-        // 关闭商店显示告别语交互
-        JsonObject closeShopInteraction = new JsonObject();
-        closeShopInteraction.addProperty("event", "pixelmon:close_shop");
-
-        JsonObject closeShopConditions = new JsonObject();
-        closeShopConditions.addProperty("type", "pixelmon:true");
-        closeShopInteraction.add("conditions", closeShopConditions);
-
-        JsonObject closeShopResults = new JsonObject();
-        JsonArray closeShopResultsArray = new JsonArray();
-
-        JsonObject goodbyeDialogue = new JsonObject();
-        goodbyeDialogue.addProperty("title", title); // 使用纯字符串
-        goodbyeDialogue.addProperty("message", goodbye); // 使用纯字符串
-        goodbyeDialogue.addProperty("fire_close_event", false);
-        goodbyeDialogue.addProperty("type", "pixelmon:open_dialogue");
-        closeShopResultsArray.add(goodbyeDialogue);
-
-        closeShopResults.add("value", closeShopResultsArray);
-        closeShopResults.addProperty("type", "pixelmon:constant");
-        closeShopInteraction.add("results", closeShopResults);
-
-        interactionsArray.add(closeShopInteraction);
-
-        interactionsWrapper.add("interactions", interactionsArray);
-        return interactionsWrapper;
-    }
-
-    /**
-     * 创建多页提示交互（纯字符串版本）
-     */
-    private JsonObject createMultiPageTipInteractionsString(String title, List<String> messagePages) {
-        JsonObject interactionsWrapper = new JsonObject();
-        JsonArray interactionsArray = new JsonArray();
-
-        // 右键点击打开多页对话
-        JsonObject interaction = new JsonObject();
-        interaction.addProperty("event", "pixelmon:right_click");
-
-        JsonObject conditions = new JsonObject();
-        conditions.addProperty("type", "pixelmon:true");
-        interaction.add("conditions", conditions);
-
-        JsonObject results = new JsonObject();
-        JsonArray resultsArray = new JsonArray();
-
-        JsonObject dialogue = new JsonObject();
-        dialogue.addProperty("title", title); // 使用纯字符串
-        dialogue.addProperty("type", "pixelmon:open_paged_dialogue");
-
-        JsonArray pagesArray = new JsonArray();
-        for (String message : messagePages) {
-            pagesArray.add(message); // 使用纯字符串
-        }
-        dialogue.add("pages", pagesArray);
-
-        resultsArray.add(dialogue);
-        results.add("value", resultsArray);
-        results.addProperty("type", "pixelmon:constant");
-        interaction.add("results", results);
-
-        interactionsArray.add(interaction);
-        interactionsWrapper.add("interactions", interactionsArray);
-        return interactionsWrapper;
-    }
-
-    private JsonObject createGymLeaderInteractionsString(String title, String greeting,
-                                                         String winMessage, String loseMessage,
-                                                         double rewardMoney, List<JsonObject> rewardItems,
-                                                         int cooldownDays) {
-        JsonObject interactions = new JsonObject();
-        JsonArray interactionsArray = new JsonArray();
-
-        // 右键点击交互
-        interactionsArray.add(createRightClickInteractionString(greeting, title));
-        // 关闭对话开始战斗
-        interactionsArray.add(createCloseDialogueBattleInteraction());
-        // 战斗胜利交互
-        interactionsArray.add(createWinBattleInteractionString(winMessage, title, rewardMoney, rewardItems, cooldownDays));
-        // 战斗失败交互
-        interactionsArray.add(createLoseBattleInteractionString(loseMessage, title, cooldownDays));
-
-        interactions.add("interactions", interactionsArray);
-        return interactions;
-    }
-
-    private JsonObject createRightClickInteractionString(String message, String title) {
-        JsonObject interaction = new JsonObject();
-        interaction.addProperty("event", "pixelmon:right_click");
-
-        JsonObject conditions = new JsonObject();
-        conditions.addProperty("type", "pixelmon:true");
-        interaction.add("conditions", conditions);
-
-        JsonObject results = new JsonObject();
-        JsonArray resultsArray = new JsonArray();
-
-        JsonObject dialogue = new JsonObject();
-        dialogue.addProperty("title", title); // 使用纯字符串
-        dialogue.addProperty("message", message); // 使用纯字符串
-        dialogue.addProperty("type", "pixelmon:open_dialogue");
-        resultsArray.add(dialogue);
-
-        results.add("value", resultsArray);
-        results.addProperty("type", "pixelmon:constant");
-        interaction.add("results", results);
-
-        return interaction;
-    }
-
-    private JsonObject createCloseDialogueBattleInteraction() {
-        JsonObject interaction = new JsonObject();
-        interaction.addProperty("event", "pixelmon:close_dialogue");
-
-        JsonObject conditions = new JsonObject();
-        conditions.addProperty("type", "pixelmon:true");
-        interaction.add("conditions", conditions);
-
-        JsonObject results = new JsonObject();
-        JsonArray resultsArray = new JsonArray();
-
-        JsonObject battle = new JsonObject();
-        battle.addProperty("type", "pixelmon:player_start_npc_battle");
-        resultsArray.add(battle);
-
-        results.add("value", resultsArray);
-        results.addProperty("type", "pixelmon:constant");
-        interaction.add("results", results);
-
-        return interaction;
-    }
-
-    private JsonObject createWinBattleInteractionString(String message, String title,
-                                                        double rewardMoney, List<JsonObject> rewardItems,
-                                                        int cooldownDays) {
-        JsonObject interaction = new JsonObject();
-        interaction.addProperty("event", "pixelmon:win_battle");
-
-        JsonObject conditions = new JsonObject();
-        conditions.addProperty("type", "pixelmon:true");
-        interaction.add("conditions", conditions);
-
-        JsonObject results = new JsonObject();
-        JsonArray resultsArray = new JsonArray();
-
-        // 胜利对话
-        JsonObject dialogue = new JsonObject();
-        dialogue.addProperty("title", title); // 使用纯字符串
-        dialogue.addProperty("message", message); // 使用纯字符串
-        dialogue.addProperty("fire_close_event", false);
-        dialogue.addProperty("type", "pixelmon:open_dialogue");
-        resultsArray.add(dialogue);
-
-        // 金钱奖励
-        if (rewardMoney > 0) {
-            JsonObject moneyReward = new JsonObject();
-            moneyReward.addProperty("money", rewardMoney);
-            moneyReward.addProperty("type", "pixelmon:give_money");
-            resultsArray.add(moneyReward);
-        }
-
-        // 物品奖励
-        if (!rewardItems.isEmpty()) {
-            JsonObject itemReward = new JsonObject();
-            itemReward.addProperty("type", "pixelmon:give_item");
-
-            JsonArray itemsArray = new JsonArray();
-            for (JsonObject item : rewardItems) {
-                itemsArray.add(item);
-            }
-            itemReward.add("items", itemsArray);
-            resultsArray.add(itemReward);
-        }
-
-        // 触发训练师击败事件
-        JsonObject defeatEvent = new JsonObject();
-        defeatEvent.addProperty("type", "pixelmon:trigger_interaction_event");
-        defeatEvent.addProperty("event", "pixelmon:defeat_trainer");
-        resultsArray.add(defeatEvent);
-
-        // 设置冷却
-        JsonObject cooldown = new JsonObject();
-        cooldown.addProperty("type", "pixelmon:set_cooldown");
-
-        JsonObject player = new JsonObject();
-        player.addProperty("key", "pixelmon:player");
-        player.addProperty("type", "pixelmon:context_player");
-        cooldown.add("player", player);
-
-        cooldown.addProperty("key", "pixelmon:gym_leader");
-        cooldown.addProperty("cooldown", cooldownDays);
-        cooldown.addProperty("unit", "DAYS");
-        resultsArray.add(cooldown);
-
-        results.add("value", resultsArray);
-        results.addProperty("type", "pixelmon:constant");
-        interaction.add("results", results);
-
-        return interaction;
-    }
-
-    private JsonObject createLoseBattleInteractionString(String message, String title, int cooldownDays) {
-        JsonObject interaction = new JsonObject();
-        interaction.addProperty("event", "pixelmon:lose_battle");
-
-        JsonObject conditions = new JsonObject();
-        conditions.addProperty("type", "pixelmon:true");
-        interaction.add("conditions", conditions);
-
-        JsonObject results = new JsonObject();
-        JsonArray resultsArray = new JsonArray();
-
-        // 失败对话
-        JsonObject dialogue = new JsonObject();
-        dialogue.addProperty("title", title); // 使用纯字符串
-        dialogue.addProperty("message", message); // 使用纯字符串
-        dialogue.addProperty("fire_close_event", false);
-        dialogue.addProperty("type", "pixelmon:open_dialogue");
-        resultsArray.add(dialogue);
-
-        // 设置冷却
-        JsonObject cooldown = new JsonObject();
-        cooldown.addProperty("type", "pixelmon:set_cooldown");
-
-        JsonObject player = new JsonObject();
-        player.addProperty("key", "pixelmon:player");
-        player.addProperty("type", "pixelmon:context_player");
-        cooldown.add("player", player);
-
-        cooldown.addProperty("key", "pixelmon:gym_leader");
-        cooldown.addProperty("cooldown", cooldownDays);
-        cooldown.addProperty("unit", "DAYS");
-        resultsArray.add(cooldown);
-
-        results.add("value", resultsArray);
-        results.addProperty("type", "pixelmon:constant");
-        interaction.add("results", results);
-
-        return interaction;
-    }
-
-    // ==================== 原始私有辅助方法保持不变 ====================
-
-    private JsonObject createCustomShopInteractions(JsonObject title, JsonObject greeting,
-                                                    JsonObject goodbye, List<JsonObject> shopItems) {
-        JsonObject interactionsWrapper = new JsonObject();
-        JsonArray interactionsArray = new JsonArray();
-
-        // 右键点击交互
-        JsonObject rightClickInteraction = new JsonObject();
-        rightClickInteraction.addProperty("event", "pixelmon:right_click");
-
-        JsonObject rightClickConditions = new JsonObject();
-        rightClickConditions.addProperty("type", "pixelmon:true");
-        rightClickInteraction.add("conditions", rightClickConditions);
-
-        JsonObject rightClickResults = new JsonObject();
-        JsonArray rightClickResultsArray = new JsonArray();
-
-        JsonObject dialogue = new JsonObject();
-        dialogue.add("title", title);
-        dialogue.add("message", greeting);
-        dialogue.addProperty("type", "pixelmon:open_dialogue");
-        rightClickResultsArray.add(dialogue);
-
-        rightClickResults.add("value", rightClickResultsArray);
-        rightClickResults.addProperty("type", "pixelmon:constant");
-        rightClickInteraction.add("results", rightClickResults);
-
-        interactionsArray.add(rightClickInteraction);
-
-        // 关闭对话打开商店交互
-        JsonObject closeDialogueInteraction = new JsonObject();
-        closeDialogueInteraction.addProperty("event", "pixelmon:close_dialogue");
-
-        JsonObject closeDialogueConditions = new JsonObject();
-        closeDialogueConditions.addProperty("type", "pixelmon:true");
-        closeDialogueInteraction.add("conditions", closeDialogueConditions);
-
-        JsonObject closeDialogueResults = new JsonObject();
-        JsonArray closeDialogueResultsArray = new JsonArray();
-
-        JsonObject shop = new JsonObject();
-        shop.addProperty("type", "pixelmon:open_shop");
-
-        JsonArray itemsArray = new JsonArray();
-        for (JsonObject item : shopItems) {
-            itemsArray.add(item);
-        }
-        shop.add("items", itemsArray);
-
-        closeDialogueResultsArray.add(shop);
-        closeDialogueResults.add("value", closeDialogueResultsArray);
-        closeDialogueResults.addProperty("type", "pixelmon:constant");
-        closeDialogueInteraction.add("results", closeDialogueResults);
-
-        interactionsArray.add(closeDialogueInteraction);
-
-        // 关闭商店显示告别语交互
-        JsonObject closeShopInteraction = new JsonObject();
-        closeShopInteraction.addProperty("event", "pixelmon:close_shop");
-
-        JsonObject closeShopConditions = new JsonObject();
-        closeShopConditions.addProperty("type", "pixelmon:true");
-        closeShopInteraction.add("conditions", closeShopConditions);
-
-        JsonObject closeShopResults = new JsonObject();
-        JsonArray closeShopResultsArray = new JsonArray();
-
-        JsonObject goodbyeDialogue = new JsonObject();
-        goodbyeDialogue.add("title", title);
-        goodbyeDialogue.add("message", goodbye);
-        goodbyeDialogue.addProperty("fire_close_event", false);
-        goodbyeDialogue.addProperty("type", "pixelmon:open_dialogue");
-        closeShopResultsArray.add(goodbyeDialogue);
-
-        closeShopResults.add("value", closeShopResultsArray);
-        closeShopResults.addProperty("type", "pixelmon:constant");
-        closeShopInteraction.add("results", closeShopResults);
-
-        interactionsArray.add(closeShopInteraction);
-
-        interactionsWrapper.add("interactions", interactionsArray);
-        return interactionsWrapper;
-    }
-
-    private JsonObject createMultiPageTipInteractions(JsonObject title, List<JsonObject> messagePages) {
-        JsonObject interactionsWrapper = new JsonObject();
-        JsonArray interactionsArray = new JsonArray();
-
-        // 右键点击打开多页对话
-        JsonObject interaction = new JsonObject();
-        interaction.addProperty("event", "pixelmon:right_click");
-
-        JsonObject conditions = new JsonObject();
-        conditions.addProperty("type", "pixelmon:true");
-        interaction.add("conditions", conditions);
-
-        JsonObject results = new JsonObject();
-        JsonArray resultsArray = new JsonArray();
-
-        JsonObject dialogue = new JsonObject();
-        dialogue.add("title", title);
-        dialogue.addProperty("type", "pixelmon:open_paged_dialogue");
-
-        JsonArray pagesArray = new JsonArray();
-        for (JsonObject message : messagePages) {
-            pagesArray.add(message);
-        }
-        dialogue.add("pages", pagesArray);
-
-        resultsArray.add(dialogue);
-        results.add("value", resultsArray);
-        results.addProperty("type", "pixelmon:constant");
-        interaction.add("results", results);
-
-        interactionsArray.add(interaction);
-        interactionsWrapper.add("interactions", interactionsArray);
-        return interactionsWrapper;
-    }
-
-    // ==================== JSON保存方法保持不变 ====================
+    // ==================== JSON保存方法 ====================
 
     private CompletableFuture<?> saveOriginal(CachedOutput cache, JsonObject json, Path path) {
         return CompletableFuture.runAsync(() -> {

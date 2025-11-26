@@ -14,12 +14,13 @@ import java.util.List;
  * 用于以类型安全的方式创建宝可梦NPC定义的构建器类。
  */
 public class NPCDefinition {
-    private JsonObject interactions;
     private JsonObject properties;
-    private JsonObject party;
     private JsonObject names;
+    private JsonObject party;
     private JsonObject models;
-    private JsonObject goals;
+    private JsonObject aiProvider;
+    private JsonObject interactions;
+    private NPCType type;
 
     private NPCDefinition() {}
 
@@ -30,14 +31,75 @@ public class NPCDefinition {
     public JsonObject serialize() {
         JsonObject root = new JsonObject();
 
-        if (interactions != null) root.add("interactions", interactions);
-        if (properties != null) root.add("properties", properties);
-        if (party != null) root.add("party", party);
-        if (names != null) root.add("names", names);
-        if (models != null) root.add("models", models);
-        if (goals != null) root.add("goals", goals);
+        // 根据类型确定字段顺序
+        switch (type) {
+            case GYM_LEADER:
+                // 道馆馆主顺序：properties, names, party, models, ai_provider, interactions
+                if (properties != null) root.add("properties", properties);
+                if (names != null) root.add("names", names);
+                if (party != null) root.add("party", party);
+                if (models != null) root.add("models", models);
+                if (aiProvider != null) root.add("ai_provider", aiProvider);
+                if (interactions != null) root.add("interactions", interactions);
+                break;
+
+            case SHOP:
+                // 商店NPC顺序：interactions, properties, party, names, models, ai_provider
+                if (interactions != null) root.add("interactions", interactions);
+                if (properties != null) root.add("properties", properties);
+                if (party != null) root.add("party", party);
+                if (names != null) root.add("names", names);
+                if (models != null) root.add("models", models);
+                if (aiProvider != null) root.add("ai_provider", aiProvider);
+                break;
+
+            case CHAT:
+                // 聊天NPC顺序：interactions, properties, party, names, models, ai_provider
+                if (interactions != null) root.add("interactions", interactions);
+                if (properties != null) root.add("properties", properties);
+                if (party != null) root.add("party", party);
+                if (names != null) root.add("names", names);
+                if (models != null) root.add("models", models);
+                if (aiProvider != null) root.add("ai_provider", aiProvider);
+                break;
+
+            default:
+                // 默认顺序
+                if (properties != null) root.add("properties", properties);
+                if (names != null) root.add("names", names);
+                if (party != null) root.add("party", party);
+                if (models != null) root.add("models", models);
+                if (aiProvider != null) root.add("ai_provider", aiProvider);
+                if (interactions != null) root.add("interactions", interactions);
+                break;
+        }
 
         return root;
+    }
+
+    /**
+     * NPC类型枚举
+     */
+    public enum NPCType {
+        /**
+         * 道馆馆主类型（战斗NPC）
+         */
+        GYM_LEADER,
+
+        /**
+         * 商店NPC类型
+         */
+        SHOP,
+
+        /**
+         * 聊天NPC类型
+         */
+        CHAT,
+
+        /**
+         * 默认类型
+         */
+        DEFAULT
     }
 
     /**
@@ -68,14 +130,23 @@ public class NPCDefinition {
         }
 
         /**
-         * 使用字符串标题的属性配置（宝可梦NPC兼容）
+         * 设置NPC类型
          */
-        public Builder withStringTitleProperties(float health, float eyeHeight, float width, float height,
-                                                 String title, boolean pushable, boolean child,
-                                                 boolean invulnerable, boolean immovable, boolean nameplate) {
+        public Builder withType(NPCType type) {
+            definition.type = type;
+            return this;
+        }
+
+        /**
+         * 使用翻译标题对象的属性配置（新版本格式）
+         */
+        public Builder withTitleProperties(float health, float eyeHeight, float width, float height,
+                                           JsonObject title, boolean pushable, boolean child,
+                                           boolean invulnerable, boolean immovable, boolean nameplate) {
             JsonObject properties = new JsonObject();
             JsonObject value = new JsonObject();
 
+            // 严格按照 dragon_1.json 中 properties.value 的顺序
             value.addProperty("health", health);
             value.addProperty("eyeHeight", eyeHeight);
 
@@ -84,7 +155,7 @@ public class NPCDefinition {
             dimensions.addProperty("height", height);
             value.add("dimensions", dimensions);
 
-            value.addProperty("title", title); // 使用纯字符串而不是JsonObject
+            value.add("title", title);
 
             value.addProperty("pushable", pushable);
             value.addProperty("child", child);
@@ -99,66 +170,8 @@ public class NPCDefinition {
         }
 
         /**
-         * 使用自定义标题对象的属性配置
+         * 使用基础属性配置（无标题）
          */
-        public Builder withTitleProperties(float health, float eyeHeight, float width, float height,
-                                           JsonObject title, boolean pushable, boolean child,
-                                           boolean invulnerable, boolean immovable, boolean nameplate) {
-            JsonObject properties = new JsonObject();
-            JsonObject value = new JsonObject();
-
-            value.addProperty("health", health);
-            value.addProperty("eyeHeight", eyeHeight);
-
-            JsonObject dimensions = new JsonObject();
-            dimensions.addProperty("width", width);
-            dimensions.addProperty("height", height);
-            value.add("dimensions", dimensions);
-
-            value.add("title", title); // 使用传入的标题对象
-
-            value.addProperty("pushable", pushable);
-            value.addProperty("child", child);
-            value.addProperty("invulnerable", invulnerable);
-            value.addProperty("immovable", immovable);
-            value.addProperty("nameplate", nameplate);
-
-            properties.add("value", value);
-            properties.addProperty("type", "pixelmon:constant");
-            definition.properties = properties;
-            return this;
-        }
-
-        // 交互配置
-        public Builder withInteractions(JsonObject interactions) {
-            definition.interactions = interactions;
-            return this;
-        }
-
-        public Builder withUniformInteractions(List<JsonObject> interactionValues) {
-            JsonObject interactions = new JsonObject();
-            JsonArray valuesArray = new JsonArray();
-            interactionValues.forEach(valuesArray::add);
-            interactions.add("values", valuesArray);
-            interactions.addProperty("type", "pixelmon:uniformly_random");
-            definition.interactions = interactions;
-            return this;
-        }
-
-        public Builder withConstantInteractions(JsonObject interactionValue) {
-            JsonObject interactions = new JsonObject();
-            interactions.add("value", interactionValue);
-            interactions.addProperty("type", "pixelmon:constant");
-            definition.interactions = interactions;
-            return this;
-        }
-
-        // 属性配置
-        public Builder withProperties(JsonObject properties) {
-            definition.properties = properties;
-            return this;
-        }
-
         public Builder withBasicProperties(float health, float eyeHeight, float width, float height,
                                            boolean pushable, boolean child, boolean invulnerable,
                                            boolean immovable, boolean nameplate) {
@@ -185,38 +198,52 @@ public class NPCDefinition {
             return this;
         }
 
+        /**
+         * 使用完整标题属性的属性配置（新版本格式）
+         */
         public Builder withTitledProperties(float health, float eyeHeight, float width, float height,
                                             String titleTranslate, String color, boolean bold,
                                             boolean italic, boolean underlined, boolean pushable,
                                             boolean child, boolean invulnerable, boolean immovable,
                                             boolean nameplate) {
-            JsonObject properties = new JsonObject();
-            JsonObject value = new JsonObject();
-
-            value.addProperty("health", health);
-            value.addProperty("eyeHeight", eyeHeight);
-
-            JsonObject dimensions = new JsonObject();
-            dimensions.addProperty("width", width);
-            dimensions.addProperty("height", height);
-            value.add("dimensions", dimensions);
-
             JsonObject title = new JsonObject();
             title.addProperty("translate", titleTranslate);
             title.addProperty("color", color);
             title.addProperty("bold", bold);
             title.addProperty("italic", italic);
             title.addProperty("underlined", underlined);
-            value.add("title", title);
 
-            value.addProperty("pushable", pushable);
-            value.addProperty("child", child);
-            value.addProperty("invulnerable", invulnerable);
-            value.addProperty("immovable", immovable);
-            value.addProperty("nameplate", nameplate);
+            return withTitleProperties(health, eyeHeight, width, height, title, pushable, child,
+                    invulnerable, immovable, nameplate);
+        }
 
-            properties.add("value", value);
-            properties.addProperty("type", "pixelmon:constant");
+        // 交互配置
+        public Builder withInteractions(JsonObject interactions) {
+            definition.interactions = interactions;
+            return this;
+        }
+
+        public Builder withUniformInteractions(List<JsonObject> interactionValues) {
+            JsonObject interactions = new JsonObject();
+            JsonArray valuesArray = new JsonArray();
+            interactionValues.forEach(valuesArray::add);
+            interactions.add("values", valuesArray);
+            interactions.addProperty("type", "pixelmon:uniformly_random");
+            definition.interactions = interactions;
+            return this;
+        }
+
+        public Builder withConstantInteractions(JsonObject interactionValue) {
+            JsonObject interactions = new JsonObject();
+            // 严格按照 dragon_1.json 中 interactions 的结构
+            interactions.add("value", interactionValue);
+            interactions.addProperty("type", "pixelmon:constant");
+            definition.interactions = interactions;
+            return this;
+        }
+
+        // 属性配置（直接设置）
+        public Builder withProperties(JsonObject properties) {
             definition.properties = properties;
             return this;
         }
@@ -293,14 +320,11 @@ public class NPCDefinition {
                 modelObj.addProperty("slim", model.slim);
                 modelObj.addProperty("type", "pixelmon:player");
 
-                JsonObject texture = new JsonObject();
-                JsonObject resource = new JsonObject();
-                resource.addProperty("resource", model.textureResource);
-                resource.addProperty("fallback", model.textureFallback);
-                texture.add("resource", resource);
-                texture.addProperty("type", "pixelmon:fallback");
+                if (model.textureResource != null) {
+                    // 直接纹理路径，不使用fallback结构以匹配 dragon_1.json
+                    modelObj.addProperty("texture", model.textureResource);
+                }
 
-                modelObj.add("texture", texture);
                 valuesArray.add(modelObj);
             }
 
@@ -317,14 +341,8 @@ public class NPCDefinition {
             value.addProperty("slim", slim);
             value.addProperty("type", "pixelmon:player");
 
-            JsonObject texture = new JsonObject();
-            JsonObject resource = new JsonObject();
-            resource.addProperty("resource", textureResource);
-            resource.addProperty("fallback", textureFallback);
-            texture.add("resource", resource);
-            texture.addProperty("type", "pixelmon:fallback");
-
-            value.add("texture", texture);
+            // 直接纹理路径，不使用fallback结构以匹配 dragon_1.json
+            value.addProperty("texture", textureResource);
 
             models.add("value", value);
             models.addProperty("type", "pixelmon:constant");
@@ -336,32 +354,52 @@ public class NPCDefinition {
             return withSinglePlayerModel(slim, textureResource, textureResource);
         }
 
-        // 行为目标配置
-        public Builder withGoals(JsonObject goals) {
-            definition.goals = goals;
+        // AI提供者配置
+        public Builder withAIProvider(JsonObject aiProvider) {
+            definition.aiProvider = aiProvider;
             return this;
         }
 
-        public Builder withLookAtNearbyGoal(float lookDistance, float probability, int priority) {
-            JsonObject goals = new JsonObject();
+        public Builder withStandAndLookAI(float lookDistance, boolean swim) {
+            JsonObject aiProvider = new JsonObject();
             JsonObject value = new JsonObject();
 
-            JsonArray goalsArray = new JsonArray();
-            JsonObject goal = new JsonObject();
-            JsonObject provider = new JsonObject();
+            // 严格按照 dragon_1.json 中 ai_provider.value 的顺序
+            value.addProperty("type", "pixelmon:stand_and_look");
+            value.addProperty("look_distance", lookDistance);
+            value.addProperty("swim", swim);
 
-            provider.addProperty("type", "pixelmon:look_at_nearby");
-            provider.addProperty("look_distance", lookDistance);
-            provider.addProperty("probability", probability);
+            aiProvider.add("value", value);
+            aiProvider.addProperty("type", "pixelmon:constant");
+            definition.aiProvider = aiProvider;
+            return this;
+        }
 
-            goal.add("provider", provider);
-            goal.addProperty("priority", priority);
-            goalsArray.add(goal);
+        public Builder withStandardNPC(String profession) {
+            JsonObject aiProvider = new JsonObject();
+            JsonObject value = new JsonObject();
 
-            value.add("goals", goalsArray);
-            goals.add("value", value);
-            goals.addProperty("type", "pixelmon:constant");
-            definition.goals = goals;
+            value.addProperty("type", "pixelmon:standard_npc");
+            value.addProperty("profession", profession);
+
+            aiProvider.add("value", value);
+            aiProvider.addProperty("type", "pixelmon:constant");
+            definition.aiProvider = aiProvider;
+            return this;
+        }
+
+        public Builder withWanderAndLookAI(float lookDistance, float speed, boolean swim) {
+            JsonObject aiProvider = new JsonObject();
+            JsonObject value = new JsonObject();
+
+            value.addProperty("type", "pixelmon:wander_and_look");
+            value.addProperty("look_distance", lookDistance);
+            value.addProperty("speed", speed);
+            value.addProperty("swim", swim);
+
+            aiProvider.add("value", value);
+            aiProvider.addProperty("type", "pixelmon:constant");
+            definition.aiProvider = aiProvider;
             return this;
         }
 
@@ -384,6 +422,13 @@ public class NPCDefinition {
          */
         public static PlayerModel of(boolean slim, String textureResource) {
             return new PlayerModel(slim, textureResource, textureResource);
+        }
+
+        /**
+         * 创建玩家模型实例（带后备纹理）
+         */
+        public static PlayerModel of(boolean slim, String textureResource, String textureFallback) {
+            return new PlayerModel(slim, textureResource, textureFallback);
         }
     }
 }

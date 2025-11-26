@@ -1,0 +1,286 @@
+{
+  "interactions": {
+    "value": {
+      "interactions": [
+        {
+          "event": "pixelmon:right_click",
+          "conditions": {
+            "type": "pixelmon:true"
+          },
+          "results": {
+            "value": [
+              {
+                "title": "高级物品商店",
+                "message": "欢迎来到高级物品商店！这里出售各种稀有道具和精灵球。",
+                "type": "pixelmon:open_dialogue"
+              }
+            ],
+            "type": "pixelmon:constant"
+          }
+        },
+        {
+          "event": "pixelmon:close_dialogue",
+          "conditions": {
+            "type": "pixelmon:true"
+          },
+          "results": {
+            "value": [
+              {
+                "type": "pixelmon:open_shop",
+                "items": [
+                  {
+                    "item": {
+                      "id": "pixelmon:poke_ball",
+                      "count": 1,
+                      "components": {
+                        "pixelmon:poke_ball": "master_ball"
+                      }
+                    },
+                    "buyPrice": 50000.0,
+                    "sellPrice": 12500.0
+                  },
+                  {
+                    "item": {
+                      "id": "pixelmon:rare_candy",
+                      "count": 10
+                    },
+                    "buyPrice": 50000.0,
+                    "sellPrice": 12500.0
+                  },
+                  {
+                    "item": {
+                      "id": "pixelmon:poke_ball",
+                      "count": 4,
+                      "components": {
+                        "pixelmon:poke_ball": "ultra_ball"
+                      }
+                    },
+                    "buyPrice": 15000.0,
+                    "sellPrice": 3750.0
+                  },
+                  {
+                    "item": {
+                      "id": "pixelmon:poke_ball",
+                      "count": 8,
+                      "components": {
+                        "pixelmon:poke_ball": "great_ball"
+                      }
+                    },
+                    "buyPrice": 8000.0,
+                    "sellPrice": 2000.0
+                  },
+                  {
+                    "item": {
+                      "id": "pixelmon:poke_ball",
+                      "count": 4,
+                      "components": {
+                        "pixelmon:poke_ball": "quick_ball"
+                      }
+                    },
+                    "buyPrice": 12000.0,
+                    "sellPrice": 3000.0
+                  },
+                  {
+                    "item": {
+                      "id": "pixelmon:poke_ball",
+                      "count": 4,
+                      "components": {
+                        "pixelmon:poke_ball": "repeat_ball"
+                      }
+                    },
+                    "buyPrice": 12000.0,
+                    "sellPrice": 3000.0
+                  },
+                  {
+                    "item": {
+                      "id": "pixelmon:poke_ball",
+                      "count": 4,
+                      "components": {
+                        "pixelmon:poke_ball": "timer_ball"
+                      }
+                    },
+                    "buyPrice": 12000.0,
+                    "sellPrice": 3000.0
+                  },
+                  {
+                    "item": {
+                      "id": "pixelmon:poke_ball",
+                      "count": 4,
+                      "components": {
+                        "pixelmon:poke_ball": "dusk_ball"
+                      }
+                    },
+                    "buyPrice": 12000.0,
+                    "sellPrice": 3000.0
+                  },
+                  {
+                    "item": {
+                      "id": "pixelmon:poke_ball",
+                      "count": 4,
+                      "components": {
+                        "pixelmon:poke_ball": "net_ball"
+                      }
+                    },
+                    "buyPrice": 12000.0,
+                    "sellPrice": 3000.0
+                  },
+                  {
+                    "item": {
+                      "id": "pixelmon:poke_ball",
+                      "count": 4,
+                      "components": {
+                        "pixelmon:poke_ball": "dive_ball"
+                      }
+                    },
+                    "buyPrice": 12000.0,
+                    "sellPrice": 3000.0
+                  },
+                  {
+                    "item": {
+                      "id": "pixelmon:poke_ball",
+                      "count": 4,
+                      "components": {
+                        "pixelmon:poke_ball": "nest_ball"
+                      }
+                    },
+                    "buyPrice": 10000.0,
+                    "sellPrice": 2500.0
+                  },
+                  {
+                    "item": {
+                      "id": "pixelmon:poke_ball",
+                      "count": 4,
+                      "components": {
+                        "pixelmon:poke_ball": "heal_ball"
+                      }
+                    },
+                    "buyPrice": 8000.0,
+                    "sellPrice": 2000.0
+                  },
+                  {
+                    "item": {
+                      "id": "pixelmon:poke_ball",
+                      "count": 4,
+                      "components": {
+                        "pixelmon:poke_ball": "luxury_ball"
+                      }
+                    },
+                    "buyPrice": 15000.0,
+                    "sellPrice": 3750.0
+                  },
+                  {
+                    "item": {
+                      "id": "pixelmon:poke_ball",
+                      "count": 4,
+                      "components": {
+                        "pixelmon:poke_ball": "premier_ball"
+                      }
+                    },
+                    "buyPrice": 10000.0,
+                    "sellPrice": 2500.0
+                  },
+                  {
+                    "item": {
+                      "id": "pixelmon:ability_capsule",
+                      "count": 1
+                    },
+                    "buyPrice": 10000.0,
+                    "sellPrice": 2500.0
+                  },
+                  {
+                    "item": {
+                      "id": "pixelmon:golden_bottle_cap",
+                      "count": 1
+                    },
+                    "buyPrice": 15000.0,
+                    "sellPrice": 3750.0
+                  },
+                  {
+                    "item": {
+                      "id": "pixelmon:ability_patch",
+                      "count": 1
+                    },
+                    "buyPrice": 20000.0,
+                    "sellPrice": 5000.0
+                  }
+                ]
+              }
+            ],
+            "type": "pixelmon:constant"
+          }
+        },
+        {
+          "event": "pixelmon:close_shop",
+          "conditions": {
+            "type": "pixelmon:true"
+          },
+          "results": {
+            "value": [
+              {
+                "title": "高级物品商店",
+                "message": "感谢您的惠顾！欢迎下次光临！",
+                "fire_close_event": false,
+                "type": "pixelmon:open_dialogue"
+              }
+            ],
+            "type": "pixelmon:constant"
+          }
+        }
+      ]
+    },
+    "type": "pixelmon:constant"
+  },
+  "properties": {
+    "value": {
+      "health": 20.0,
+      "eyeHeight": 1.9,
+      "dimensions": {
+        "width": 0.65,
+        "height": 2.0
+      },
+      "title": {
+        "translate": "高级物品商店",
+        "color": "#FFD700",
+        "bold": true,
+        "italic": false,
+        "underlined": false
+      },
+      "pushable": false,
+      "child": false,
+      "invulnerable": false,
+      "immovable": false,
+      "nameplate": true
+    },
+    "type": "pixelmon:constant"
+  },
+  "party": {
+    "value": {
+      "type": "pixelmon:empty"
+    },
+    "type": "pixelmon:constant"
+  },
+  "names": {
+    "values": [
+      "毛毛龙·晨曦"
+    ],
+    "type": "pixelmon:uniformly_random"
+  },
+  "models": {
+    "values": [
+      {
+        "slim": false,
+        "type": "pixelmon:player",
+        "texture": "rem:textures/steve/info_dragon.png"
+      }
+    ],
+    "type": "pixelmon:uniformly_random"
+  },
+  "ai_provider": {
+    "value": {
+      "type": "pixelmon:stand_and_look",
+      "look_distance": 5.0,
+      "swim": false
+    },
+    "type": "pixelmon:constant"
+  }
+}

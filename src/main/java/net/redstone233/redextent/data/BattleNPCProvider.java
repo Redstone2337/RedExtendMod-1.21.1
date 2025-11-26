@@ -3,6 +3,7 @@ package net.redstone233.redextent.data;
 import com.google.gson.JsonObject;
 import net.minecraft.data.PackOutput;
 import net.redstone233.redextent.core.generator.PixelmonNPCProvider;
+import net.redstone233.redextent.core.npc.NPCDefinition;
 
 import java.util.List;
 import java.util.Map;
@@ -66,7 +67,7 @@ public class BattleNPCProvider extends PixelmonNPCProvider {
                         Map.of("hp", 252, "atk", 0, "def", 0, "spatk", 252, "spdef", 4, "spd", 0))
         );
 
-        // 使用纯字符串版本的馆主NPC
+        // 使用纯字符串版本的馆主NPC，指定类型为GYM_LEADER
         addGymLeaderString(
                 "blue_dragon_leader",          // 文件名
                 "蓝龙",                        // NPC名称
@@ -81,7 +82,8 @@ public class BattleNPCProvider extends PixelmonNPCProvider {
                         createItemReward("pixelmon:rare_candy", 10)
                 ),
                 3,                             // 冷却天数
-                "rem:textures/npc/battle/blue_dragon.png" // 纹理路径
+                "rem:textures/npc/battle/blue_dragon.png", // 纹理路径
+                NPCDefinition.NPCType.GYM_LEADER // 指定NPC类型
         );
     }
 
@@ -140,7 +142,8 @@ public class BattleNPCProvider extends PixelmonNPCProvider {
                         createItemReward("pixelmon:rare_candy", 5)
                 ),
                 2,                             // 冷却天数
-                "rem:textures/npc/battle/eric.png" // 纹理路径
+                "rem:textures/npc/battle/eric.png", // 纹理路径
+                NPCDefinition.NPCType.GYM_LEADER // 指定NPC类型
         );
     }
 
@@ -199,7 +202,8 @@ public class BattleNPCProvider extends PixelmonNPCProvider {
                         createItemReward("pixelmon:rare_candy", 5)
                 ),
                 2,                             // 冷却天数
-                "rem:textures/npc/battle/ice_dragon.png" // 纹理路径
+                "rem:textures/npc/battle/ice_dragon.png", // 纹理路径
+                NPCDefinition.NPCType.GYM_LEADER // 指定NPC类型
         );
     }
 
@@ -258,7 +262,8 @@ public class BattleNPCProvider extends PixelmonNPCProvider {
                         createItemReward("pixelmon:rare_candy", 5)
                 ),
                 2,                             // 冷却天数
-                "rem:textures/npc/battle/ender_dragon.png" // 纹理路径
+                "rem:textures/npc/battle/ender_dragon.png", // 纹理路径
+                NPCDefinition.NPCType.GYM_LEADER // 指定NPC类型
         );
     }
 
@@ -314,21 +319,129 @@ public class BattleNPCProvider extends PixelmonNPCProvider {
                 5000.0,                        // 奖励金钱
                 List.of(                       // 奖励物品
                         createItemReward("pixelmon:dragon_scale", 1),
-                        createItemReward("pixelmon:rare_candy", 5)
+                        createItemReward("pixelmon:rare_candy", 5),
+                        createPokeBallReward(PokeBallTypes.FAST_BALL,3)
                 ),
                 2,                             // 冷却天数
-                "pixelmon:textures/npc/gym_leaders/dragon_trainer.png" // 纹理路径
+                "pixelmon:textures/npc/gym_leaders/dragon_trainer.png", // 纹理路径
+                NPCDefinition.NPCType.GYM_LEADER // 指定NPC类型
         );
     }
 
-    // ==================== 辅助方法 ====================
+    // ==================== BattleNPCProvider 所需的辅助方法 ====================
 
     /**
-     * 创建带个体值和努力值的宝可梦配置
+     * 创建物品奖励（用于战斗奖励）
      */
-    private String createPokemonSpecWithIVsEVs(String pokemon, int level, String ability, String heldItem,
-                                               String nature, List<String> moves, Map<String, Integer> ivs,
-                                               Map<String, Integer> evs) {
+    public static JsonObject createItemReward(String itemId, int count) {
+        JsonObject item = new JsonObject();
+        item.addProperty("id", itemId);
+        item.addProperty("count", count);
+        return item;
+    }
+
+    /**
+     * 创建大师球奖励（使用新版本的组件系统）
+     */
+    public static JsonObject createMasterBallReward(int count) {
+        JsonObject item = new JsonObject();
+        item.addProperty("id", "pixelmon:poke_ball");
+        item.addProperty("count", count);
+
+        JsonObject components = new JsonObject();
+        components.addProperty("pixelmon:poke_ball", "master_ball");
+        item.add("components", components);
+
+        return item;
+    }
+
+    /**
+     * 创建精灵球奖励（支持所有类型的精灵球）
+     */
+    public static JsonObject createPokeBallReward(String ballType, int count) {
+        JsonObject item = new JsonObject();
+        item.addProperty("id", "pixelmon:poke_ball");
+        item.addProperty("count", count);
+
+        JsonObject components = new JsonObject();
+        components.addProperty("pixelmon:poke_ball", ballType);
+        item.add("components", components);
+
+        return item;
+    }
+
+    /**
+     * 生成简化版对战馆主NPC（使用纯字符串参数）
+     * 这是专门为 BattleNPCProvider 设计的简化方法
+     */
+    protected void addGymLeaderString(String fileName, String npcName, String titleText,
+                                      String greeting, String winMessage, String loseMessage,
+                                      List<String> pokemonSpecs, double rewardMoney,
+                                      List<JsonObject> rewardItems, int cooldownDays,
+                                      String texturePath) {
+
+        // 创建标题（使用纯文本而不是翻译键）
+        JsonObject title = createTextTitle(titleText, "#8E44AD", true, false, false);
+
+        // 创建自定义交互
+        JsonObject interactions = createCustomBattleLeaderInteractions(
+                titleText,      // 使用纯文本作为标题
+                greeting,       // 问候语
+                winMessage,     // 胜利消息
+                loseMessage,    // 失败消息
+                rewardMoney,    // 奖励金钱
+                rewardItems,    // 奖励物品
+                cooldownDays    // 冷却天数
+        );
+
+        // 调用现有的对战馆主生成方法
+        addBattleLeaderNPC(fileName, npcName, title, pokemonSpecs, texturePath, interactions);
+    }
+
+    /**
+     * 生成简化版对战馆主NPC（带类型参数）
+     */
+    protected void addGymLeaderString(String fileName, String npcName, String titleText,
+                                      String greeting, String winMessage, String loseMessage,
+                                      List<String> pokemonSpecs, double rewardMoney,
+                                      List<JsonObject> rewardItems, int cooldownDays,
+                                      String texturePath, NPCDefinition.NPCType type) {
+
+        // 创建标题（使用纯文本而不是翻译键）
+        JsonObject title = createTextTitle(titleText, "#8E44AD", true, false, false);
+
+        // 创建自定义交互
+        JsonObject interactions = createCustomBattleLeaderInteractions(
+                titleText,      // 使用纯文本作为标题
+                greeting,       // 问候语
+                winMessage,     // 胜利消息
+                loseMessage,    // 失败消息
+                rewardMoney,    // 奖励金钱
+                rewardItems,    // 奖励物品
+                cooldownDays    // 冷却天数
+        );
+
+        // 使用自定义NPC生成方法，支持类型参数
+        JsonObject npcDefinition = definition()
+                .withType(type)
+                .withProperties(createBattleLeaderProperties(title))
+                .withSingleName(npcName)
+                .withSpecParty(pokemonSpecs)
+                .withSinglePlayerModel(true, texturePath)
+                .withStandAndLookAI(10.0f, false)
+                .withConstantInteractions(interactions)
+                .build()
+                .serialize();
+
+        this.add(fileName, npcDefinition);
+    }
+
+    /**
+     * 创建带个体值和努力值的宝可梦配置（BattleNPCProvider 专用）
+     */
+    public static String createPokemonSpecWithIVsEVs(String pokemon, int level, String ability, String heldItem,
+                                                     String nature, List<String> moves, Map<String, Integer> ivs,
+                                                     Map<String, Integer> evs) {
         StringBuilder spec = new StringBuilder(pokemon);
         spec.append(" lvl:").append(level);
 
