@@ -247,9 +247,17 @@ public class DatapackValidator {
 
         for (Pack pack : packs) {
             total++;
-            boolean isValid = validateDatapack((PackResources) pack, currentFormat, null, registries);
-            if (isValid) {
-                valid++;
+            try {
+                // 修复：从 Pack 对象获取 PackResources
+                PackResources packResources = pack.open();
+                boolean isValid = validateDatapack(packResources, currentFormat, null, registries);
+                if (isValid) {
+                    valid++;
+                }
+                // 确保资源被正确关闭
+                packResources.close();
+            } catch (Exception e) {
+                RedExtendMod.LOGGER.error("Failed to process data pack: {}", pack.getId(), e);
             }
         }
 
@@ -259,31 +267,37 @@ public class DatapackValidator {
     /**
      * 获取数据包的 rem 配置（用于调试）
      */
-    public static Optional<RemConfig> getRemConfig(PackResources pack, HolderLookup.Provider registries) {
+    public static Optional<RemConfig> getRemConfig(Pack pack, HolderLookup.Provider registries) {
         try {
-            Optional<IoSupplier<InputStream>> metaSupplier = Optional.ofNullable(pack.getRootResource("pack.mcmeta"));
-            if (metaSupplier.isEmpty()) {
-                return Optional.empty();
+            // 修复：从 Pack 对象获取 PackResources
+            PackResources packResources = pack.open();
+            try {
+                Optional<IoSupplier<InputStream>> metaSupplier = Optional.ofNullable(packResources.getRootResource("pack.mcmeta"));
+                if (metaSupplier.isEmpty()) {
+                    return Optional.empty();
+                }
+
+                String metaContent;
+                try (InputStream is = metaSupplier.get().get()) {
+                    metaContent = new String(is.readAllBytes(), StandardCharsets.UTF_8);
+                }
+
+                JsonObject metaJson = GSON.fromJson(metaContent, JsonObject.class);
+
+                if (!metaJson.has("rem")) {
+                    return Optional.empty();
+                }
+
+                JsonElement remElement = metaJson.get("rem");
+                DataResult<RemConfig> result = CodecUtils.parseRemConfig(remElement, registries);
+
+                return result.result();
+            } finally {
+                packResources.close();
             }
-
-            String metaContent;
-            try (InputStream is = metaSupplier.get().get()) {
-                metaContent = new String(is.readAllBytes(), StandardCharsets.UTF_8);
-            }
-
-            JsonObject metaJson = GSON.fromJson(metaContent, JsonObject.class);
-
-            if (!metaJson.has("rem")) {
-                return Optional.empty();
-            }
-
-            JsonElement remElement = metaJson.get("rem");
-            DataResult<RemConfig> result = CodecUtils.parseRemConfig(remElement, registries);
-
-            return result.result();
 
         } catch (Exception e) {
-            RedExtendMod.LOGGER.error("Failed to get rem config for data pack: {}", pack.packId(), e);
+            RedExtendMod.LOGGER.error("Failed to get rem config for data pack: {}", pack.getId(), e);
             return Optional.empty();
         }
     }
