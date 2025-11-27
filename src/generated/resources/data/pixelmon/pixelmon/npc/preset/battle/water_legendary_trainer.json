@@ -1,0 +1,324 @@
+{
+  "properties": {
+    "value": {
+      "health": 20.0,
+      "eyeHeight": 1.9,
+      "dimensions": {
+        "width": 0.65,
+        "height": 2.0
+      },
+      "title": {
+        "text": "水系神兽训练家·海澜",
+        "color": "#8E44AD",
+        "bold": true,
+        "italic": false,
+        "underlined": false
+      },
+      "pushable": false,
+      "child": false,
+      "invulnerable": false,
+      "immovable": false,
+      "nameplate": true
+    },
+    "type": "pixelmon:constant"
+  },
+  "names": {
+    "values": [
+      "海澜"
+    ],
+    "type": "pixelmon:uniformly_random"
+  },
+  "party": {
+    "value": {
+      "specs": [
+        "Kyogre lvl:87 ability:drizzle helditem:blue_orb nature:modest ivhp:31 ivatk:31 ivdef:31 ivspatk:31 ivspdef:31 ivspd:31 evhp:4 evspatk:252 evspd:252 move1:origin_pulse move2:water_spout move3:thunder move4:ice_beam",
+        "Lugia lvl:84 ability:pressure helditem:leftovers nature:bold ivhp:31 ivatk:31 ivdef:31 ivspatk:31 ivspdef:31 ivspd:31 evhp:252 evdef:252 evspdef:4 move1:aeroblast move2:calm_mind move3:roost move4:ice_beam",
+        "Articuno lvl:81 ability:pressure helditem:heavy_duty_boots nature:calm ivhp:31 ivatk:31 ivdef:31 ivspatk:31 ivspdef:31 ivspd:31 evhp:248 evspdef:252 evspd:8 move1:freeze-dry move2:hurricane move3:roost move4:toxic",
+        "Suicune lvl:79 ability:pressure helditem:leftovers nature:bold ivhp:31 ivatk:31 ivdef:31 ivspatk:31 ivspdef:31 ivspd:31 evhp:252 evdef:252 evspdef:4 move1:scald move2:ice_beam move3:calm_mind move4:rest",
+        "Zekrom lvl:77 ability:teravolt helditem:choice_band nature:adamant ivhp:31 ivatk:31 ivdef:31 ivspatk:31 ivspdef:31 ivspd:31 evatk:252 evspdef:4 evspd:252 move1:bolt_strike move2:outrage move3:stone_edge move4:volt_switch",
+        "Swampert lvl:74 ability:swift swim helditem:swampertite nature:adamant ivhp:31 ivatk:31 ivdef:31 ivspatk:31 ivspdef:31 ivspd:31 evatk:252 evspdef:4 evspd:252 move1:waterfall move2:earthquake move3:ice_punch move4:rain_dance"
+      ],
+      "type": "pixelmon:spec"
+    },
+    "type": "pixelmon:constant"
+  },
+  "models": {
+    "value": {
+      "slim": true,
+      "type": "pixelmon:player",
+      "texture": "rem:textures/npc/battle/ice_dragon.png"
+    },
+    "type": "pixelmon:constant"
+  },
+  "ai_provider": {
+    "value": {
+      "type": "pixelmon:stand_and_look",
+      "look_distance": 10.0,
+      "swim": false
+    },
+    "type": "pixelmon:constant"
+  },
+  "interactions": {
+    "value": {
+      "interactions": [
+        {
+          "event": "pixelmon:right_click",
+          "conditions": [
+            {
+              "type": "pixelmon:interaction_condition",
+              "condition": {
+                "type": "pixelmon:string_compare",
+                "first": {
+                  "value": "MAIN_HAND",
+                  "type": "pixelmon:constant_string"
+                },
+                "second": {
+                  "type": "pixelmon:hand_used"
+                }
+              }
+            },
+            {
+              "type": "pixelmon:interaction_condition",
+              "condition": {
+                "type": "pixelmon:can_battle",
+                "player": {
+                  "key": "pixelmon:player",
+                  "type": "pixelmon:context_player"
+                }
+              }
+            },
+            {
+              "type": "pixelmon:interaction_condition",
+              "condition": {
+                "type": "pixelmon:logical_not",
+                "condition": {
+                  "type": "pixelmon:interaction_condition",
+                  "condition": {
+                    "type": "pixelmon:on_cooldown",
+                    "player": {
+                      "key": "pixelmon:player",
+                      "type": "pixelmon:context_player"
+                    },
+                    "cooldown_key": "pixelmon:leader_gym_dragon_1",
+                    "cooldown": 1,
+                    "unit": "DAYS"
+                  }
+                }
+              }
+            }
+          ],
+          "results": {
+            "value": [
+              {
+                "type": "pixelmon:open_dialogue",
+                "title": "水系神兽训练家·海澜",
+                "message": "我是水系神兽训练家海澜！感受大海的力量吧！"
+              }
+            ],
+            "type": "pixelmon:constant"
+          }
+        },
+        {
+          "event": "pixelmon:right_click",
+          "conditions": [
+            {
+              "type": "pixelmon:interaction_condition",
+              "condition": {
+                "type": "pixelmon:string_compare",
+                "first": {
+                  "value": "MAIN_HAND",
+                  "type": "pixelmon:constant_string"
+                },
+                "second": {
+                  "type": "pixelmon:hand_used"
+                }
+              }
+            },
+            {
+              "type": "pixelmon:interaction_condition",
+              "condition": {
+                "type": "pixelmon:on_cooldown",
+                "player": {
+                  "key": "pixelmon:player",
+                  "type": "pixelmon:context_player"
+                },
+                "cooldown_key": "pixelmon:leader_gym_dragon_1",
+                "cooldown": 2,
+                "unit": "DAYS"
+              }
+            }
+          ],
+          "results": {
+            "value": [
+              {
+                "type": "pixelmon:message_player",
+                "messages": [
+                  {
+                    "translate": "pixelmon.npc.dialogue.battle.leader.gym.dragon.1.cooldown"
+                  }
+                ]
+              }
+            ],
+            "type": "pixelmon:constant"
+          }
+        },
+        {
+          "event": "pixelmon:right_click",
+          "conditions": [
+            {
+              "type": "pixelmon:interaction_condition",
+              "condition": {
+                "type": "pixelmon:string_compare",
+                "first": {
+                  "value": "MAIN_HAND",
+                  "type": "pixelmon:constant_string"
+                },
+                "second": {
+                  "type": "pixelmon:hand_used"
+                }
+              }
+            },
+            {
+              "type": "pixelmon:interaction_condition",
+              "condition": {
+                "type": "pixelmon:logical_not",
+                "condition": {
+                  "type": "pixelmon:interaction_condition",
+                  "condition": {
+                    "type": "pixelmon:can_battle",
+                    "player": {
+                      "key": "pixelmon:player",
+                      "type": "pixelmon:context_player"
+                    }
+                  }
+                }
+              }
+            }
+          ],
+          "results": {
+            "value": [
+              {
+                "type": "pixelmon:message_player",
+                "messages": [
+                  {
+                    "translate": "pixelmon.npc.dialogue.battle.leader.gym.dragon.1.unable_to_battle"
+                  }
+                ]
+              }
+            ],
+            "type": "pixelmon:constant"
+          }
+        },
+        {
+          "event": "pixelmon:close_dialogue",
+          "conditions": [
+            {
+              "type": "pixelmon:interaction_condition",
+              "condition": {
+                "type": "pixelmon:true"
+              }
+            }
+          ],
+          "results": {
+            "value": [
+              {
+                "type": "pixelmon:player_start_npc_battle"
+              }
+            ],
+            "type": "pixelmon:constant"
+          }
+        },
+        {
+          "event": "pixelmon:lose_battle",
+          "conditions": [
+            {
+              "type": "pixelmon:interaction_condition",
+              "condition": {
+                "type": "pixelmon:true"
+              }
+            }
+          ],
+          "results": {
+            "value": [
+              {
+                "type": "pixelmon:open_dialogue",
+                "title": "水系神兽训练家·海澜",
+                "message": "大海的力量是无穷无尽的！",
+                "fire_close_event": false
+              },
+              {
+                "type": "pixelmon:set_string_context",
+                "key": "pixelmon:leader",
+                "value": "leader_gym_dragon_1"
+              },
+              {
+                "type": "pixelmon:trigger_interaction_event",
+                "event": "pixelmon:lose_to_leader"
+              }
+            ],
+            "type": "pixelmon:constant"
+          }
+        },
+        {
+          "event": "pixelmon:win_battle",
+          "conditions": [
+            {
+              "type": "pixelmon:interaction_condition",
+              "condition": {
+                "type": "pixelmon:true"
+              }
+            }
+          ],
+          "results": {
+            "value": [
+              {
+                "type": "pixelmon:open_dialogue",
+                "title": "水系神兽训练家·海澜",
+                "message": "你的实力如海洋般深不可测！继续前进吧！",
+                "fire_close_event": false
+              },
+              {
+                "type": "pixelmon:give_money",
+                "money": 5000.0
+              },
+              {
+                "type": "pixelmon:give_item",
+                "items": [
+                  {
+                    "id": "pixelmon:water_stone",
+                    "count": 1
+                  },
+                  {
+                    "id": "pixelmon:rare_candy",
+                    "count": 5
+                  }
+                ]
+              },
+              {
+                "type": "pixelmon:set_cooldown",
+                "player": {
+                  "key": "pixelmon:player",
+                  "type": "pixelmon:context_player"
+                },
+                "key": "pixelmon:leader_gym_dragon_1",
+                "cooldown": 2,
+                "unit": "DAYS"
+              },
+              {
+                "type": "pixelmon:set_string_context",
+                "key": "pixelmon:leader",
+                "value": "leader_gym_dragon_1"
+              },
+              {
+                "type": "pixelmon:trigger_interaction_event",
+                "event": "pixelmon:defeat_leader"
+              }
+            ],
+            "type": "pixelmon:constant"
+          }
+        }
+      ]
+    },
+    "type": "pixelmon:constant"
+  }
+}

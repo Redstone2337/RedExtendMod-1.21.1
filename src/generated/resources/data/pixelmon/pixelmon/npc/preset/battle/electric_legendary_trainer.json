@@ -1,0 +1,324 @@
+{
+  "properties": {
+    "value": {
+      "health": 20.0,
+      "eyeHeight": 1.9,
+      "dimensions": {
+        "width": 0.65,
+        "height": 2.0
+      },
+      "title": {
+        "text": "电系神兽训练家·雷霆",
+        "color": "#8E44AD",
+        "bold": true,
+        "italic": false,
+        "underlined": false
+      },
+      "pushable": false,
+      "child": false,
+      "invulnerable": false,
+      "immovable": false,
+      "nameplate": true
+    },
+    "type": "pixelmon:constant"
+  },
+  "names": {
+    "values": [
+      "雷霆"
+    ],
+    "type": "pixelmon:uniformly_random"
+  },
+  "party": {
+    "value": {
+      "specs": [
+        "Raikou lvl:86 ability:pressure helditem:assault_vest nature:timid ivhp:31 ivatk:31 ivdef:31 ivspatk:31 ivspdef:31 ivspd:31 evspatk:252 evspdef:4 evspd:252 move1:thunderbolt move2:volt_switch move3:shadow_ball move4:extrasensory",
+        "Zapdos lvl:83 ability:pressure helditem:heavy_duty_boots nature:timid ivhp:31 ivatk:31 ivdef:31 ivspatk:31 ivspdef:31 ivspd:31 evspatk:252 evspdef:4 evspd:252 move1:thunderbolt move2:hurricane move3:heat_wave move4:roost",
+        "Thundurus lvl:80 ability:prankster helditem:life_orb nature:timid ivhp:31 ivatk:31 ivdef:31 ivspatk:31 ivspdef:31 ivspd:31 evspatk:252 evspdef:4 evspd:252 move1:thunderbolt move2:focus_blast move3:hidden_power_ice move4:nasty_plot",
+        "Tapu Koko lvl:78 ability:electric surge helditem:choice_specs nature:timid ivhp:31 ivatk:31 ivdef:31 ivspatk:31 ivspdef:31 ivspd:31 evspatk:252 evspdef:4 evspd:252 move1:thunderbolt move2:dazzling_gleam move3:volt_switch move4:grass_knot",
+        "Zeraora lvl:76 ability:volt absorb helditem:expert_belt nature:jolly ivhp:31 ivatk:31 ivdef:31 ivspatk:31 ivspdef:31 ivspd:31 evatk:252 evspdef:4 evspd:252 move1:plasma_fists move2:close_combat move3:blaze_kick move4:volt_switch",
+        "Ampharos lvl:73 ability:mold breaker helditem:ampharosite nature:modest ivhp:31 ivatk:31 ivdef:31 ivspatk:31 ivspdef:31 ivspd:31 evhp:248 evspatk:252 evspdef:8 move1:thunderbolt move2:dragon_pulse move3:focus_blast move4:volt_switch"
+      ],
+      "type": "pixelmon:spec"
+    },
+    "type": "pixelmon:constant"
+  },
+  "models": {
+    "value": {
+      "slim": true,
+      "type": "pixelmon:player",
+      "texture": "rem:textures/npc/battle/ender_dragon.png"
+    },
+    "type": "pixelmon:constant"
+  },
+  "ai_provider": {
+    "value": {
+      "type": "pixelmon:stand_and_look",
+      "look_distance": 10.0,
+      "swim": false
+    },
+    "type": "pixelmon:constant"
+  },
+  "interactions": {
+    "value": {
+      "interactions": [
+        {
+          "event": "pixelmon:right_click",
+          "conditions": [
+            {
+              "type": "pixelmon:interaction_condition",
+              "condition": {
+                "type": "pixelmon:string_compare",
+                "first": {
+                  "value": "MAIN_HAND",
+                  "type": "pixelmon:constant_string"
+                },
+                "second": {
+                  "type": "pixelmon:hand_used"
+                }
+              }
+            },
+            {
+              "type": "pixelmon:interaction_condition",
+              "condition": {
+                "type": "pixelmon:can_battle",
+                "player": {
+                  "key": "pixelmon:player",
+                  "type": "pixelmon:context_player"
+                }
+              }
+            },
+            {
+              "type": "pixelmon:interaction_condition",
+              "condition": {
+                "type": "pixelmon:logical_not",
+                "condition": {
+                  "type": "pixelmon:interaction_condition",
+                  "condition": {
+                    "type": "pixelmon:on_cooldown",
+                    "player": {
+                      "key": "pixelmon:player",
+                      "type": "pixelmon:context_player"
+                    },
+                    "cooldown_key": "pixelmon:leader_gym_dragon_1",
+                    "cooldown": 1,
+                    "unit": "DAYS"
+                  }
+                }
+              }
+            }
+          ],
+          "results": {
+            "value": [
+              {
+                "type": "pixelmon:open_dialogue",
+                "title": "电系神兽训练家·雷霆",
+                "message": "我是电系神兽训练家雷霆！准备好被电击了吗？"
+              }
+            ],
+            "type": "pixelmon:constant"
+          }
+        },
+        {
+          "event": "pixelmon:right_click",
+          "conditions": [
+            {
+              "type": "pixelmon:interaction_condition",
+              "condition": {
+                "type": "pixelmon:string_compare",
+                "first": {
+                  "value": "MAIN_HAND",
+                  "type": "pixelmon:constant_string"
+                },
+                "second": {
+                  "type": "pixelmon:hand_used"
+                }
+              }
+            },
+            {
+              "type": "pixelmon:interaction_condition",
+              "condition": {
+                "type": "pixelmon:on_cooldown",
+                "player": {
+                  "key": "pixelmon:player",
+                  "type": "pixelmon:context_player"
+                },
+                "cooldown_key": "pixelmon:leader_gym_dragon_1",
+                "cooldown": 2,
+                "unit": "DAYS"
+              }
+            }
+          ],
+          "results": {
+            "value": [
+              {
+                "type": "pixelmon:message_player",
+                "messages": [
+                  {
+                    "translate": "pixelmon.npc.dialogue.battle.leader.gym.dragon.1.cooldown"
+                  }
+                ]
+              }
+            ],
+            "type": "pixelmon:constant"
+          }
+        },
+        {
+          "event": "pixelmon:right_click",
+          "conditions": [
+            {
+              "type": "pixelmon:interaction_condition",
+              "condition": {
+                "type": "pixelmon:string_compare",
+                "first": {
+                  "value": "MAIN_HAND",
+                  "type": "pixelmon:constant_string"
+                },
+                "second": {
+                  "type": "pixelmon:hand_used"
+                }
+              }
+            },
+            {
+              "type": "pixelmon:interaction_condition",
+              "condition": {
+                "type": "pixelmon:logical_not",
+                "condition": {
+                  "type": "pixelmon:interaction_condition",
+                  "condition": {
+                    "type": "pixelmon:can_battle",
+                    "player": {
+                      "key": "pixelmon:player",
+                      "type": "pixelmon:context_player"
+                    }
+                  }
+                }
+              }
+            }
+          ],
+          "results": {
+            "value": [
+              {
+                "type": "pixelmon:message_player",
+                "messages": [
+                  {
+                    "translate": "pixelmon.npc.dialogue.battle.leader.gym.dragon.1.unable_to_battle"
+                  }
+                ]
+              }
+            ],
+            "type": "pixelmon:constant"
+          }
+        },
+        {
+          "event": "pixelmon:close_dialogue",
+          "conditions": [
+            {
+              "type": "pixelmon:interaction_condition",
+              "condition": {
+                "type": "pixelmon:true"
+              }
+            }
+          ],
+          "results": {
+            "value": [
+              {
+                "type": "pixelmon:player_start_npc_battle"
+              }
+            ],
+            "type": "pixelmon:constant"
+          }
+        },
+        {
+          "event": "pixelmon:lose_battle",
+          "conditions": [
+            {
+              "type": "pixelmon:interaction_condition",
+              "condition": {
+                "type": "pixelmon:true"
+              }
+            }
+          ],
+          "results": {
+            "value": [
+              {
+                "type": "pixelmon:open_dialogue",
+                "title": "电系神兽训练家·雷霆",
+                "message": "电力的力量无人能挡！",
+                "fire_close_event": false
+              },
+              {
+                "type": "pixelmon:set_string_context",
+                "key": "pixelmon:leader",
+                "value": "leader_gym_dragon_1"
+              },
+              {
+                "type": "pixelmon:trigger_interaction_event",
+                "event": "pixelmon:lose_to_leader"
+              }
+            ],
+            "type": "pixelmon:constant"
+          }
+        },
+        {
+          "event": "pixelmon:win_battle",
+          "conditions": [
+            {
+              "type": "pixelmon:interaction_condition",
+              "condition": {
+                "type": "pixelmon:true"
+              }
+            }
+          ],
+          "results": {
+            "value": [
+              {
+                "type": "pixelmon:open_dialogue",
+                "title": "电系神兽训练家·雷霆",
+                "message": "你的实力如闪电般耀眼！继续前进吧！",
+                "fire_close_event": false
+              },
+              {
+                "type": "pixelmon:give_money",
+                "money": 5000.0
+              },
+              {
+                "type": "pixelmon:give_item",
+                "items": [
+                  {
+                    "id": "pixelmon:thunder_stone",
+                    "count": 1
+                  },
+                  {
+                    "id": "pixelmon:rare_candy",
+                    "count": 5
+                  }
+                ]
+              },
+              {
+                "type": "pixelmon:set_cooldown",
+                "player": {
+                  "key": "pixelmon:player",
+                  "type": "pixelmon:context_player"
+                },
+                "key": "pixelmon:leader_gym_dragon_1",
+                "cooldown": 2,
+                "unit": "DAYS"
+              },
+              {
+                "type": "pixelmon:set_string_context",
+                "key": "pixelmon:leader",
+                "value": "leader_gym_dragon_1"
+              },
+              {
+                "type": "pixelmon:trigger_interaction_event",
+                "event": "pixelmon:defeat_leader"
+              }
+            ],
+            "type": "pixelmon:constant"
+          }
+        }
+      ]
+    },
+    "type": "pixelmon:constant"
+  }
+}

@@ -1,0 +1,327 @@
+{
+  "properties": {
+    "value": {
+      "health": 20.0,
+      "eyeHeight": 1.9,
+      "dimensions": {
+        "width": 0.65,
+        "height": 2.0
+      },
+      "title": {
+        "text": "神兽道馆馆主·蓝龙",
+        "color": "#8E44AD",
+        "bold": true,
+        "italic": false,
+        "underlined": false
+      },
+      "pushable": false,
+      "child": false,
+      "invulnerable": false,
+      "immovable": false,
+      "nameplate": true
+    },
+    "type": "pixelmon:constant"
+  },
+  "names": {
+    "values": [
+      "蓝龙"
+    ],
+    "type": "pixelmon:uniformly_random"
+  },
+  "party": {
+    "value": {
+      "specs": [
+        "Zygarde lvl:100 ability:power construct helditem:leftovers nature:adamant ivhp:31 ivatk:31 ivdef:31 ivspatk:31 ivspdef:31 ivspd:31 evhp:252 evatk:252 evdef:4 move1:thousand_arrows move2:thousand_waves move3:core_enforcer move4:extreme_speed",
+        "Rayquaza lvl:98 ability:air lock helditem:life_orb nature:jolly ivhp:31 ivatk:31 ivdef:31 ivspatk:31 ivspdef:31 ivspd:31 evatk:252 evdef:4 evspd:252 move1:dragon_ascent move2:extreme_speed move3:dragon_dance move4:earthquake",
+        "Mewtwo lvl:96 ability:pressure helditem:mewtwonite_x nature:timid ivhp:31 ivatk:31 ivdef:31 ivspatk:31 ivspdef:31 ivspd:31 evdef:4 evspatk:252 evspd:252 move1:psystrike move2:aura_sphere move3:ice_beam move4:recover",
+        "Dialga lvl:95 ability:pressure helditem:adamant_orb nature:modest ivhp:31 ivatk:31 ivdef:31 ivspatk:31 ivspdef:31 ivspd:31 evhp:252 evspatk:252 evspdef:4 move1:roar_of_time move2:flash_cannon move3:fire_blast move4:thunder",
+        "Palkia lvl:94 ability:pressure helditem:lustrous_orb nature:timid ivhp:31 ivatk:31 ivdef:31 ivspatk:31 ivspdef:31 ivspd:31 evspatk:252 evspdef:4 evspd:252 move1:spacial_rend move2:hydro_pump move3:thunderbolt move4:fire_blast",
+        "Giratina lvl:92 ability:levitate helditem:griseous_orb nature:modest ivhp:31 ivatk:31 ivdef:31 ivspatk:31 ivspdef:31 ivspd:31 evhp:252 evspatk:252 evspdef:4 move1:shadow_force move2:dragon_pulse move3:aura_sphere move4:earth_power"
+      ],
+      "type": "pixelmon:spec"
+    },
+    "type": "pixelmon:constant"
+  },
+  "models": {
+    "value": {
+      "slim": true,
+      "type": "pixelmon:player",
+      "texture": "rem:textures/npc/battle/blue_dragon.png"
+    },
+    "type": "pixelmon:constant"
+  },
+  "ai_provider": {
+    "value": {
+      "type": "pixelmon:stand_and_look",
+      "look_distance": 10.0,
+      "swim": false
+    },
+    "type": "pixelmon:constant"
+  },
+  "interactions": {
+    "value": {
+      "interactions": [
+        {
+          "event": "pixelmon:right_click",
+          "conditions": [
+            {
+              "type": "pixelmon:interaction_condition",
+              "condition": {
+                "type": "pixelmon:string_compare",
+                "first": {
+                  "value": "MAIN_HAND",
+                  "type": "pixelmon:constant_string"
+                },
+                "second": {
+                  "type": "pixelmon:hand_used"
+                }
+              }
+            },
+            {
+              "type": "pixelmon:interaction_condition",
+              "condition": {
+                "type": "pixelmon:can_battle",
+                "player": {
+                  "key": "pixelmon:player",
+                  "type": "pixelmon:context_player"
+                }
+              }
+            },
+            {
+              "type": "pixelmon:interaction_condition",
+              "condition": {
+                "type": "pixelmon:logical_not",
+                "condition": {
+                  "type": "pixelmon:interaction_condition",
+                  "condition": {
+                    "type": "pixelmon:on_cooldown",
+                    "player": {
+                      "key": "pixelmon:player",
+                      "type": "pixelmon:context_player"
+                    },
+                    "cooldown_key": "pixelmon:leader_gym_dragon_1",
+                    "cooldown": 1,
+                    "unit": "DAYS"
+                  }
+                }
+              }
+            }
+          ],
+          "results": {
+            "value": [
+              {
+                "type": "pixelmon:open_dialogue",
+                "title": "神兽道馆馆主·蓝龙",
+                "message": "欢迎来到神兽道馆！我是馆主蓝龙。准备好面对传说中的宝可梦了吗？"
+              }
+            ],
+            "type": "pixelmon:constant"
+          }
+        },
+        {
+          "event": "pixelmon:right_click",
+          "conditions": [
+            {
+              "type": "pixelmon:interaction_condition",
+              "condition": {
+                "type": "pixelmon:string_compare",
+                "first": {
+                  "value": "MAIN_HAND",
+                  "type": "pixelmon:constant_string"
+                },
+                "second": {
+                  "type": "pixelmon:hand_used"
+                }
+              }
+            },
+            {
+              "type": "pixelmon:interaction_condition",
+              "condition": {
+                "type": "pixelmon:on_cooldown",
+                "player": {
+                  "key": "pixelmon:player",
+                  "type": "pixelmon:context_player"
+                },
+                "cooldown_key": "pixelmon:leader_gym_dragon_1",
+                "cooldown": 3,
+                "unit": "DAYS"
+              }
+            }
+          ],
+          "results": {
+            "value": [
+              {
+                "type": "pixelmon:message_player",
+                "messages": [
+                  {
+                    "translate": "pixelmon.npc.dialogue.battle.leader.gym.dragon.1.cooldown"
+                  }
+                ]
+              }
+            ],
+            "type": "pixelmon:constant"
+          }
+        },
+        {
+          "event": "pixelmon:right_click",
+          "conditions": [
+            {
+              "type": "pixelmon:interaction_condition",
+              "condition": {
+                "type": "pixelmon:string_compare",
+                "first": {
+                  "value": "MAIN_HAND",
+                  "type": "pixelmon:constant_string"
+                },
+                "second": {
+                  "type": "pixelmon:hand_used"
+                }
+              }
+            },
+            {
+              "type": "pixelmon:interaction_condition",
+              "condition": {
+                "type": "pixelmon:logical_not",
+                "condition": {
+                  "type": "pixelmon:interaction_condition",
+                  "condition": {
+                    "type": "pixelmon:can_battle",
+                    "player": {
+                      "key": "pixelmon:player",
+                      "type": "pixelmon:context_player"
+                    }
+                  }
+                }
+              }
+            }
+          ],
+          "results": {
+            "value": [
+              {
+                "type": "pixelmon:message_player",
+                "messages": [
+                  {
+                    "translate": "pixelmon.npc.dialogue.battle.leader.gym.dragon.1.unable_to_battle"
+                  }
+                ]
+              }
+            ],
+            "type": "pixelmon:constant"
+          }
+        },
+        {
+          "event": "pixelmon:close_dialogue",
+          "conditions": [
+            {
+              "type": "pixelmon:interaction_condition",
+              "condition": {
+                "type": "pixelmon:true"
+              }
+            }
+          ],
+          "results": {
+            "value": [
+              {
+                "type": "pixelmon:player_start_npc_battle"
+              }
+            ],
+            "type": "pixelmon:constant"
+          }
+        },
+        {
+          "event": "pixelmon:lose_battle",
+          "conditions": [
+            {
+              "type": "pixelmon:interaction_condition",
+              "condition": {
+                "type": "pixelmon:true"
+              }
+            }
+          ],
+          "results": {
+            "value": [
+              {
+                "type": "pixelmon:open_dialogue",
+                "title": "神兽道馆馆主·蓝龙",
+                "message": "神兽的力量果然不是那么容易挑战的，继续努力吧！",
+                "fire_close_event": false
+              },
+              {
+                "type": "pixelmon:set_string_context",
+                "key": "pixelmon:leader",
+                "value": "leader_gym_dragon_1"
+              },
+              {
+                "type": "pixelmon:trigger_interaction_event",
+                "event": "pixelmon:lose_to_leader"
+              }
+            ],
+            "type": "pixelmon:constant"
+          }
+        },
+        {
+          "event": "pixelmon:win_battle",
+          "conditions": [
+            {
+              "type": "pixelmon:interaction_condition",
+              "condition": {
+                "type": "pixelmon:true"
+              }
+            }
+          ],
+          "results": {
+            "value": [
+              {
+                "type": "pixelmon:open_dialogue",
+                "title": "神兽道馆馆主·蓝龙",
+                "message": "不可思议！你竟然战胜了我的神兽队伍！这是神兽徽章，你值得拥有！",
+                "fire_close_event": false
+              },
+              {
+                "type": "pixelmon:give_money",
+                "money": 10000.0
+              },
+              {
+                "type": "pixelmon:give_item",
+                "items": [
+                  {
+                    "id": "pixelmon:poke_ball",
+                    "count": 2,
+                    "components": {
+                      "pixelmon:poke_ball": "master_ball"
+                    }
+                  },
+                  {
+                    "id": "pixelmon:rare_candy",
+                    "count": 10
+                  }
+                ]
+              },
+              {
+                "type": "pixelmon:set_cooldown",
+                "player": {
+                  "key": "pixelmon:player",
+                  "type": "pixelmon:context_player"
+                },
+                "key": "pixelmon:leader_gym_dragon_1",
+                "cooldown": 3,
+                "unit": "DAYS"
+              },
+              {
+                "type": "pixelmon:set_string_context",
+                "key": "pixelmon:leader",
+                "value": "leader_gym_dragon_1"
+              },
+              {
+                "type": "pixelmon:trigger_interaction_event",
+                "event": "pixelmon:defeat_leader"
+              }
+            ],
+            "type": "pixelmon:constant"
+          }
+        }
+      ]
+    },
+    "type": "pixelmon:constant"
+  }
+}
