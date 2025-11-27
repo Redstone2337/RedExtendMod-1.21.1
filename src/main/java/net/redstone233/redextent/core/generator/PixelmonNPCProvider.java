@@ -1128,30 +1128,29 @@ public abstract class PixelmonNPCProvider implements DataProvider {
     }
 
     // ==================== 宝可梦队伍配置方法 ====================
-
     /**
-     * 创建宝可梦队伍配置
+     * 创建宝可梦队伍配置（严格匹配官方格式）
      */
     public static String createPokemonSpec(String pokemon, int level, String ability, String heldItem,
                                            String nature, int ivHp, int ivAtk, int ivDef, int ivSpAtk,
                                            int ivSpDef, int ivSpd, int evHp, int evAtk, int evDef,
                                            int evSpAtk, int evSpDef, int evSpd, List<String> moves) {
-        StringBuilder spec = new StringBuilder(pokemon);
+        StringBuilder spec = new StringBuilder(pokemon); // 宝可梦名称保持原样（首字母大写）
         spec.append(" lvl:").append(level);
 
         if (ability != null && !ability.isEmpty()) {
-            spec.append(" ability:").append(ability);
+            spec.append(" ability:").append(ability.toLowerCase()); // 特性小写
         }
 
         if (heldItem != null && !heldItem.isEmpty()) {
-            spec.append(" helditem:").append(heldItem);
+            spec.append(" helditem:").append(heldItem.toLowerCase()); // 携带物品小写
         }
 
         if (nature != null && !nature.isEmpty()) {
-            spec.append(" nature:").append(nature);
+            spec.append(" nature:").append(nature.toLowerCase()); // 性格小写
         }
 
-        // 添加个体值
+        // 严格按照官方顺序：个体值
         spec.append(" ivhp:").append(ivHp)
                 .append(" ivatk:").append(ivAtk)
                 .append(" ivdef:").append(ivDef)
@@ -1159,29 +1158,42 @@ public abstract class PixelmonNPCProvider implements DataProvider {
                 .append(" ivspdef:").append(ivSpDef)
                 .append(" ivspd:").append(ivSpd);
 
-        // 添加努力值
-        if (evHp > 0) spec.append(" evhp:").append(evHp);
-        if (evAtk > 0) spec.append(" evatk:").append(evAtk);
-        if (evDef > 0) spec.append(" evdef:").append(evDef);
-        if (evSpAtk > 0) spec.append(" evspatk:").append(evSpAtk);
-        if (evSpDef > 0) spec.append(" evspdef:").append(evSpDef);
-        if (evSpd > 0) spec.append(" evspd:").append(evSpd);
+        // 严格按照官方顺序：努力值（只写非0的）
+        if (evHp != 0) spec.append(" evhp:").append(evHp);
+        if (evAtk != 0) spec.append(" evatk:").append(evAtk);
+        if (evDef != 0) spec.append(" evdef:").append(evDef);
+        if (evSpAtk != 0) spec.append(" evspatk:").append(evSpAtk);
+        if (evSpDef != 0) spec.append(" evspdef:").append(evSpDef);
+        if (evSpd != 0) spec.append(" evspd:").append(evSpd);
 
-        // 添加技能
+        // 添加技能（严格匹配官方格式）
         for (int i = 0; i < moves.size() && i < 4; i++) {
-            spec.append(" move").append(i + 1).append(":").append(moves.get(i));
+            String move = formatMoveName(moves.get(i)); // 使用专门的技能格式化方法
+            spec.append(" move").append(i + 1).append(":").append(move);
         }
 
         return spec.toString();
     }
 
     /**
-     * 创建简化版宝可梦队伍配置
+     * 格式化技能名称以匹配官方格式
+     */
+    private static String formatMoveName(String moveName) {
+        // 如果技能名称包含空格，用下划线替换并转为小写
+        if (moveName.contains(" ")) {
+            return moveName.toLowerCase().replace(" ", "_");
+        }
+        // 单个单词的技能保持小写
+        return moveName.toLowerCase();
+    }
+
+    /**
+     * 创建简化版宝可梦队伍配置（严格匹配官方格式）
      */
     public static String createSimplePokemonSpec(String pokemon, int level, String ability,
                                                  String heldItem, String nature, List<String> moves) {
         return createPokemonSpec(pokemon, level, ability, heldItem, nature,
-                31, 31, 31, 0, 31, 31, 0, 0, 0, 0, 0, 0, moves);
+                31, 31, 31, 31, 31, 31, 0, 0, 0, 0, 0, 0, moves);
     }
 
     // ==================== 玩家模型创建方法 ====================
