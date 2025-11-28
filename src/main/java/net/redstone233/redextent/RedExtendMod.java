@@ -225,6 +225,7 @@ public class RedExtendMod {
                 case "BiomeBlessingSwamp":
                     AbilityRegistry.register(BiomeBlessingSwamp.class.getName());
                     LOGGER.info("注册自定义特性： Biome Blessing Swamp");
+                    return true;
                 default:
                     LOGGER.warn("未知的自定义特性: {}", abilityName);
                     return false;
