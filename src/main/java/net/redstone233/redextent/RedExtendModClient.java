@@ -48,7 +48,7 @@ public class RedExtendModClient {
             if (container != null) {
                 //让模组后续生命周期事件不再派发
                 Objects.requireNonNull(container.getEventBus()).start();
-                RedExtendMod.LOGGER.warn("[Rem] 软禁用 - 关闭 {} 的 EventBus", modid);
+                RedExtendMod.LOGGER.info("[Rem] 软禁用 - 关闭 {} 的 EventBus", modid);
             }
         }
         // Some client setup code
